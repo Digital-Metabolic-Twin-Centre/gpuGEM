@@ -65,12 +65,15 @@ def test_fba_solver_stateful(tiny_lp):
 def test_default_settings_small_model():
     from gpugem._defaults import default_settings
     s = default_settings(n_vars=50_000)
-    assert "presolve" not in s   # no PaPILO for small models
+    assert "presolve" not in s            # no PaPILO for small models
+    assert s["pdlp_precision"] == 1       # mixed precision required
+    assert s["absolute_primal_tolerance"] == 1e-8
     assert s["per_constraint_residual"] == 1
 
 
 def test_default_settings_large_model():
     from gpugem._defaults import default_settings
     s = default_settings(n_vars=200_000)
-    assert s.get("presolve") == 1   # PaPILO required for large models
+    assert s.get("presolve") == 1         # PaPILO required for large models
     assert s["per_constraint_residual"] == 1
+    assert "absolute_primal_tolerance" not in s  # tolerances left at default 1e-4

@@ -95,10 +95,24 @@ result = gpugem.solve(S=S, b=b, lb=lb, ub=ub, c=c,
 
 gpuGEM automatically selects solver settings based on model size:
 
-| Model size | Key defaults | Rationale |
-|---|---|---|
-| ≤ 100K reactions | `per_constraint_residual=1` | Max-norm convergence; no PaPILO (adds postsolve error on well-conditioned models) |
-| > 100K reactions | `presolve=1` + `per_constraint_residual=1` | PaPILO presolve required to avoid a cuOpt false-infeasibility bug on models with extreme stoichiometric coefficient ranges |
+**Small models (≤ 100K reactions) — e.g. Harvey whole-body model:**
+
+```python
+pdlp_precision             = 1      # mixed FP32/FP64 — double precision diverges on these models
+absolute_primal_tolerance  = 1e-8   # tight tolerance: 0 stoich violations at 1e-6 max residual
+relative_primal_tolerance  = 1e-8
+absolute_dual_tolerance    = 1e-8
+relative_dual_tolerance    = 1e-8
+per_constraint_residual    = 1      # max-norm convergence check → better accuracy
+```
+
+**Large models (> 100K reactions) — e.g. personalised microbiome whole-body models:**
+
+```python
+presolve                   = 1      # PaPILO — required; default PSLP falsely reports Infeasible
+per_constraint_residual    = 1      # max-norm convergence → 44% fewer violations vs default
+# tolerances left at default 1e-4 — accuracy bottleneck is PaPILO's internal feastol, not PDLP
+```
 
 Any cuOpt parameter can be overridden:
 
