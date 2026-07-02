@@ -1,3 +1,5 @@
+<div align="center">
+
 # gpuGEM
 
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/)
@@ -7,6 +9,8 @@
 [![Status: Alpha](https://img.shields.io/badge/status-alpha-orange)]()
 
 GPU-accelerated Flux Balance Analysis (FBA) for genome-scale metabolic models.
+
+</div>
 
 gpuGEM wraps [NVIDIA cuOpt](https://developer.nvidia.com/cuopt) PDLP solver with validated default settings derived from systematic benchmarking on whole-body metabolic models, including the [Harvey](https://www.vmh.life/) model and personalised microbiome whole-body models. It provides a minimal, COBRA-compatible API so existing modelling workflows can switch to GPU solving with one line of code.
 
@@ -148,7 +152,7 @@ result.feasibility  # dict: stoich_max_residual, stoich_rows_violated_1e6, ...
 If you use gpuGEM in your research, please cite:
 
 > *gpuGEM: GPU-accelerated Flux Balance Analysis for genome-scale metabolic models.*  
-> Digital Metabolic Twin Centre, 2026. https://github.com/zarelab/gpuGEM
+> Digital Metabolic Twin Centre, 2026. https://github.com/Digital-Metabolic-Twin-Centre/gpuGEM
 
 ---
 

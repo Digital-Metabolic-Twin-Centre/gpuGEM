@@ -37,9 +37,9 @@ cobra = ["cobra>=0.29"]
 dev   = ["pytest>=7", "pytest-cov", "ruff"]
 
 [project.urls]
-Homepage   = "https://github.com/zarelab/gpuGEM"
-Repository = "https://github.com/zarelab/gpuGEM"
-Issues     = "https://github.com/zarelab/gpuGEM/issues"
+Homepage   = "https://github.com/Digital-Metabolic-Twin-Centre/gpuGEM"
+Repository = "https://github.com/Digital-Metabolic-Twin-Centre/gpuGEM"
+Issues     = "https://github.com/Digital-Metabolic-Twin-Centre/gpuGEM/issues"
 
 [tool.setuptools.packages.find]
 where = ["."]
