@@ -20,12 +20,10 @@ gpuGEM wraps [NVIDIA cuOpt](https://developer.nvidia.com/cuopt) PDLP solver with
 
 GPU first-order LP solvers (PDLP) offer substantial speedups on genome-scale FBA, but getting correct results requires non-obvious configuration. Out-of-the-box cuOpt settings produce large constraint violations or silently return wrong solutions on whole-body models. gpuGEM ships with settings that have been validated for correctness:
 
-| Model scale | Solver | Time | Max stoich. residual |
-|---|---|---|---|
-| Harvey (81K rxns, 160K constraints) — Gurobi | Dual simplex | 24 s | ~1e-9 |
-| Harvey — **gpuGEM default** | GPU PDLP | **0.76 s** | 1.8e-5 |
-| Microbiome WBM (789K rxns, 1.66M constraints) — Gurobi | Dual simplex | 44–85 s | ~0 |
-| Microbiome WBM — **gpuGEM default** | GPU PDLP | **27 s** | 8.4e-5 |
+| Model | Reactions | Constraints | Time | Max stoich. residual |
+|---|---|---|---|---|
+| Harvey whole-body model | 81K | 160K | **0.76 s** | 1.8e-5 |
+| Microbiome whole-body model | 789K | 1.66M | **27 s** | 8.4e-5 |
 
 ---
 
