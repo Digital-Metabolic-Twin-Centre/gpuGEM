@@ -1,0 +1,52 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "gpugem"
+version = "0.1.0"
+description = "GPU-accelerated Flux Balance Analysis for genome-scale metabolic models"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.10"
+authors = [
+    { name = "Digital Metabolic Twin Centre" },
+]
+keywords = [
+    "flux balance analysis", "FBA", "metabolic modelling",
+    "GPU", "PDLP", "cuOpt", "COBRA", "systems biology",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "numpy>=1.24",
+    "scipy>=1.10",
+    "cuopt-cu12>=26.6.0",
+]
+
+[project.optional-dependencies]
+cobra = ["cobra>=0.29"]
+dev   = ["pytest>=7", "pytest-cov", "ruff"]
+
+[project.urls]
+Homepage   = "https://github.com/zarelab/gpuGEM"
+Repository = "https://github.com/zarelab/gpuGEM"
+Issues     = "https://github.com/zarelab/gpuGEM/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["gpugem*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
