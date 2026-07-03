@@ -26,6 +26,7 @@ class CoefficientScalingMapping:
     split_entries: list[dict[str, Any]] = field(default_factory=list)
     min_abs: float = 0.1
     max_abs: float = 100.0
+    aux_bound: float | None = None
 
 
 def _factor_abs(value: float, min_abs: float, max_abs: float) -> list[float]:
@@ -174,6 +175,7 @@ def decompose_stoichiometry(
         split_entries=split_entries,
         min_abs=float(min_abs),
         max_abs=float(max_abs),
+        aux_bound=None,
     )
     return S_scaled, mapping
 
@@ -204,14 +206,18 @@ def scale_model(
         [np.asarray(model["b"], dtype=np.float64), np.zeros(n_aux_mets)]
     )
     # Auxiliary fluxes are algebraically coupled to the original reaction flux.
-    # They must be effectively free so reversible original reactions remain
-    # reversible. Use finite solver-friendly infinity, matching gpuGEM loaders.
-    inf = 1e30
+    # They need enough room to follow reversible original reactions, but should
+    # not introduce huge artificial bounds. Use the largest finite bound already
+    # present in this model.
+    lb = np.asarray(model["lb"], dtype=np.float64)
+    ub = np.asarray(model["ub"], dtype=np.float64)
+    finite_bounds = np.abs(np.concatenate([lb[np.isfinite(lb)], ub[np.isfinite(ub)]]))
+    aux_bound = float(finite_bounds.max()) if finite_bounds.size else 1000.0
     scaled["lb"] = np.concatenate(
-        [np.asarray(model["lb"], dtype=np.float64), np.full(n_aux, -inf)]
+        [lb, np.full(n_aux, -aux_bound)]
     )
     scaled["ub"] = np.concatenate(
-        [np.asarray(model["ub"], dtype=np.float64), np.full(n_aux, inf)]
+        [ub, np.full(n_aux, aux_bound)]
     )
     scaled["c"] = np.concatenate(
         [np.asarray(model["c"], dtype=np.float64), np.zeros(n_aux)]
@@ -224,6 +230,16 @@ def scale_model(
             format="csr",
         )
 
+    mapping = CoefficientScalingMapping(
+        n_original_vars=mapping.n_original_vars,
+        n_original_mets=mapping.n_original_mets,
+        aux_var_indices=mapping.aux_var_indices,
+        aux_met_indices=mapping.aux_met_indices,
+        split_entries=mapping.split_entries,
+        min_abs=mapping.min_abs,
+        max_abs=mapping.max_abs,
+        aux_bound=aux_bound,
+    )
     return scaled, mapping
 
 
