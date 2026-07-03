@@ -60,4 +60,7 @@ def test_scale_model_extends_arrays_and_coupling_columns():
     assert scaled["ub"].shape[0] == scaled["S"].shape[1]
     assert scaled["c"].shape[0] == scaled["S"].shape[1]
     assert mapping.n_original_vars == 2
+    assert mapping.aux_bound == 100.0
     assert np.all(scaled["c"][mapping.aux_var_indices] == 0.0)
+    assert np.all(scaled["lb"][mapping.aux_var_indices] == -100.0)
+    assert np.all(scaled["ub"][mapping.aux_var_indices] == 100.0)
