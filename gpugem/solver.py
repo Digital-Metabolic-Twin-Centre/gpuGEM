@@ -162,6 +162,18 @@ def solve(
     status_code = int(sol.get_termination_status())
     status_name = _STATUS_NAMES.get(status_code, f"Unknown({status_code})")
 
+    # Solver-reported convergence statistics (PDLP iterations, residuals, gap)
+    solver_stats = {}
+    n_iterations = None
+    try:
+        stats = sol.get_lp_stats()
+        if isinstance(stats, dict):
+            solver_stats = dict(stats)
+            if "nb_iterations" in stats:
+                n_iterations = int(stats["nb_iterations"])
+    except Exception:
+        pass
+
     # Extract solution
     fluxes = None
     objective = None
@@ -204,6 +216,8 @@ def solve(
         wall_time_s=round(wall_time, 4),
         solver_settings=applied,
         feasibility=feasibility,
+        n_iterations=n_iterations,
+        solver_stats=solver_stats,
     )
 
 

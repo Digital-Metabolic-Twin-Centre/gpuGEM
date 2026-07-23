@@ -28,9 +28,17 @@ class FBAResult:
     feasibility: dict = field(default_factory=dict)
     """Feasibility diagnostics: max constraint residual, violated row counts, etc."""
 
+    n_iterations: Optional[int] = None
+    """Number of PDLP iterations reported by the solver, or ``None`` if unavailable."""
+
+    solver_stats: dict = field(default_factory=dict)
+    """Solver-reported convergence statistics (``primal_residual``, ``dual_residual``,
+    ``gap``, ``nb_iterations``) as returned by cuOpt's ``get_lp_stats()``."""
+
     def __repr__(self) -> str:
         obj = f"{self.objective:.6g}" if self.objective is not None else "None"
+        iters = f", iters={self.n_iterations}" if self.n_iterations is not None else ""
         return (
             f"FBAResult(status={self.status!r}, objective={obj}, "
-            f"time={self.wall_time_s:.3f}s)"
+            f"time={self.wall_time_s:.3f}s{iters})"
         )
