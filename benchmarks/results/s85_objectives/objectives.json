@@ -1,0 +1,142 @@
+[
+  {
+    "id": "whole_body",
+    "reaction": "Whole_body_objective_rxn",
+    "category": "whole_body",
+    "is_baseline": true,
+    "rationale": "The model's own shipped objective; same reaction used for S85 in the 002 cross-scale benchmark, included so the sweep average can be compared back to that ~10x result directly."
+  },
+  {
+    "id": "liver_biomass",
+    "reaction": "Liver_biomass_maintenance",
+    "category": "organ_biomass",
+    "is_baseline": false,
+    "rationale": "Liver is the model's largest, most metabolically central organ compartment (highest reaction count of any organ)."
+  },
+  {
+    "id": "kidney_biomass",
+    "reaction": "Kidney_biomass_maintenance",
+    "category": "organ_biomass",
+    "is_baseline": false,
+    "rationale": "Kidney is the second-largest organ compartment and central to whole-body nitrogen/electrolyte handling."
+  },
+  {
+    "id": "brain_biomass",
+    "reaction": "Brain_biomass_maintenance",
+    "category": "organ_biomass",
+    "is_baseline": false,
+    "rationale": "Brain has distinct, highly constrained energy metabolism (near-exclusive glucose/ketone use) vs. other organs."
+  },
+  {
+    "id": "heart_biomass",
+    "reaction": "Heart_biomass_maintenance",
+    "category": "organ_biomass",
+    "is_baseline": false,
+    "rationale": "Heart is a large, continuously-active muscle compartment with fatty-acid-dominant metabolism."
+  },
+  {
+    "id": "muscle_biomass",
+    "reaction": "Muscle_biomass_maintenance",
+    "category": "organ_biomass",
+    "is_baseline": false,
+    "rationale": "Skeletal muscle is the largest body-mass compartment overall, dominant in whole-body amino-acid/glucose turnover."
+  },
+  {
+    "id": "colon_biomass",
+    "reaction": "Colon_biomass_maintenance",
+    "category": "organ_biomass",
+    "is_baseline": false,
+    "rationale": "Colon sits directly at the host-microbiome interface, coupling host metabolism to gut microbial exchange."
+  },
+  {
+    "id": "pancreas_biomass",
+    "reaction": "Pancreas_biomass_maintenance",
+    "category": "organ_biomass",
+    "is_baseline": false,
+    "rationale": "Pancreas governs whole-body glucose homeostasis (insulin/glucagon producing tissue)."
+  },
+  {
+    "id": "lung_biomass",
+    "reaction": "Lung_biomass_maintenance",
+    "category": "organ_biomass",
+    "is_baseline": false,
+    "rationale": "Lung is a large, distinct gas-exchange compartment with its own surfactant/lipid metabolism."
+  },
+  {
+    "id": "skin_biomass",
+    "reaction": "Skin_biomass_maintenance",
+    "category": "organ_biomass",
+    "is_baseline": false,
+    "rationale": "Skin is a large peripheral compartment, structurally and metabolically distinct from internal organs."
+  },
+  {
+    "id": "adipocytes_biomass",
+    "reaction": "Adipocytes_biomass_maintenance",
+    "category": "organ_biomass",
+    "is_baseline": false,
+    "rationale": "Adipose tissue is the body's primary lipid-storage compartment, metabolically distinct from lean organs."
+  },
+  {
+    "id": "bcells_biomass",
+    "reaction": "Bcells_biomass_maintenance",
+    "category": "immune_cell_biomass",
+    "is_baseline": false,
+    "rationale": "B cells represent adaptive humoral immunity, a small peripheral compartment contrasting with the large organ objectives."
+  },
+  {
+    "id": "cd4tcells_biomass",
+    "reaction": "CD4Tcells_biomass_maintenance",
+    "category": "immune_cell_biomass",
+    "is_baseline": false,
+    "rationale": "CD4+ T cells represent adaptive cell-mediated immunity."
+  },
+  {
+    "id": "nkcells_biomass",
+    "reaction": "Nkcells_biomass_maintenance",
+    "category": "immune_cell_biomass",
+    "is_baseline": false,
+    "rationale": "NK cells represent innate lymphoid immunity, distinct lineage from the adaptive T/B-cell objectives."
+  },
+  {
+    "id": "monocyte_biomass",
+    "reaction": "Monocyte_biomass_maintenance",
+    "category": "immune_cell_biomass",
+    "is_baseline": false,
+    "rationale": "Monocytes represent innate myeloid immunity and phagocytic metabolism, distinct from lymphoid cell types."
+  },
+  {
+    "id": "platelet_biomass",
+    "reaction": "Platelet_biomass_maintenance_noTrTr",
+    "category": "immune_cell_biomass",
+    "is_baseline": false,
+    "rationale": "Platelets are anucleate blood cells with minimal biosynthetic machinery -- the smallest, most constrained objective in the set."
+  },
+  {
+    "id": "microbe_bacteroides_fragilis",
+    "reaction": "panBacteroides_fragilis_biomassPan",
+    "category": "microbiome",
+    "is_baseline": false,
+    "rationale": "Common gut commensal/opportunistic pathogen; representative Bacteroidetes-phylum taxon."
+  },
+  {
+    "id": "microbe_faecalibacterium_prausnitzii",
+    "reaction": "panFaecalibacterium_prausnitzii_biomassPan",
+    "category": "microbiome",
+    "is_baseline": false,
+    "rationale": "Major butyrate-producing commensal, widely used as a marker of gut health in microbiome studies."
+  },
+  {
+    "id": "microbe_escherichia_coli",
+    "reaction": "panEscherichia_coli_biomassPan",
+    "category": "microbiome",
+    "is_baseline": false,
+    "rationale": "Facultative anaerobe and common gut pathobiont; representative Proteobacteria-phylum taxon."
+  },
+  {
+    "id": "microbe_akkermansia_muciniphila",
+    "reaction": "panAkkermansia_muciniphila_biomassPan",
+    "category": "microbiome",
+    "is_baseline": false,
+    "rationale": "Mucin-degrading commensal associated with host metabolic health; representative Verrucomicrobia-phylum taxon."
+  }
+]

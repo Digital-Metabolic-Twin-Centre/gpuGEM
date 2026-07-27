@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "S85 objective-sweep per-objective result",
+  "description": "benchmarks/results/s85_objectives/<id>.json",
+  "type": "object",
+  "required": ["objective", "provenance", "build_s", "reps", "time_limit", "res_tol", "obj_tol",
+               "versions", "timestamp", "gurobi", "cuopt", "obj_rel_diff", "both_feasible"],
+  "properties": {
+    "objective": {
+      "type": "object",
+      "required": ["id", "reaction", "category", "rationale", "is_baseline"],
+      "properties": {
+        "id": {"type": "string"},
+        "reaction": {"type": "string"},
+        "category": {"enum": ["whole_body", "organ_biomass", "immune_cell_biomass", "microbiome"]},
+        "rationale": {"type": "string"},
+        "is_baseline": {"type": "boolean"}
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["model", "scale", "kind", "source", "sha256", "n_cols", "n_eq_rows",
+                   "n_total_rows", "nnz", "obj_nonzero", "maximize"],
+      "properties": {
+        "model": {"const": "S85"},
+        "scale": {"type": "string"},
+        "kind": {"const": "mat"},
+        "source": {"type": "string"},
+        "sha256": {"type": "string"},
+        "n_cols": {"type": "integer"},
+        "n_eq_rows": {"type": "integer"},
+        "n_total_rows": {"type": "integer"},
+        "nnz": {"type": "integer"},
+        "obj_nonzero": {"const": 1},
+        "maximize": {"const": true}
+      }
+    },
+    "build_s": {"type": "number"},
+    "reps": {"type": "integer", "minimum": 1},
+    "time_limit": {"type": "number"},
+    "res_tol": {"type": "number"},
+    "obj_tol": {"type": "number"},
+    "versions": {
+      "type": "object",
+      "properties": {
+        "gpu_name": {"type": ["string", "null"]},
+        "gurobi_version": {"type": ["string", "null"]},
+        "cuopt_version": {"type": ["string", "null"]},
+        "python": {"type": "string"}
+      }
+    },
+    "timestamp": {"type": "string", "format": "date-time"},
+    "gurobi": {"$ref": "#/$defs/solverBlock"},
+    "cuopt": {"$ref": "#/$defs/solverBlock"},
+    "obj_rel_diff": {"type": ["number", "null"]},
+    "both_feasible": {"type": "boolean"}
+  },
+  "$defs": {
+    "solverBlock": {
+      "type": "object",
+      "required": ["repeats", "solve_s_median", "solve_s_min", "solve_s_max", "objective", "feasible"],
+      "properties": {
+        "repeats": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["repeat", "solve_s", "objective", "status", "iters", "residual_inf", "feasible"],
+            "properties": {
+              "repeat": {"type": "integer"},
+              "solve_s": {"type": "number"},
+              "objective": {"type": ["number", "null"]},
+              "status": {"type": "string"},
+              "iters": {"type": ["integer", "null"]},
+              "residual_inf": {"type": "number"},
+              "feasible": {"type": "boolean"}
+            }
+          }
+        },
+        "solve_s_median": {"type": "number"},
+        "solve_s_min": {"type": "number"},
+        "solve_s_max": {"type": "number"},
+        "objective": {"type": ["number", "null"]},
+        "feasible": {"type": "boolean"}
+      }
+    }
+  }
+}

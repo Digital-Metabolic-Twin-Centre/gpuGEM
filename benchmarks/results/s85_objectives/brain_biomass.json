@@ -1,0 +1,75 @@
+{
+  "objective": {
+    "id": "brain_biomass",
+    "reaction": "Brain_biomass_maintenance",
+    "category": "organ_biomass",
+    "is_baseline": false,
+    "rationale": "Brain has distinct, highly constrained energy metabolism (near-exclusive glucose/ketone use) vs. other organs."
+  },
+  "provenance": {
+    "model": "S85",
+    "scale": "microbiome",
+    "kind": "mat",
+    "source": "/home/farid/projects/cuGEM/microbiome_models/mWBM_S85_male.mat",
+    "sha256": "271d1590e4b75ecabb6ee8b7eda3f04a270497afc86689ed842afe364bb9c6eb",
+    "n_cols": 874634,
+    "n_eq_rows": 734457,
+    "n_total_rows": 1993029,
+    "nnz": 6137523,
+    "obj_nonzero": 1,
+    "maximize": true,
+    "objective_id": "brain_biomass",
+    "objective_rxn": "Brain_biomass_maintenance",
+    "objective_idx": 22964
+  },
+  "build_s": 69.01485533080995,
+  "reps": 1,
+  "time_limit": 900.0,
+  "res_tol": 0.0001,
+  "obj_tol": 1e-06,
+  "versions": {
+    "gpu_name": "NVIDIA RTX A4500",
+    "gurobi_version": "13.0.2",
+    "cuopt_version": "26.06.00",
+    "python": "3.13.13"
+  },
+  "timestamp": "2026-07-27T15:47:06.276176+00:00",
+  "gurobi": {
+    "repeats": [
+      {
+        "repeat": 0,
+        "solve_s": 53.95453985501081,
+        "objective": 2.0,
+        "status": "Optimal",
+        "iters": 91,
+        "residual_inf": 9.8540391428e-07,
+        "feasible": true
+      }
+    ],
+    "solve_s_median": 53.95453985501081,
+    "solve_s_min": 53.95453985501081,
+    "solve_s_max": 53.95453985501081,
+    "objective": 2.0,
+    "feasible": true
+  },
+  "cuopt": {
+    "repeats": [
+      {
+        "repeat": 0,
+        "solve_s": 520.2787,
+        "objective": 2.0,
+        "status": "Optimal",
+        "iters": 984000,
+        "residual_inf": 8.868415896295202e-05,
+        "feasible": true
+      }
+    ],
+    "solve_s_median": 520.2787,
+    "solve_s_min": 520.2787,
+    "solve_s_max": 520.2787,
+    "objective": 2.0,
+    "feasible": true
+  },
+  "obj_rel_diff": 0.0,
+  "both_feasible": true
+}

@@ -57,3 +57,33 @@ Model file locations can be overridden with `MWBM_DIR` and `HARVEY_MAT` env vars
   by sha256. Solver + GPU versions embedded in every JSON and the figure caption.
 - The figure imports only pandas + matplotlib — a reviewer can rebuild it with no
   GPU and no solver license.
+
+## S85 multi-objective sweep
+
+S85 was the one outlier in the table above (cuOpt ~10x *slower* than Gurobi on
+the single whole-body objective, unlike every other model). `run_objective_sweep.py`
+re-solves S85 with both solvers across ~20 additional biologically distinct
+objectives (`s85_objectives.py`: organ/tissue biomass, immune-cell biomass,
+individual gut-microbiome taxa) to check whether that gap holds on average or
+was specific to the whole-body objective. Same correctness gate, same LP
+builder pattern as above; unlike the cross-scale benchmark it defaults to 1
+repeat per (objective, solver) since the statistical signal here comes from
+averaging across ~20 objectives rather than repeating one (see
+`specs/003-s85-multi-objective-benchmark/`).
+
+```bash
+python -m benchmarks.run_objective_sweep --objective whole_body   # one objective
+python -m benchmarks.run_objective_sweep --all                    # all ~20 (resumable, hours)
+python -m benchmarks.aggregate_sweep                               # summary from committed JSON, no GPU
+```
+
+Because a full `--all` run can take hours, it prints a start/finish line per
+(objective, solver) plus a heartbeat line every `--heartbeat-s` (default 30s)
+while a solve is in progress, and skips objectives whose result already exists
+unless `--force` — so it is safe to interrupt and restart.
+
+Outputs (committed) under `results/s85_objectives/`: `objectives.json` (the
+objective registry with each one's biological rationale), one `<id>.json` per
+objective, and `summary.json`/`summary.csv` (per-solver average/median/min/max
+runtime, the cuOpt/Gurobi runtime ratio, and any objective whose ratio is an
+outlier relative to the rest).

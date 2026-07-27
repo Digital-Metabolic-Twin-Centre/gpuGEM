@@ -1,0 +1,75 @@
+{
+  "objective": {
+    "id": "liver_biomass",
+    "reaction": "Liver_biomass_maintenance",
+    "category": "organ_biomass",
+    "is_baseline": false,
+    "rationale": "Liver is the model's largest, most metabolically central organ compartment (highest reaction count of any organ)."
+  },
+  "provenance": {
+    "model": "S85",
+    "scale": "microbiome",
+    "kind": "mat",
+    "source": "/home/farid/projects/cuGEM/microbiome_models/mWBM_S85_male.mat",
+    "sha256": "271d1590e4b75ecabb6ee8b7eda3f04a270497afc86689ed842afe364bb9c6eb",
+    "n_cols": 874634,
+    "n_eq_rows": 734457,
+    "n_total_rows": 1993029,
+    "nnz": 6137523,
+    "obj_nonzero": 1,
+    "maximize": true,
+    "objective_id": "liver_biomass",
+    "objective_rxn": "Liver_biomass_maintenance",
+    "objective_idx": 77380
+  },
+  "build_s": 69.22875481378287,
+  "reps": 1,
+  "time_limit": 900.0,
+  "res_tol": 0.0001,
+  "obj_tol": 1e-06,
+  "versions": {
+    "gpu_name": "NVIDIA RTX A4500",
+    "gurobi_version": "13.0.2",
+    "cuopt_version": "26.06.00",
+    "python": "3.13.13"
+  },
+  "timestamp": "2026-07-27T15:25:39.666090+00:00",
+  "gurobi": {
+    "repeats": [
+      {
+        "repeat": 0,
+        "solve_s": 55.296653856988996,
+        "objective": 2.5714285714285716,
+        "status": "Optimal",
+        "iters": 91,
+        "residual_inf": 9.8540391428e-07,
+        "feasible": true
+      }
+    ],
+    "solve_s_median": 55.296653856988996,
+    "solve_s_min": 55.296653856988996,
+    "solve_s_max": 55.296653856988996,
+    "objective": 2.5714285714285716,
+    "feasible": true
+  },
+  "cuopt": {
+    "repeats": [
+      {
+        "repeat": 0,
+        "solve_s": 510.7792,
+        "objective": 2.5714285714285716,
+        "status": "Optimal",
+        "iters": 984000,
+        "residual_inf": 8.868415896295202e-05,
+        "feasible": true
+      }
+    ],
+    "solve_s_median": 510.7792,
+    "solve_s_min": 510.7792,
+    "solve_s_max": 510.7792,
+    "objective": 2.5714285714285716,
+    "feasible": true
+  },
+  "obj_rel_diff": 0.0,
+  "both_feasible": true
+}

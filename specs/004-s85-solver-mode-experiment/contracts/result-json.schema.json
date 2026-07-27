@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "S85 solver-mode variant result",
+  "description": "benchmarks/results/s85_solver_modes/<id>.json",
+  "type": "object",
+  "required": ["variant", "provenance", "outcome", "outcome_reason", "subprocess_exit_code",
+               "solve_s", "status", "solved_by", "iters", "objective", "residual_inf",
+               "gurobi_objective", "obj_rel_diff", "verified_correct", "time_limit",
+               "subprocess_timeout"],
+  "properties": {
+    "variant": {
+      "type": "object",
+      "required": ["id", "cuopt_kwargs", "rationale", "is_baseline"],
+      "properties": {
+        "id": {"enum": ["baseline", "methodical1", "concurrent", "barrier_cold"]},
+        "cuopt_kwargs": {"type": "object"},
+        "rationale": {"type": "string"},
+        "is_baseline": {"type": "boolean"}
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["model", "n_cols", "n_eq_rows", "n_total_rows", "nnz", "sha256"],
+      "properties": {
+        "model": {"const": "S85"},
+        "n_cols": {"type": "integer"},
+        "n_eq_rows": {"type": "integer"},
+        "n_total_rows": {"type": "integer"},
+        "nnz": {"type": "integer"},
+        "sha256": {"type": "string"}
+      }
+    },
+    "outcome": {"enum": ["Completed", "DidNotComplete"]},
+    "outcome_reason": {"enum": ["timeout", "crashed", null]},
+    "subprocess_exit_code": {"type": ["integer", "null"]},
+    "solve_s": {"type": ["number", "null"]},
+    "status": {"type": ["string", "null"]},
+    "solved_by": {"enum": ["PDLP", "DualSimplex", "Barrier", "Concurrent", "Unset", null]},
+    "iters": {"type": ["integer", "null"]},
+    "objective": {"type": ["number", "null"]},
+    "residual_inf": {"type": ["number", "null"]},
+    "gurobi_objective": {"type": "number"},
+    "obj_rel_diff": {"type": ["number", "null"]},
+    "verified_correct": {"type": "boolean"},
+    "time_limit": {"type": "number"},
+    "subprocess_timeout": {"type": "number"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"outcome": {"const": "DidNotComplete"}}},
+      "then": {
+        "properties": {
+          "solve_s": {"const": null},
+          "status": {"const": null},
+          "objective": {"const": null},
+          "verified_correct": {"const": false}
+        }
+      }
+    }
+  ]
+}

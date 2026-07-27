@@ -1,0 +1,75 @@
+{
+  "objective": {
+    "id": "colon_biomass",
+    "reaction": "Colon_biomass_maintenance",
+    "category": "organ_biomass",
+    "is_baseline": false,
+    "rationale": "Colon sits directly at the host-microbiome interface, coupling host metabolism to gut microbial exchange."
+  },
+  "provenance": {
+    "model": "S85",
+    "scale": "microbiome",
+    "kind": "mat",
+    "source": "/home/farid/projects/cuGEM/microbiome_models/mWBM_S85_male.mat",
+    "sha256": "271d1590e4b75ecabb6ee8b7eda3f04a270497afc86689ed842afe364bb9c6eb",
+    "n_cols": 874634,
+    "n_eq_rows": 734457,
+    "n_total_rows": 1993029,
+    "nnz": 6137523,
+    "obj_nonzero": 1,
+    "maximize": true,
+    "objective_id": "colon_biomass",
+    "objective_rxn": "Colon_biomass_maintenance",
+    "objective_idx": 3663
+  },
+  "build_s": 72.10806062398478,
+  "reps": 1,
+  "time_limit": 900.0,
+  "res_tol": 0.0001,
+  "obj_tol": 1e-06,
+  "versions": {
+    "gpu_name": "NVIDIA RTX A4500",
+    "gurobi_version": "13.0.2",
+    "cuopt_version": "26.06.00",
+    "python": "3.13.13"
+  },
+  "timestamp": "2026-07-27T16:20:13.419222+00:00",
+  "gurobi": {
+    "repeats": [
+      {
+        "repeat": 0,
+        "solve_s": 58.48756169015542,
+        "objective": 0.4285714285714285,
+        "status": "Optimal",
+        "iters": 91,
+        "residual_inf": 9.8540391428e-07,
+        "feasible": true
+      }
+    ],
+    "solve_s_median": 58.48756169015542,
+    "solve_s_min": 58.48756169015542,
+    "solve_s_max": 58.48756169015542,
+    "objective": 0.4285714285714285,
+    "feasible": true
+  },
+  "cuopt": {
+    "repeats": [
+      {
+        "repeat": 0,
+        "solve_s": 510.3955,
+        "objective": 0.4285714285714285,
+        "status": "Optimal",
+        "iters": 984000,
+        "residual_inf": 8.868415896295202e-05,
+        "feasible": true
+      }
+    ],
+    "solve_s_median": 510.3955,
+    "solve_s_min": 510.3955,
+    "solve_s_max": 510.3955,
+    "objective": 0.4285714285714285,
+    "feasible": true
+  },
+  "obj_rel_diff": 0.0,
+  "both_feasible": true
+}
