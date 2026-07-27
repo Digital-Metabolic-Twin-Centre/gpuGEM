@@ -1,0 +1,105 @@
+{
+  "provenance": {
+    "model": "e_coli_core",
+    "scale": "small",
+    "kind": "cobra",
+    "source": "e_coli_core",
+    "cache": "e_coli_core.xml",
+    "sha256": "3eacb74e968898deb75489fc0946c1b17ce52bbceddc24297a6cc478c038f445",
+    "fetched": true,
+    "cobra_n_rxns": 95,
+    "cobra_n_mets": 72,
+    "n_cols": 95,
+    "n_eq_rows": 72,
+    "n_total_rows": 72,
+    "nnz": 360,
+    "obj_nonzero": 1,
+    "maximize": true
+  },
+  "build_s": 1.8949627266265452,
+  "reps": 3,
+  "time_limit": 900.0,
+  "res_tol": 0.0001,
+  "obj_tol": 1e-06,
+  "versions": {
+    "gpu_name": "NVIDIA RTX A4500",
+    "gurobi_version": "13.0.2",
+    "cuopt_version": "26.06.00",
+    "python": "3.13.13"
+  },
+  "timestamp": "2026-07-27T12:36:01.318796+00:00",
+  "gurobi": {
+    "repeats": [
+      {
+        "repeat": 0,
+        "solve_s": 0.0013084271922707558,
+        "objective": 0.8739215069684305,
+        "status": "Optimal",
+        "iters": 10,
+        "residual_inf": 1.4210854715202004e-13,
+        "feasible": true
+      },
+      {
+        "repeat": 1,
+        "solve_s": 0.0007871249690651894,
+        "objective": 0.8739215069684305,
+        "status": "Optimal",
+        "iters": 10,
+        "residual_inf": 1.4210854715202004e-13,
+        "feasible": true
+      },
+      {
+        "repeat": 2,
+        "solve_s": 0.0007544751279056072,
+        "objective": 0.8739215069684305,
+        "status": "Optimal",
+        "iters": 10,
+        "residual_inf": 1.4210854715202004e-13,
+        "feasible": true
+      }
+    ],
+    "solve_s_median": 0.0007871249690651894,
+    "solve_s_min": 0.0007544751279056072,
+    "solve_s_max": 0.0013084271922707558,
+    "objective": 0.8739215069684305,
+    "feasible": true
+  },
+  "cuopt": {
+    "repeats": [
+      {
+        "repeat": 0,
+        "solve_s": 0.4457,
+        "objective": 0.8739215056938601,
+        "status": "Optimal",
+        "iters": 8200,
+        "residual_inf": 7.779511312921983e-09,
+        "feasible": true
+      },
+      {
+        "repeat": 1,
+        "solve_s": 0.2489,
+        "objective": 0.8739215056938601,
+        "status": "Optimal",
+        "iters": 8200,
+        "residual_inf": 7.779511312921983e-09,
+        "feasible": true
+      },
+      {
+        "repeat": 2,
+        "solve_s": 0.2488,
+        "objective": 0.8739215056938601,
+        "status": "Optimal",
+        "iters": 8200,
+        "residual_inf": 7.779511312921983e-09,
+        "feasible": true
+      }
+    ],
+    "solve_s_median": 0.2489,
+    "solve_s_min": 0.2488,
+    "solve_s_max": 0.4457,
+    "objective": 0.8739215056938601,
+    "feasible": true
+  },
+  "obj_rel_diff": 1.274570449183443e-09,
+  "both_feasible": true
+}

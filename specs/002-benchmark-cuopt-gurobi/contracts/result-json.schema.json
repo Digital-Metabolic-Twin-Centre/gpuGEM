@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SolveResult",
+  "type": "object",
+  "required": ["model","solver","repeats","n_rows","n_cols","nnz","solver_version","gpu_name"],
+  "properties": {
+    "model": {"type":"string"},
+    "solver": {"type":"string","enum":["gurobi","cuopt"]},
+    "n_rows": {"type":"integer"}, "n_cols": {"type":"integer"}, "nnz": {"type":"integer"},
+    "load_s": {"type":"number"}, "build_s": {"type":"number"},
+    "repeats": {"type":"array","items":{"type":"object","required":["repeat","solve_s","objective","status","residual_inf","feasible"],
+      "properties":{"repeat":{"type":"integer"},"solve_s":{"type":"number"},"objective":{"type":"number"},
+        "status":{"type":"string"},"iters":{"type":["integer","null"]},"residual_inf":{"type":"number"},"feasible":{"type":"boolean"}}}},
+    "solve_s_median": {"type":"number"},
+    "solver_version": {"type":"string"}, "gpu_name": {"type":"string"}, "timestamp": {"type":"string"}
+  }
+}
