@@ -1,0 +1,75 @@
+{
+  "objective": {
+    "id": "microbe_escherichia_coli",
+    "reaction": "panEscherichia_coli_biomassPan",
+    "category": "microbiome",
+    "is_baseline": false,
+    "rationale": "Facultative anaerobe and common gut pathobiont; representative Proteobacteria-phylum taxon."
+  },
+  "provenance": {
+    "model": "S85",
+    "scale": "microbiome",
+    "kind": "mat",
+    "source": "/home/farid/projects/cuGEM/microbiome_models/mWBM_S85_male.mat",
+    "sha256": "271d1590e4b75ecabb6ee8b7eda3f04a270497afc86689ed842afe364bb9c6eb",
+    "n_cols": 874634,
+    "n_eq_rows": 734457,
+    "n_total_rows": 1993029,
+    "nnz": 6137523,
+    "obj_nonzero": 1,
+    "maximize": true,
+    "objective_id": "microbe_escherichia_coli",
+    "objective_rxn": "panEscherichia_coli_biomassPan",
+    "objective_idx": 427580
+  },
+  "build_s": 69.31722831400111,
+  "reps": 1,
+  "time_limit": 900.0,
+  "res_tol": 0.0001,
+  "obj_tol": 1e-06,
+  "versions": {
+    "gpu_name": "NVIDIA RTX A4500",
+    "gurobi_version": "13.0.2",
+    "cuopt_version": "26.06.00",
+    "python": "3.13.13"
+  },
+  "timestamp": "2026-07-27T18:29:35.574777+00:00",
+  "gurobi": {
+    "repeats": [
+      {
+        "repeat": 0,
+        "solve_s": 53.748657086864114,
+        "objective": 0.0321393,
+        "status": "Optimal",
+        "iters": 91,
+        "residual_inf": 9.8540391428e-07,
+        "feasible": true
+      }
+    ],
+    "solve_s_median": 53.748657086864114,
+    "solve_s_min": 53.748657086864114,
+    "solve_s_max": 53.748657086864114,
+    "objective": 0.0321393,
+    "feasible": true
+  },
+  "cuopt": {
+    "repeats": [
+      {
+        "repeat": 0,
+        "solve_s": 508.6381,
+        "objective": 0.0321393,
+        "status": "Optimal",
+        "iters": 984000,
+        "residual_inf": 8.868415896295202e-05,
+        "feasible": true
+      }
+    ],
+    "solve_s_median": 508.6381,
+    "solve_s_min": 508.6381,
+    "solve_s_max": 508.6381,
+    "objective": 0.0321393,
+    "feasible": true
+  },
+  "obj_rel_diff": 0.0,
+  "both_feasible": true
+}

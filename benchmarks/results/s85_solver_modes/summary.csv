@@ -1,0 +1,5 @@
+variant_id,is_baseline,outcome,outcome_reason,solve_s,status,solved_by,iters,residual_inf,verified_correct,speedup_vs_baseline,is_best_candidate
+baseline,True,Completed,,505.4884,Optimal,PDLP,984000,8.868415896295202e-05,True,,False
+methodical1,False,DidNotComplete,timeout,,,,,,False,,False
+concurrent,False,Completed,,513.3977,Optimal,PDLP,984000,8.868415896295202e-05,True,0.9846,False
+barrier_cold,False,Completed,,7.1748,NumericalError,Barrier,0,inf,False,70.4533,False

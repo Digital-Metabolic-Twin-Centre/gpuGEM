@@ -1,0 +1,40 @@
+{
+  "variant": {
+    "id": "barrier_cold",
+    "cuopt_kwargs": {
+      "method": 3
+    },
+    "is_baseline": false,
+    "rationale": "method=Barrier (GPU interior-point via cuDSS), run cold with no warm start since warm-starting is confirmed broken in cuOpt 26.6.0. Theoretically more tolerant of ill-conditioning than PDLP -- plausibly why Gurobi's own barrier method doesn't suffer the same slowdown -- but never explicitly tested on these models."
+  },
+  "provenance": {
+    "model": "S85",
+    "scale": "microbiome",
+    "kind": "mat",
+    "source": "/home/farid/projects/cuGEM/microbiome_models/mWBM_S85_male.mat",
+    "sha256": "271d1590e4b75ecabb6ee8b7eda3f04a270497afc86689ed842afe364bb9c6eb",
+    "n_cols": 874634,
+    "n_eq_rows": 734457,
+    "n_total_rows": 1993029,
+    "nnz": 6137523,
+    "obj_nonzero": 1,
+    "maximize": true,
+    "objective_id": "whole_body",
+    "objective_rxn": "Whole_body_objective_rxn",
+    "objective_idx": 80701
+  },
+  "outcome": "Completed",
+  "outcome_reason": null,
+  "subprocess_exit_code": 0,
+  "solve_s": 7.1748,
+  "status": "NumericalError",
+  "solved_by": "Barrier",
+  "iters": 0,
+  "objective": null,
+  "residual_inf": Infinity,
+  "gurobi_objective": 1.0,
+  "obj_rel_diff": null,
+  "verified_correct": false,
+  "time_limit": 900.0,
+  "subprocess_timeout": 960.0
+}

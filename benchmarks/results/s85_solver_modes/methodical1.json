@@ -1,0 +1,25 @@
+{
+  "variant": {
+    "id": "methodical1",
+    "cuopt_kwargs": {
+      "pdlp_solver_mode": 2
+    },
+    "is_baseline": false,
+    "rationale": "pdlp_solver_mode=Methodical1: cuOpt describes this PDHG variant as 'more thorough, better on hard problems, slower per step but fewer steps needed' than the default Stable3. Explicitly flagged as untested on these microbiome whole-body models in prior investigation notes (cuGEM's CUOPT_SETTINGS_REFERENCE.md)."
+  },
+  "provenance": null,
+  "outcome": "DidNotComplete",
+  "outcome_reason": "timeout",
+  "subprocess_exit_code": null,
+  "solve_s": null,
+  "status": null,
+  "solved_by": null,
+  "iters": null,
+  "objective": null,
+  "residual_inf": null,
+  "gurobi_objective": 1.0,
+  "obj_rel_diff": null,
+  "verified_correct": false,
+  "time_limit": 900.0,
+  "subprocess_timeout": 960.0
+}

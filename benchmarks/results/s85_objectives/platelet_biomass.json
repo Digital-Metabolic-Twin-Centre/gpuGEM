@@ -1,0 +1,75 @@
+{
+  "objective": {
+    "id": "platelet_biomass",
+    "reaction": "Platelet_biomass_maintenance_noTrTr",
+    "category": "immune_cell_biomass",
+    "is_baseline": false,
+    "rationale": "Platelets are anucleate blood cells with minimal biosynthetic machinery -- the smallest, most constrained objective in the set."
+  },
+  "provenance": {
+    "model": "S85",
+    "scale": "microbiome",
+    "kind": "mat",
+    "source": "/home/farid/projects/cuGEM/microbiome_models/mWBM_S85_male.mat",
+    "sha256": "271d1590e4b75ecabb6ee8b7eda3f04a270497afc86689ed842afe364bb9c6eb",
+    "n_cols": 874634,
+    "n_eq_rows": 734457,
+    "n_total_rows": 1993029,
+    "nnz": 6137523,
+    "obj_nonzero": 1,
+    "maximize": true,
+    "objective_id": "platelet_biomass",
+    "objective_rxn": "Platelet_biomass_maintenance_noTrTr",
+    "objective_idx": 55444
+  },
+  "build_s": 69.30732623720542,
+  "reps": 1,
+  "time_limit": 900.0,
+  "res_tol": 0.0001,
+  "obj_tol": 1e-06,
+  "versions": {
+    "gpu_name": "NVIDIA RTX A4500",
+    "gurobi_version": "13.0.2",
+    "cuopt_version": "26.06.00",
+    "python": "3.13.13"
+  },
+  "timestamp": "2026-07-27T17:57:49.340394+00:00",
+  "gurobi": {
+    "repeats": [
+      {
+        "repeat": 0,
+        "solve_s": 51.664799361955374,
+        "objective": 0.028571428571428567,
+        "status": "Optimal",
+        "iters": 91,
+        "residual_inf": 9.8540391428e-07,
+        "feasible": true
+      }
+    ],
+    "solve_s_median": 51.664799361955374,
+    "solve_s_min": 51.664799361955374,
+    "solve_s_max": 51.664799361955374,
+    "objective": 0.028571428571428567,
+    "feasible": true
+  },
+  "cuopt": {
+    "repeats": [
+      {
+        "repeat": 0,
+        "solve_s": 507.0705,
+        "objective": 0.028571428571428567,
+        "status": "Optimal",
+        "iters": 984000,
+        "residual_inf": 8.868415896295202e-05,
+        "feasible": true
+      }
+    ],
+    "solve_s_median": 507.0705,
+    "solve_s_min": 507.0705,
+    "solve_s_max": 507.0705,
+    "objective": 0.028571428571428567,
+    "feasible": true
+  },
+  "obj_rel_diff": 0.0,
+  "both_feasible": true
+}

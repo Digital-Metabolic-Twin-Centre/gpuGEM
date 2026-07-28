@@ -87,3 +87,61 @@ objective registry with each one's biological rationale), one `<id>.json` per
 objective, and `summary.json`/`summary.csv` (per-solver average/median/min/max
 runtime, the cuOpt/Gurobi runtime ratio, and any objective whose ratio is an
 outlier relative to the rest).
+
+**Result**: the gap is real and structural, not an artifact of the biomass
+objective. All 20 objectives passed the correctness gate; cuOpt's wall time was
+flat across every one of them (507-537s, a ~6% spread) despite spanning wildly
+different biology (organs, immune cells, individual gut bacteria) —
+`runtime_ratio_median = 9.41`, the original whole-body objective's own ratio
+(9.16) sits right on the median, and zero objectives were flagged as outliers.
+cuOpt's cost on S85 is governed by the shared constraint matrix, not by which
+variable is being maximized.
+
+## S85 alternative solver-mode experiment
+
+Given the above, `run_solver_mode_experiment.py` tests whether any currently-unused
+cuOpt solver-mode setting closes the gap: `pdlp_solver_mode=Methodical1` (a PDHG
+variant described as more thorough on hard problems), `method=Concurrent`
+(cuOpt's own actual default — races PDLP/DualSimplex/Barrier in parallel;
+`gpugem`'s shipped defaults currently hardcode PDLP-only for large models,
+foreclosing this), and `method=Barrier` run cold (no warm start, since
+warm-starting is broken in cuOpt 26.6.0) — all three flagged as untested on this
+model family in prior investigation notes. Every variant is expressed as a
+`**cuopt_kwargs` override through `gpugem.solve`'s existing per-call mechanism;
+`gpugem/_defaults.py` is never edited (see `specs/004-s85-solver-mode-experiment/`).
+
+```bash
+python -m benchmarks.run_solver_mode_experiment              # baseline + all 3 candidates
+python -m benchmarks.aggregate_solver_modes                  # summary from committed JSON, no GPU
+```
+
+Because two of the three candidates have never been run on this model family and
+could behave unpredictably (in particular `barrier_cold`'s cold factorization on
+an ~874K-variable problem), each variant runs in its own subprocess with a time
+budget (`--time-limit`, default 900s cuOpt-level + 60s subprocess-level grace) —
+a hang or crash in one variant is recorded as `DidNotComplete` (`"timeout"` or
+`"crashed"`) and does not stop the remaining variants. Skips a variant whose
+result already exists unless `--force`.
+
+Outputs (committed) under `results/s85_solver_modes/`: one `<id>.json` per
+variant (`baseline`, `methodical1`, `concurrent`, `barrier_cold`) and
+`summary.json`/`summary.csv` (each candidate's speedup factor vs. baseline,
+correctness, and the best verified-correct candidate if any beats the baseline).
+
+**Result**: none of the three candidates beat the baseline while remaining
+verified-correct.
+
+| variant | solve_s | status | solved_by | verified_correct |
+|---|---|---|---|---|
+| baseline (unchanged) | 505.5s | Optimal | PDLP | yes |
+| methodical1 | — (`DidNotComplete`/`timeout`) | — | — | no |
+| concurrent | 513.4s | Optimal | PDLP | yes (0.98x — a tie) |
+| barrier_cold | 7.2s | NumericalError | Barrier | no |
+
+`methodical1` didn't even converge inside the same 900s+60s budget the baseline
+finished comfortably within. `concurrent` raced PDLP/DualSimplex/Barrier and PDLP
+won again — direct evidence that Barrier/DualSimplex aren't faster contenders on
+this problem even head-to-head. `barrier_cold` failed almost immediately with a
+numerical error rather than hanging or slowly converging, consistent with cuDSS's
+factorization choking on S85's `[1e-6, 2e5]` coefficient range without a warm
+start to help it. See the README's "Known limitations" section.

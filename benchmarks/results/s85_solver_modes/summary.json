@@ -1,0 +1,26 @@
+{
+  "baseline_solve_s": 505.4884,
+  "candidates": [
+    {
+      "id": "methodical1",
+      "solve_s": null,
+      "verified_correct": false,
+      "speedup": null
+    },
+    {
+      "id": "concurrent",
+      "solve_s": 513.3977,
+      "verified_correct": true,
+      "speedup": 0.984594204453974
+    },
+    {
+      "id": "barrier_cold",
+      "solve_s": 7.1748,
+      "verified_correct": false,
+      "speedup": 70.45330880303284
+    }
+  ],
+  "best_candidate_id": null,
+  "best_candidate_speedup": null,
+  "any_did_not_complete": true
+}

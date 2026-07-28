@@ -1,0 +1,38 @@
+{
+  "variant": {
+    "id": "baseline",
+    "cuopt_kwargs": {},
+    "is_baseline": true,
+    "rationale": "gpugem's current shipped large-model defaults (method=PDLP, presolve=PaPILO, per_constraint_residual=1), applied by giving no overrides at all so this can never silently drift from what gpugem._defaults.default_settings actually ships."
+  },
+  "provenance": {
+    "model": "S85",
+    "scale": "microbiome",
+    "kind": "mat",
+    "source": "/home/farid/projects/cuGEM/microbiome_models/mWBM_S85_male.mat",
+    "sha256": "271d1590e4b75ecabb6ee8b7eda3f04a270497afc86689ed842afe364bb9c6eb",
+    "n_cols": 874634,
+    "n_eq_rows": 734457,
+    "n_total_rows": 1993029,
+    "nnz": 6137523,
+    "obj_nonzero": 1,
+    "maximize": true,
+    "objective_id": "whole_body",
+    "objective_rxn": "Whole_body_objective_rxn",
+    "objective_idx": 80701
+  },
+  "outcome": "Completed",
+  "outcome_reason": null,
+  "subprocess_exit_code": 0,
+  "solve_s": 505.4884,
+  "status": "Optimal",
+  "solved_by": "PDLP",
+  "iters": 984000,
+  "objective": 1.0,
+  "residual_inf": 8.868415896295202e-05,
+  "gurobi_objective": 1.0,
+  "obj_rel_diff": 0.0,
+  "verified_correct": true,
+  "time_limit": 900.0,
+  "subprocess_timeout": 960.0
+}

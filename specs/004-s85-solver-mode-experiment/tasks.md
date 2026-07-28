@@ -36,7 +36,7 @@ inside `gpugem/` (see plan.md Project Structure).
 **Purpose**: Prepare the output location for this feature's results, distinct from `002`'s
 `results/S85.json` and `003`'s `results/s85_objectives/`.
 
-- [ ] T001 Create `benchmarks/results/s85_solver_modes/` directory with a `.gitkeep`
+- [X] T001 Create `benchmarks/results/s85_solver_modes/` directory with a `.gitkeep`
 
 **Checkpoint**: Output location exists; no new dependencies required (plan.md confirms
 cuopt-cu12/gurobipy/scipy/numpy already satisfy this feature).
@@ -51,19 +51,19 @@ form) — this MUST exist before any user story phase starts.
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T002 In `gpugem/result.py`, add `solved_by: Optional[str] = None` field to `FBAResult`
+- [X] T002 In `gpugem/result.py`, add `solved_by: Optional[str] = None` field to `FBAResult`
   per `contracts/gpugem-api-addition.md` (docstring explaining it's from cuOpt's
   `sol.get_solved_by()`, most informative for `method=Concurrent`, `None` if unavailable)
-- [ ] T003 In `gpugem/solver.py`'s `solve()`, immediately after `sol = Solve(dm, settings)`,
+- [X] T003 In `gpugem/solver.py`'s `solve()`, immediately after `sol = Solve(dm, settings)`,
   capture `sol.get_solved_by()` (its `SolverMethod` enum `.name`, e.g. `"PDLP"`) into a local
   variable using the same defensive `try/except` style already used for `get_lp_stats()`, and
   pass it through as `FBAResult(..., solved_by=...)` — no change to existing default-merging,
   settings application, or status/feasibility logic (depends on T002)
-- [ ] T004 [P] In `tests/test_solver.py`, add a test that solves the existing `tiny_lp` fixture
+- [X] T004 [P] In `tests/test_solver.py`, add a test that solves the existing `tiny_lp` fixture
   and asserts `result.solved_by` is populated with a valid `SolverMethod` name (or is `None` if
   the installed cuOpt version doesn't support it — do not hard-fail on absence), per
   `contracts/gpugem-api-addition.md` (Constitution Principle III — depends on T003)
-- [ ] T005 In `benchmarks/solver_mode_variants.py`, create the `SOLVER_MODE_VARIANTS` list of 4
+- [X] T005 In `benchmarks/solver_mode_variants.py`, create the `SOLVER_MODE_VARIANTS` list of 4
   `SolverModeVariant` entries per data-model.md: `baseline` (`cuopt_kwargs={}`, `is_baseline=True`),
   `methodical1` (`cuopt_kwargs={"pdlp_solver_mode": 2}`), `concurrent`
   (`cuopt_kwargs={"method": 0}`), `barrier_cold` (`cuopt_kwargs={"method": 3}`) — each with a
@@ -71,7 +71,7 @@ form) — this MUST exist before any user story phase starts.
   `validate_variants()` function that checks every `cuopt_kwargs` key against cuOpt's live
   `get_solver_parameter_names()` registry and that exactly one entry has `is_baseline=True`
   (research R5, R8; validation rules in data-model.md)
-- [ ] T006 [P] Create `tests/test_solver_mode_variants.py` with registry validation tests (no
+- [X] T006 [P] Create `tests/test_solver_mode_variants.py` with registry validation tests (no
   GPU/Gurobi required): `id` values unique, exactly one `is_baseline=True`, every
   `cuopt_kwargs` key resolves against `get_solver_parameter_names()` (depends on T005)
 
@@ -91,7 +91,7 @@ on the same objective and the same underlying LP.
 
 ### Implementation for User Story 1
 
-- [ ] T007 [US1] Create `benchmarks/_solver_mode_worker.py`: given a `variant_id` CLI argument,
+- [X] T007 [US1] Create `benchmarks/_solver_mode_worker.py`: given a `variant_id` CLI argument,
   look it up in `SOLVER_MODE_VARIANTS` (T005), build S85's LP via
   `benchmarks.s85_objectives.build_lp_for_objective("whole_body")`, call
   `gpugem.solve(..., time_limit=<passed in>, check_feasibility=True, **variant.cuopt_kwargs)`,
@@ -99,7 +99,7 @@ on the same objective and the same underlying LP.
   JSON object to stdout (`solve_s`, `status`, `solved_by`, `iters`, `objective`,
   `residual_inf`) — this is the subprocess entry point, never invoked directly by a user
   (research R1, R2; `contracts/cli-contract.md`)
-- [ ] T008 [US1] Create `benchmarks/run_solver_mode_experiment.py` orchestrator: solve Gurobi
+- [X] T008 [US1] Create `benchmarks/run_solver_mode_experiment.py` orchestrator: solve Gurobi
   once via `benchmarks.solve.solve_gurobi` on the same LP (research R6) as the shared correctness
   reference; for each of the 4 variants in `SOLVER_MODE_VARIANTS` order, skip if
   `results/s85_solver_modes/<id>.json` already exists and `--force` wasn't given (print
@@ -111,14 +111,14 @@ on the same objective and the same underlying LP.
   `benchmarks.residual.objectives_agree`, and write `results/s85_solver_modes/<id>.json` per
   data-model.md's `VariantResult` schema and `contracts/result-json.schema.json`; add
   `--time-limit` (default 900.0) and `--force` CLI flags (depends on T007)
-- [ ] T009 [US1] On the GPU host, run
+- [X] T009 [US1] On the GPU host, run
   `python -m benchmarks.run_solver_mode_experiment` for just the `baseline` variant (temporarily
   isolate it or let the full run reach it first) and confirm `results/s85_solver_modes/
   baseline.json`'s `solve_s` is consistent with the existing ~509-520s cuOpt figures from
   `002`/`003` and `solved_by="PDLP"` — this is the check that the new subprocess-based path
   reproduces the already-trusted result before trusting it for the untested candidates
   (quickstart.md step 3; depends on T008)
-- [ ] T010 [US1] On the GPU host, run the full experiment (`python -m
+- [X] T010 [US1] On the GPU host, run the full experiment (`python -m
   benchmarks.run_solver_mode_experiment`) and confirm every one of the 4 variants produces a
   recorded `VariantResult` (`Completed` or `DidNotComplete`), none silently missing from
   `results/s85_solver_modes/` (depends on T008, T009)
@@ -141,7 +141,7 @@ the baseline).
 
 ### Implementation for User Story 2
 
-- [ ] T011 [P] [US2] Create `benchmarks/aggregate_solver_modes.py`: read the (up to 4)
+- [X] T011 [P] [US2] Create `benchmarks/aggregate_solver_modes.py`: read the (up to 4)
   `results/s85_solver_modes/*.json` files, compute `speedup = baseline_solve_s /
   candidate_solve_s` per verified-correct candidate (research R7), identify `best_candidate_id`
   (verified-correct, `speedup > 1`, minimal `solve_s`) or `null` if none qualify, and write
@@ -149,15 +149,15 @@ the baseline).
   `VariantComparison` and `contracts/csv-columns.md` (exactly 4 CSV rows regardless of outcome)
   — runnable standalone with no solver import (depends on T008 for the result-file shape, not on
   T009/T010's actual GPU runs, so can proceed in parallel with those)
-- [ ] T012 [US2] In `benchmarks/run_solver_mode_experiment.py`, call
+- [X] T012 [US2] In `benchmarks/run_solver_mode_experiment.py`, call
   `aggregate_solver_modes`'s summary regeneration at the end of a run, per
   `contracts/cli-contract.md` (depends on T008, T011)
-- [ ] T013 [P] [US2] In `tests/test_solver_mode_variants.py`, add comparison-math unit tests on
+- [X] T013 [P] [US2] In `tests/test_solver_mode_variants.py`, add comparison-math unit tests on
   synthetic `VariantResult`-shaped data: speedup computed correctly, best-candidate selection
   picks the fastest verified-correct candidate with `speedup > 1`, and the "no candidate beats
   baseline" case is reported explicitly (not omitted or defaulted to a misleading value) —
   matches spec User Story 2 Acceptance Scenario 3 (depends on T011)
-- [ ] T014 [US2] On the GPU host, run `python -m benchmarks.aggregate_solver_modes` (or let
+- [X] T014 [US2] On the GPU host, run `python -m benchmarks.aggregate_solver_modes` (or let
   T012's wiring do it) against T010's results and confirm `summary.json`/`summary.csv` correctly
   reflect each variant's speedup and correctness, per quickstart.md step 6 (depends on T010, T012)
 
@@ -177,13 +177,13 @@ candidate and still proceeds to run the remaining candidates.
 
 ### Implementation for User Story 3
 
-- [ ] T015 [US3] In `benchmarks/run_solver_mode_experiment.py`, add `timeout=variant_time_limit +
+- [X] T015 [US3] In `benchmarks/run_solver_mode_experiment.py`, add `timeout=variant_time_limit +
   60` to the `subprocess.run` call (research R3) and catch `subprocess.TimeoutExpired`,
   classifying that outcome as `"DidNotComplete"` / `outcome_reason="timeout"` (distinct from
   T008's existing `"crashed"` classification for a clean nonzero exit) — the process is killed by
   `subprocess.run`'s own timeout handling, and the loop MUST continue to the next variant
   afterward (depends on T008)
-- [ ] T016 [US3] On the GPU host, force a timeout (e.g. temporarily pass a very small
+- [X] T016 [US3] On the GPU host, force a timeout (e.g. temporarily pass a very small
   `--time-limit` while testing `barrier_cold` or `methodical1` specifically) and confirm: (a) it
   is recorded as `DidNotComplete`/`"timeout"`, not a false success or an unclassified crash; (b)
   the experiment proceeds to and completes the remaining variants; (c) the User Story 2 summary
@@ -200,16 +200,16 @@ results, a comparison, and survives an unproven setting misbehaving.
 **Purpose**: Documentation, lint, and the final end-to-end run that answers the motivating
 question.
 
-- [ ] T017 [P] Add a "S85 solver-mode experiment" section to `benchmarks/README.md` documenting
+- [X] T017 [P] Add a "S85 solver-mode experiment" section to `benchmarks/README.md` documenting
   `run_solver_mode_experiment.py` / `aggregate_solver_modes.py` usage, per plan.md's Project
   Structure note
-- [ ] T018 [P] Run `ruff check` on `gpugem/solver.py`, `gpugem/result.py`,
+- [X] T018 [P] Run `ruff check` on `gpugem/solver.py`, `gpugem/result.py`,
   `benchmarks/solver_mode_variants.py`, `benchmarks/_solver_mode_worker.py`,
   `benchmarks/run_solver_mode_experiment.py`, `benchmarks/aggregate_solver_modes.py`,
   `tests/test_solver_mode_variants.py` and fix any violations (Constitution Quality Standards:
   `line-length = 100`), consistent with `003`'s established convention of matching existing
   `benchmarks/` style rather than diverging
-- [ ] T019 Run quickstart.md end-to-end (steps 1-6) on the GPU host and record, in the
+- [X] T019 Run quickstart.md end-to-end (steps 1-6) on the GPU host and record, in the
   experiment's own `summary.json`, whether any candidate variant beats the baseline while
   remaining `verified_correct` — the answer to spec SC-001. If any candidate surfaces a new
   solver limitation (e.g. `barrier_cold` OOMs, or `concurrent`'s winning method is inconsistent

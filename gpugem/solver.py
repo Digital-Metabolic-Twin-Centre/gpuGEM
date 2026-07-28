@@ -5,7 +5,7 @@ Core FBA solver — thin wrapper over NVIDIA cuOpt with validated default settin
 from __future__ import annotations
 
 import time
-from typing import Any, Optional, Union
+from typing import Any, Optional
 
 import numpy as np
 import scipy.sparse as sp
@@ -174,6 +174,13 @@ def solve(
     except Exception:
         pass
 
+    # Which underlying method actually produced the solution (relevant for method=Concurrent)
+    solved_by = None
+    try:
+        solved_by = sol.get_solved_by().name
+    except Exception:
+        pass
+
     # Extract solution
     fluxes = None
     objective = None
@@ -217,6 +224,7 @@ def solve(
         solver_settings=applied,
         feasibility=feasibility,
         n_iterations=n_iterations,
+        solved_by=solved_by,
         solver_stats=solver_stats,
     )
 

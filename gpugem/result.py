@@ -35,6 +35,12 @@ class FBAResult:
     """Solver-reported convergence statistics (``primal_residual``, ``dual_residual``,
     ``gap``, ``nb_iterations``) as returned by cuOpt's ``get_lp_stats()``."""
 
+    solved_by: Optional[str] = None
+    """Which underlying method produced the solution (``'PDLP'``, ``'DualSimplex'``,
+    ``'Barrier'``, ``'Concurrent'``, ``'Unset'``), from cuOpt's ``sol.get_solved_by()``.
+    Most informative when ``method=Concurrent`` was requested, since cuOpt races multiple
+    methods and the winner can vary; ``None`` if the installed cuOpt version doesn't expose it."""
+
     def __repr__(self) -> str:
         obj = f"{self.objective:.6g}" if self.objective is not None else "None"
         iters = f", iters={self.n_iterations}" if self.n_iterations is not None else ""

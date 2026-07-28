@@ -156,6 +156,16 @@ result.feasibility  # dict: stoich_max_residual, stoich_rows_violated_1e6, ...
 - Requires an NVIDIA GPU with CUDA 12+ and the `cuopt-cu12` package (NVIDIA Developer licence).
 - The min-norm QP step (used in some FBA variants to select a unique flux vector) cannot currently be solved by cuOpt — Gurobi or another QP solver is needed for that step.
 - Postsolve accuracy on models > 100K reactions is bounded at ~1e-5 due to a hardcoded tolerance in cuOpt's PaPILO integration ([open issue](https://github.com/rapidsai/cuopt/issues)).
+- On the mWBM S85 microbiome model (coefficient range spanning `[1e-6, 2e5]`), cuOpt's PDLP is
+  structurally ~9-10x slower than Gurobi across every biologically distinct objective tested, not
+  just one (`benchmarks/run_objective_sweep.py`). None of `pdlp_solver_mode=Methodical1`,
+  `method=Concurrent`, or a cold (no warm-start) `method=Barrier` close that gap on this model:
+  Methodical1 did not converge within a 900s+60s budget (worse than baseline's ~505s); Concurrent
+  raced PDLP/DualSimplex/Barrier and PDLP won again (~513s, effectively tied with baseline); cold
+  Barrier failed almost immediately with `status=NumericalError` (~7s, no usable solution) —
+  plausibly cuDSS's sparse factorization failing on this matrix's ill-conditioning without a warm
+  start to help it, consistent with `26.6.0`'s separately-confirmed broken warm-start path
+  (`benchmarks/run_solver_mode_experiment.py`, see `specs/004-s85-solver-mode-experiment/`).
 
 ---
 

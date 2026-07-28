@@ -1,0 +1,15 @@
+{
+  "n_objectives_total": 20,
+  "n_objectives_gated": 20,
+  "gurobi_solve_s_mean": 57.6648899684893,
+  "gurobi_solve_s_median": 54.666974547086284,
+  "gurobi_solve_s_min": 51.664799361955374,
+  "gurobi_solve_s_max": 87.62362292502075,
+  "cuopt_solve_s_mean": 515.50757,
+  "cuopt_solve_s_median": 511.90755,
+  "cuopt_solve_s_min": 506.9108,
+  "cuopt_solve_s_max": 536.5644,
+  "runtime_ratio_median": 9.407865789847353,
+  "baseline_ratio": 9.162532243104867,
+  "outliers": []
+}

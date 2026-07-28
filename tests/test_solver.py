@@ -51,6 +51,14 @@ def test_cuopt_override(tiny_lp):
     assert result.status in ("Optimal", "TimeLimit", "NoTermination")
 
 
+def test_solved_by_reported(tiny_lp):
+    """result.solved_by is either a real SolverMethod name or None, never garbage."""
+    import gpugem
+    result = gpugem.solve(**tiny_lp, time_limit=10.0)
+    if result.solved_by is not None:
+        assert result.solved_by in ("PDLP", "DualSimplex", "Barrier", "Concurrent", "Unset")
+
+
 def test_fba_solver_stateful(tiny_lp):
     import gpugem
     solver = gpugem.FBASolver(**tiny_lp, time_limit=10.0)
