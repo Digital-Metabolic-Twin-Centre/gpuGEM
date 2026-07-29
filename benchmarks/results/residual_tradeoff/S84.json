@@ -1,0 +1,40 @@
+{
+  "model": "S84",
+  "scale": "microbiome",
+  "n_cols": 685998,
+  "shipped_default": {
+    "configuration": "shipped_default",
+    "source": "reused",
+    "solve_s": 24.6368,
+    "iterations": 57000,
+    "status": "Optimal",
+    "objective": 1.0,
+    "residual_inf": 4.7207380759468074e-05,
+    "rows_violated": null,
+    "time_limit": 900.0
+  },
+  "residual_0": {
+    "configuration": "residual_0",
+    "source": "fresh",
+    "solve_s": 9.1123,
+    "iterations": 13600,
+    "status": "Optimal",
+    "objective": 1.0,
+    "residual_inf": 2.573880495289296,
+    "rows_violated": 249173,
+    "time_limit": 900.0
+  },
+  "gurobi": {
+    "configuration": "gurobi",
+    "source": "reused",
+    "solve_s": 40.616124144755304,
+    "iterations": 94,
+    "status": "Optimal",
+    "objective": 1.0,
+    "residual_inf": 9.104737948701074e-07,
+    "rows_violated": null,
+    "time_limit": 900.0
+  },
+  "speedup_residual_0_vs_shipped": 2.703686226309494,
+  "violation_ratio_residual_0_vs_shipped": 54522.84057875992
+}

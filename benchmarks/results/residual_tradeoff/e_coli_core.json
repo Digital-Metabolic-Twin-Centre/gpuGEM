@@ -1,0 +1,40 @@
+{
+  "model": "e_coli_core",
+  "scale": "small",
+  "n_cols": 95,
+  "shipped_default": {
+    "configuration": "shipped_default",
+    "source": "reused",
+    "solve_s": 0.2489,
+    "iterations": 8200,
+    "status": "Optimal",
+    "objective": 0.8739215056938601,
+    "residual_inf": 7.779511312921983e-09,
+    "rows_violated": null,
+    "time_limit": 900.0
+  },
+  "residual_0": {
+    "configuration": "residual_0",
+    "source": "fresh",
+    "solve_s": 0.4681,
+    "iterations": 8200,
+    "status": "Optimal",
+    "objective": 0.8739215056938601,
+    "residual_inf": 7.779511312921983e-09,
+    "rows_violated": 0,
+    "time_limit": 900.0
+  },
+  "gurobi": {
+    "configuration": "gurobi",
+    "source": "reused",
+    "solve_s": 0.0007871249690651894,
+    "iterations": 10,
+    "status": "Optimal",
+    "objective": 0.8739215069684305,
+    "residual_inf": 1.4210854715202004e-13,
+    "rows_violated": null,
+    "time_limit": 900.0
+  },
+  "speedup_residual_0_vs_shipped": 0.5317239906002991,
+  "violation_ratio_residual_0_vs_shipped": 1.0
+}

@@ -1,0 +1,40 @@
+{
+  "model": "Harvey",
+  "scale": "whole-body",
+  "n_cols": 81094,
+  "shipped_default": {
+    "configuration": "shipped_default",
+    "source": "reused",
+    "solve_s": 1.6727,
+    "iterations": 31600,
+    "status": "Optimal",
+    "objective": 1.0,
+    "residual_inf": 5.5791078423794715e-09,
+    "rows_violated": null,
+    "time_limit": 900.0
+  },
+  "residual_0": {
+    "configuration": "residual_0",
+    "source": "fresh",
+    "solve_s": 1.1543,
+    "iterations": 19800,
+    "status": "Optimal",
+    "objective": 1.0,
+    "residual_inf": 0.00031923918475594256,
+    "rows_violated": 591,
+    "time_limit": 900.0
+  },
+  "gurobi": {
+    "configuration": "gurobi",
+    "source": "reused",
+    "solve_s": 2.815347373019904,
+    "iterations": 55,
+    "status": "Optimal",
+    "objective": 1.0,
+    "residual_inf": 3.3396645449101925e-09,
+    "rows_violated": null,
+    "time_limit": 900.0
+  },
+  "speedup_residual_0_vs_shipped": 1.4491033526812787,
+  "violation_ratio_residual_0_vs_shipped": 57220.47212118203
+}

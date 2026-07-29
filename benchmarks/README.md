@@ -145,3 +145,47 @@ this problem even head-to-head. `barrier_cold` failed almost immediately with a
 numerical error rather than hanging or slowly converging, consistent with cuDSS's
 factorization choking on S85's `[1e-6, 2e5]` coefficient range without a warm
 start to help it. See the README's "Known limitations" section.
+
+## Constraint-residual speed/correctness trade-off benchmark
+
+A follow-up investigation traced the S85 slowdown to a specific, deliberate `gpugem`
+default: `per_constraint_residual=1` (a per-row L-infinity feasibility check requiring
+*every one* of ~2 million constraint rows to individually satisfy the tolerance) versus
+cuOpt's own actual default, `per_constraint_residual=0` (an aggregate L2-norm check).
+`run_residual_tradeoff.py` quantifies that trade-off across every model already in the
+cross-scale benchmark — not just S85 — reusing `002`'s existing shipped-default cuOpt and
+Gurobi results (never re-solved) and adding one fresh `per_constraint_residual=0` solve per
+model. **This benchmark does not change, recommend, or silently adopt
+`per_constraint_residual=0`** — `gpugem/_defaults.py` stays untouched regardless of what the
+comparison shows (see `specs/005-residual-tradeoff-benchmark/`).
+
+```bash
+python -m benchmarks.run_residual_tradeoff --all              # reuse 002 + solve per_constraint_residual=0
+python -m benchmarks.aggregate_residual_tradeoff               # comparison.csv from committed JSON, no GPU
+python -m benchmarks.make_residual_tradeoff_figures             # both figures from the CSV, no solver
+```
+
+Outputs (committed) under `results/residual_tradeoff/`: one `<model>.json` per model (all three
+configurations) and `comparison.csv` (15 rows: 5 models x 3 configurations). Figures under
+`figures/`: `residual_tradeoff_violations.png` and `residual_tradeoff_solvetime.png` — both carry
+an explicit "not a recommended configuration" caption and visually distinguish the
+`per_constraint_residual=0` bars (hatched) from the other two.
+
+**Result**: the effect scales with model conditioning, not just size — and it's essentially free
+for the two small, well-conditioned models.
+
+| model | vars | shipped_default residual | residual_0 residual | rows violated (>1e-6) | speedup |
+|---|---|---|---|---|---|
+| e_coli_core | 95 | 7.78e-09 | 7.78e-09 (identical) | 0 | ~0.5x (already sub-second either way) |
+| iML1515 | 2,712 | 2.95e-09 | 4.45e-09 | 0 | ~1.0x (no meaningful difference) |
+| Harvey | 81,094 | 5.58e-09 | 3.19e-04 | 591 | ~1.4x |
+| S84 | 685,998 | 4.72e-05 | 2.57 | 249,173 | ~2.7x |
+| S85 | 874,634 | 8.87e-05 | 156.4 | 372,156 | ~66.9x |
+
+For the two small BiGG models, `per_constraint_residual` essentially never binds — the shipped
+default and cuOpt's own default land on the same iteration count and residual, confirming this is
+specifically a large/ill-conditioned-model phenomenon, not a general cuOpt inefficiency. The
+effect grows sharply with scale and coefficient-range severity: by S85, disabling the per-row
+check leaves **372,156 of ~2 million constraint rows** (about 19%) violated beyond `1e-6` — a
+real, large correctness regression, not numerical noise, which is exactly why `gpugem` pays the
+iteration cost to avoid it.

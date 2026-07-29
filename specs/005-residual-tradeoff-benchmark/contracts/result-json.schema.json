@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Per-model residual-tradeoff comparison",
+  "description": "benchmarks/results/residual_tradeoff/<model>.json",
+  "type": "object",
+  "required": ["model", "scale", "n_cols", "shipped_default", "residual_0", "gurobi",
+               "speedup_residual_0_vs_shipped", "violation_ratio_residual_0_vs_shipped"],
+  "properties": {
+    "model": {"enum": ["e_coli_core", "iML1515", "Harvey", "S84", "S85"]},
+    "scale": {"enum": ["small", "medium", "whole-body", "microbiome"]},
+    "n_cols": {"type": "integer"},
+    "shipped_default": {"$ref": "#/$defs/result"},
+    "residual_0": {"$ref": "#/$defs/result"},
+    "gurobi": {"$ref": "#/$defs/result"},
+    "speedup_residual_0_vs_shipped": {"type": "number"},
+    "violation_ratio_residual_0_vs_shipped": {"type": "number"}
+  },
+  "$defs": {
+    "result": {
+      "type": "object",
+      "required": ["configuration", "source", "solve_s", "status", "objective",
+                   "residual_inf", "rows_violated", "time_limit"],
+      "properties": {
+        "configuration": {"enum": ["shipped_default", "residual_0", "gurobi"]},
+        "source": {"enum": ["reused", "fresh"]},
+        "solve_s": {"type": "number"},
+        "iterations": {"type": ["integer", "null"]},
+        "status": {"type": "string"},
+        "objective": {"type": "number"},
+        "residual_inf": {"type": "number"},
+        "rows_violated": {"type": ["integer", "null"]},
+        "time_limit": {"type": "number"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"source": {"const": "reused"}}},
+          "then": {"properties": {"rows_violated": {"const": null}}}
+        }
+      ]
+    }
+  }
+}
