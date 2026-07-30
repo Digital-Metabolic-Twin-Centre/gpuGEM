@@ -16,19 +16,15 @@ HERE = Path(__file__).resolve().parent
 CSV = HERE / "results" / "benchmark.csv"
 OUT = HERE / "figures" / "benchmark_solvetime.png"
 
-SCALE_ORDER = ["small", "medium", "whole-body", "microbiome"]
-
-
 def main():
     df = pd.read_csv(CSV)
-    df["_sc"] = df["scale"].map({s: i for i, s in enumerate(SCALE_ORDER)})
-    df = df.sort_values(["_sc", "n_cols"]).reset_index(drop=True)
+    df = df.sort_values("n_cols").reset_index(drop=True)
 
     labels = ["%s\n(%s vars)" % (r.model, format(int(r.n_cols), ",")) for r in df.itertuples()]
     x = np.arange(len(df))
     w = 0.38
 
-    fig, ax = plt.subplots(figsize=(8.2, 4.6))
+    fig, ax = plt.subplots(figsize=(max(8.2, 1.5 * len(df)), 4.6))
     b1 = ax.bar(x - w / 2, df["gurobi_solve_s_median"], w, label="Gurobi (barrier+crossover)",
                 color="#c44e52", edgecolor="black", linewidth=0.4)
     b2 = ax.bar(x + w / 2, df["cuopt_solve_s_median"], w, label="cuOpt (gpuGEM default, GPU)",

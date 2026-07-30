@@ -6,7 +6,6 @@ problem. BiGG models are cached locally for reproducibility.
 """
 from __future__ import annotations
 
-import gzip
 import hashlib
 import os
 from pathlib import Path
@@ -27,7 +26,8 @@ HARVEY_MAT = Path(os.environ.get(
     Path.home() / "projects" / "cuGEM" / "metabolic_modelling" / "Harvey_1_03c_reduced.mat",
 ))
 
-# order controls left-to-right placement in the figure (small -> large)
+# order is cosmetic (dict literal position only) -- the comparison figure sorts by
+# each model's actual solved n_cols, not by this field (see make_figure.py)
 REGISTRY = {
     "e_coli_core": {"scale": "small",      "order": 0, "kind": "cobra", "source": "e_coli_core"},
     "iML1515":     {"scale": "medium",     "order": 1, "kind": "cobra", "source": "iML1515"},
@@ -38,6 +38,14 @@ REGISTRY = {
                     "source": str(MODELS_DIR / "mWBM_S84_male.mat"), "model_key": None, "objective": None},
     "S85":         {"scale": "microbiome", "order": 4, "kind": "mat",
                     "source": str(MODELS_DIR / "mWBM_S85_male.mat"), "model_key": None, "objective": None},
+    "S9":          {"scale": "microbiome", "order": 5, "kind": "mat",
+                    "source": str(CACHE / "mWBM_S9_male.mat"), "model_key": None, "objective": None},
+    "S15":         {"scale": "microbiome", "order": 6, "kind": "mat",
+                    "source": str(CACHE / "mWBM_S15_male.mat"), "model_key": None, "objective": None},
+    "S23":         {"scale": "microbiome", "order": 7, "kind": "mat",
+                    "source": str(CACHE / "mWBM_S23_male.mat"), "model_key": None, "objective": None},
+    "S83":         {"scale": "microbiome", "order": 8, "kind": "mat",
+                    "source": str(CACHE / "mWBM_S83_male.mat"), "model_key": None, "objective": None},
 }
 
 ALL_MODELS = list(REGISTRY.keys())

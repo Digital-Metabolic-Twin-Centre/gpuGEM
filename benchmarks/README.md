@@ -1,7 +1,7 @@
 # Cross-scale cuOpt vs Gurobi LP benchmark
 
 Compares the GPU LP solver (NVIDIA cuOpt, via gpuGEM's shipped size-selected
-defaults) against Gurobi standalone on the max-biomass FBA LP of five models
+defaults) against Gurobi standalone on the max-biomass FBA LP of nine models
 spanning four orders of magnitude:
 
 | model | scale | source | loader |
@@ -11,6 +11,16 @@ spanning four orders of magnitude:
 | Harvey | whole-body | Harvey_1_03c_reduced.mat | gpugem.loaders.from_mat |
 | S84 | microbiome | mWBM_S84_male.mat | gpugem.loaders.from_mat |
 | S85 | microbiome | mWBM_S85_male.mat | gpugem.loaders.from_mat |
+| S23 | microbiome | mWBM_S23_male.mat (model_cache/) | gpugem.loaders.from_mat |
+| S15 | microbiome | mWBM_S15_male.mat (model_cache/) | gpugem.loaders.from_mat |
+| S9 | microbiome | mWBM_S9_male.mat (model_cache/) | gpugem.loaders.from_mat |
+| S83 | microbiome | mWBM_S83_male.mat (model_cache/) | gpugem.loaders.from_mat |
+
+S9/S15/S23/S83 are all larger than S85 (874,634 vars) — 1,007,742 to 1,179,186
+variables — and live under `benchmarks/model_cache/` rather than the `MWBM_DIR`
+location S84/S85 use (gitignored, never committed: ~637MB across the plain and
+`_lifted` variants). The comparison figure orders all nine models strictly by
+variable count, not by the table order above.
 
 Both solvers receive the **identical** LP built by `gpugem.loaders`. cuOpt uses
 gpuGEM's shipped defaults (`gpugem._defaults.default_settings`, size-selected:
@@ -29,7 +39,7 @@ The 1e-4 absolute residual tolerance accommodates the microbiome whole-body
 models, whose stoichiometric coefficients span [1e-6, 2e5]; cuOpt's PaPILO
 integration has a hardcoded feastol ~1e-5 (see gpugem/_defaults.py), so an
 absolute 1e-6 gate would reject a solution that reaches the identical optimum
-as Gurobi (objectives agree to 0 relative difference on all five models).
+as Gurobi (objectives agree to 0 relative difference on all nine models).
 
 ## Run
 
