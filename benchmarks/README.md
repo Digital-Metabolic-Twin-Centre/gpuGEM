@@ -162,24 +162,42 @@ A follow-up investigation traced the S85 slowdown to a specific, deliberate `gpu
 default: `per_constraint_residual=1` (a per-row L-infinity feasibility check requiring
 *every one* of ~2 million constraint rows to individually satisfy the tolerance) versus
 cuOpt's own actual default, `per_constraint_residual=0` (an aggregate L2-norm check).
-`run_residual_tradeoff.py` quantifies that trade-off across every model already in the
-cross-scale benchmark — not just S85 — reusing `002`'s existing shipped-default cuOpt and
-Gurobi results (never re-solved) and adding one fresh `per_constraint_residual=0` solve per
-model. **This benchmark does not change, recommend, or silently adopt
+`run_residual_tradeoff.py` quantifies that trade-off across every model in the cross-scale
+benchmark — now all nine, not just the original five — reusing `002`'s existing shipped-default
+cuOpt and Gurobi results (never re-solved) and adding one fresh `per_constraint_residual=0` solve
+per model. **This benchmark does not change, recommend, or silently adopt
 `per_constraint_residual=0`** — `gpugem/_defaults.py` stays untouched regardless of what the
-comparison shows (see `specs/005-residual-tradeoff-benchmark/`).
+comparison shows (see `specs/005-residual-tradeoff-benchmark/`,
+`specs/007-violation-distribution-figures/`).
 
 ```bash
 python -m benchmarks.run_residual_tradeoff --all              # reuse 002 + solve per_constraint_residual=0
 python -m benchmarks.aggregate_residual_tradeoff               # comparison.csv from committed JSON, no GPU
-python -m benchmarks.make_residual_tradeoff_figures             # both figures from the CSV, no solver
+python -m benchmarks.make_residual_tradeoff_figures             # runtime comparison figures from the CSV, no solver
+python -m benchmarks.make_violation_distribution_figures        # violation-distribution figures, no solver
 ```
 
+`--all` skips a model whose `results/residual_tradeoff/<model>.json` is already up to date; a file
+from before the violation-histogram fields existed is automatically re-solved once (printed as
+`[backfill] <model>`, not `[skip]`) rather than silently left stale — `--force` still forces an
+unconditional re-solve of any model.
+
 Outputs (committed) under `results/residual_tradeoff/`: one `<model>.json` per model (all three
-configurations) and `comparison.csv` (15 rows: 5 models x 3 configurations). Figures under
-`figures/`: `residual_tradeoff_violations.png` and `residual_tradeoff_solvetime.png` — both carry
-an explicit "not a recommended configuration" caption and visually distinguish the
-`per_constraint_residual=0` bars (hatched) from the other two.
+configurations, plus per-row violation histograms for the S-block and, where present, C-block) and
+`comparison.csv` (27 rows: 9 models x 3 configurations). Figures under `figures/`:
+
+- `residual_tradeoff_violations.png` / `residual_tradeoff_solvetime.png` — the three-configuration
+  comparison for all nine models, hatched `per_constraint_residual=0` bars, both carrying an
+  explicit "not a recommended configuration" caption.
+- `violation_distribution_equations.png` — a population-pyramid-style figure showing, for every
+  model, how many mass-balance equations are violated and by what magnitude under
+  `per_constraint_residual=0` (not just the single worst-row number above): violation magnitude on
+  the log-scale y-axis, count of equations at that magnitude on the x-axis, equations falling short
+  of the required balance mirrored (left) against equations exceeding it (right). Every model is
+  overlaid as a semi-transparent filled distribution, colored by a single ordinal ramp keyed to
+  model size and labeled directly by name.
+- `violation_distribution_constraints.png` — the same layout for coupling constraints, limited to
+  the seven models that have a coupling block (`e_coli_core`/`iML1515` are absent, not shown empty).
 
 **Result**: the effect scales with model conditioning, not just size — and it's essentially free
 for the two small, well-conditioned models.
@@ -189,13 +207,21 @@ for the two small, well-conditioned models.
 | e_coli_core | 95 | 7.78e-09 | 7.78e-09 (identical) | 0 | ~0.5x (already sub-second either way) |
 | iML1515 | 2,712 | 2.95e-09 | 4.45e-09 | 0 | ~1.0x (no meaningful difference) |
 | Harvey | 81,094 | 5.58e-09 | 3.19e-04 | 591 | ~1.4x |
-| S84 | 685,998 | 4.72e-05 | 2.57 | 249,173 | ~2.7x |
-| S85 | 874,634 | 8.87e-05 | 156.4 | 372,156 | ~66.9x |
+| S84 | 685,998 | 4.72e-05 | 2.57 | 249,173 | ~2.8x |
+| S85 | 874,634 | 8.87e-05 | 156.4 | 372,156 | ~71.9x |
+| S23 | 1,007,742 | 3.12e-05 | 2.58 | 340,300 | ~54.7x |
+| S15 | 1,084,341 | 9.94e-05 | 8.19 | 371,854 | ~17.9x |
+| S9 | 1,111,943 | 5.56e-05 | 294.7 | 469,579 | ~48.7x |
+| S83 | 1,179,186 | 2.14e-05 | 4.32 | 359,446 | ~32.4x |
 
 For the two small BiGG models, `per_constraint_residual` essentially never binds — the shipped
 default and cuOpt's own default land on the same iteration count and residual, confirming this is
 specifically a large/ill-conditioned-model phenomenon, not a general cuOpt inefficiency. The
-effect grows sharply with scale and coefficient-range severity: by S85, disabling the per-row
-check leaves **372,156 of ~2 million constraint rows** (about 19%) violated beyond `1e-6` — a
-real, large correctness regression, not numerical noise, which is exactly why `gpugem` pays the
-iteration cost to avoid it.
+effect grows sharply with scale and coefficient-range severity: across the seven whole-body/
+microbiome models, disabling the per-row check leaves hundreds of thousands of constraint rows
+(roughly a fifth to a third of each model's rows) violated beyond `1e-6` — a real, large
+correctness regression, not numerical noise, which is exactly why `gpugem` pays the iteration cost
+to avoid it. The magnitude of that regression (not just the row count) varies by nearly two orders
+of magnitude across the largest models even at similar scale (S9's worst-row residual ~294.7 vs
+S23's ~2.58) — visible directly in `violation_distribution_equations.png`, which the single
+worst-row number in the table above can't show.

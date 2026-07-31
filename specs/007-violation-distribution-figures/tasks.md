@@ -34,7 +34,7 @@ Project Structure).
 
 **Purpose**: Confirm the prerequisite state this feature builds on before touching any code.
 
-- [ ] T001 Confirm `benchmarks/results/S9.json`, `S15.json`, `S23.json`, `S83.json` (feature 006)
+- [X] T001 Confirm `benchmarks/results/S9.json`, `S15.json`, `S23.json`, `S83.json` (feature 006)
   and `benchmarks/results/residual_tradeoff/{e_coli_core,Harvey,iML1515,S84,S85}.json` (feature 005)
   are all present and committed — `_load_002_result`/backfill logic (US1) has nothing to build on
   otherwise
@@ -52,20 +52,20 @@ bin edges used at solve time and at render time can never silently drift apart (
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T002 Create `benchmarks/violation_histogram.py` with a module-level constant
+- [X] T002 Create `benchmarks/violation_histogram.py` with a module-level constant
   `MAGNITUDE_BIN_EDGES = numpy.logspace(-9, 3, 25)` (24 log-scale bins, 1e-9 to 1e3 — research R5)
-- [ ] T003 In `benchmarks/violation_histogram.py`, implement `signed_row_violations(A, row_lb,
+- [X] T003 In `benchmarks/violation_histogram.py`, implement `signed_row_violations(A, row_lb,
   row_ub, v)`: returns `-numpy.maximum(row_lb - A@v, 0.0) + numpy.maximum(A@v - row_ub, 0.0)` — the
   full signed vector (negative = shortfall, positive = excess, zero = satisfied), reusing
   `gpugem/solver.py`'s own `con_lb`/`con_ub` range-violation definition (research R3); pure
   function, no I/O (depends on T002)
-- [ ] T004 In `benchmarks/violation_histogram.py`, implement `histogram(violations, edges=
+- [X] T004 In `benchmarks/violation_histogram.py`, implement `histogram(violations, edges=
   MAGNITUDE_BIN_EDGES)`: splits `violations` into shortfall (`< 0`) and excess (`> 0`) magnitudes,
   bins each with `numpy.histogram(numpy.abs(...), bins=edges)`, and returns a `ViolationHistogram`
   dict per data-model.md (`bin_edges`, `shortfall_counts`, `excess_counts`, `n_rows`,
   `n_satisfied`) with the invariant `n_satisfied + sum(shortfall_counts) + sum(excess_counts) ==
   n_rows` (depends on T002, T003)
-- [ ] T005 [P] Create `tests/test_violation_histogram.py` with tests for `signed_row_violations`
+- [X] T005 [P] Create `tests/test_violation_histogram.py` with tests for `signed_row_violations`
   (equality rows via `row_lb==row_ub`, true ranges, satisfied/shortfall/excess cases on synthetic
   input) and `histogram` (a model with zero violations still returns a valid, fully-`n_satisfied`
   histogram — not an error; the invariant holds; magnitude exactly at a bin edge is handled) — no
@@ -88,28 +88,28 @@ only the original five.
 
 ### Implementation for User Story 1
 
-- [ ] T006 [US1] In `benchmarks/run_residual_tradeoff.py::_solve_residual_0`, after solving: slice
+- [X] T006 [US1] In `benchmarks/run_residual_tradeoff.py::_solve_residual_0`, after solving: slice
   the S-block (`lp["S"]`, `lp["b"]` as `row_lb==row_ub==b`) and, when `lp.get("C") is not None`,
   the C-block (`lp["C"]`, `lp["d_lb"]`, `lp["d_ub"]`) and call
   `violation_histogram.signed_row_violations` + `violation_histogram.histogram` on each using
   `res.fluxes`; add `violation_histogram_equations` (always) and `violation_histogram_constraints`
   (`None` when no C-block) to the returned dict per `contracts/result-json-extension.md` (depends
   on T002, T003, T004)
-- [ ] T007 [US1] In `benchmarks/run_residual_tradeoff.py::run_model`, change the skip condition:
+- [X] T007 [US1] In `benchmarks/run_residual_tradeoff.py::run_model`, change the skip condition:
   when `results/residual_tradeoff/<model>.json` exists but lacks
   `residual_0.violation_histogram_equations` (an old-format file from before this feature), print
   `[backfill] <model>` and re-solve rather than `[skip]`ping — per research R4, this is a
   deliberate, visible one-time schema upgrade, not a silent overwrite of the original five's
   already-trusted numbers; `--force` still forces an unconditional re-solve for any model (depends
   on T006)
-- [ ] T008 [US1] In `benchmarks/make_residual_tradeoff_figures.py`, apply the same figure-width fix
+- [X] T008 [US1] In `benchmarks/make_residual_tradeoff_figures.py`, apply the same figure-width fix
   feature 006 applied to `make_figure.py` (`figsize=(max(8.2, 1.5 * len(df)), 4.6)` or equivalent
   in `_bar_figure()`) so nine models' bar labels don't overlap (research R7)
-- [ ] T009 [US1] On the GPU host, run `python -m benchmarks.run_residual_tradeoff --all` and
+- [X] T009 [US1] On the GPU host, run `python -m benchmarks.run_residual_tradeoff --all` and
   confirm: `[backfill]` for `e_coli_core`/`Harvey`/`iML1515`/`S84`/`S85`, a fresh solve for
   `S9`/`S15`/`S23`/`S83`, and `results/residual_tradeoff/comparison.csv` ends with 27 rows (9
   models x 3 configurations) — quickstart.md step 1 (depends on T007, T008)
-- [ ] T010 [US1] Run `python -m benchmarks.make_residual_tradeoff_figures` and visually confirm
+- [X] T010 [US1] Run `python -m benchmarks.make_residual_tradeoff_figures` and visually confirm
   `residual_tradeoff_solvetime.png` / `residual_tradeoff_violations.png` show all nine models with
   legible, non-overlapping labels — quickstart.md step 2, partial (depends on T009)
 
@@ -130,7 +130,7 @@ visually mirrored and each model individually identifiable.
 
 ### Implementation for User Story 2
 
-- [ ] T011 [US2] Create `benchmarks/make_violation_distribution_figures.py` with a shared rendering
+- [X] T011 [US2] Create `benchmarks/make_violation_distribution_figures.py` with a shared rendering
   helper (e.g. `_pyramid_figure(entries, out_path, title)` where `entries` is a list of `(model,
   n_cols, ViolationHistogram)`) implementing the layout in `contracts/figure-contract.md`: log-scale
   magnitude y-axis, mirrored shortfall(left)/excess(right) count x-axis, one semi-transparent
@@ -138,15 +138,15 @@ visually mirrored and each model individually identifiable.
   model-size rank (skipping the lightest ~30% of the ramp per research R6), direct per-model text
   label plus a size-ordered backup legend, embedded non-recommendation caption, 300 dpi,
   `bbox_inches="tight"` (depends on T004 for the `ViolationHistogram` shape)
-- [ ] T012 [US2] In `benchmarks/make_violation_distribution_figures.py`, add the equations entry
+- [X] T012 [US2] In `benchmarks/make_violation_distribution_figures.py`, add the equations entry
   point: read every `results/residual_tradeoff/<model>.json`, extract
   `residual_0.violation_histogram_equations` for every model (always present), call
   `_pyramid_figure` to write `benchmarks/figures/violation_distribution_equations.png` (depends on
   T011)
-- [ ] T013 [P] [US2] In `tests/test_violation_histogram.py`, add a test for the figure data-prep
+- [X] T013 [P] [US2] In `tests/test_violation_histogram.py`, add a test for the figure data-prep
   step: a model whose histogram is all-`n_satisfied` (zero violations) still produces a valid,
   plottable (near-empty, not omitted) entry — no GPU required (depends on T004)
-- [ ] T014 [US2] Run `python -m benchmarks.make_violation_distribution_figures` and visually
+- [X] T014 [US2] Run `python -m benchmarks.make_violation_distribution_figures` and visually
   confirm `violation_distribution_equations.png` shows all nine models' distributions overlaid,
   each individually visible (not one opaque region hiding another) and labeled by model name —
   quickstart.md step 2 / validation item 2 (depends on T012)
@@ -166,12 +166,12 @@ lacking a C-block simply absent (not shown as empty).
 
 ### Implementation for User Story 3
 
-- [ ] T015 [US3] In `benchmarks/make_violation_distribution_figures.py`, add the constraints entry
+- [X] T015 [US3] In `benchmarks/make_violation_distribution_figures.py`, add the constraints entry
   point: read every `results/residual_tradeoff/<model>.json`, filter to models where
   `residual_0.violation_histogram_constraints is not None`, call the same `_pyramid_figure` helper
   (T011) to write `benchmarks/figures/violation_distribution_constraints.png`; wire both entry
   points into `main()` (depends on T011, T012)
-- [ ] T016 [US3] Run `python -m benchmarks.make_violation_distribution_figures` and visually
+- [X] T016 [US3] Run `python -m benchmarks.make_violation_distribution_figures` and visually
   confirm `violation_distribution_constraints.png` shows exactly the seven models with a coupling
   block, with `e_coli_core`/`iML1515` absent (not shown as empty entries) — quickstart.md step 2 /
   validation item 3 (depends on T015)
@@ -187,15 +187,15 @@ verifiable.
 **Purpose**: Documentation, lint, and the final end-to-end confirmation that no shipped default
 changed.
 
-- [ ] T017 [P] Add a section to `benchmarks/README.md` documenting
+- [X] T017 [P] Add a section to `benchmarks/README.md` documenting
   `make_violation_distribution_figures.py`, the nine-model `per_constraint_residual=0` coverage,
   and the `[backfill]` behavior in `run_residual_tradeoff.py`, per plan.md's Project Structure note
-- [ ] T018 [P] Run `ruff check` on `benchmarks/violation_histogram.py`,
+- [X] T018 [P] Run `ruff check` on `benchmarks/violation_histogram.py`,
   `benchmarks/run_residual_tradeoff.py`, `benchmarks/make_residual_tradeoff_figures.py`,
   `benchmarks/make_violation_distribution_figures.py`, `tests/test_violation_histogram.py` and fix
   any real violations (Constitution Quality Standards: `line-length = 100`), matching this
   project's established convention of following existing `benchmarks/` style rather than diverging
-- [ ] T019 Run quickstart.md end-to-end (validation items 1-5) on the GPU host, and confirm `git
+- [X] T019 Run quickstart.md end-to-end (validation items 1-5) on the GPU host, and confirm `git
   diff --stat gpugem/` produces no output — the project's shipped defaults are unchanged regardless
   of what the comparison shows (spec SC-005; depends on T009, T014, T016)
 

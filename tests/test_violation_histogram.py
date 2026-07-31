@@ -83,3 +83,88 @@ def test_histogram_bin_edges_match_shared_constant():
     assert len(h["bin_edges"]) == 25
     assert len(h["shortfall_counts"]) == 24
     assert len(h["excess_counts"]) == 24
+
+
+# --- figure data prep (make_violation_distribution_figures._smooth_curve) ---
+
+def test_smooth_curve_tapers_to_zero_at_both_ends():
+    from benchmarks.make_violation_distribution_figures import _smooth_curve
+
+    edges = np.logspace(-9, 3, 25)
+    counts = np.zeros(24)
+    counts[10] = 50.0
+
+    y, x = _smooth_curve(edges, counts)
+
+    assert y[0] == pytest.approx(edges[0])
+    assert y[-1] == pytest.approx(edges[-1])
+    assert x[0] == pytest.approx(0.0)
+    assert x[-1] == pytest.approx(0.0)
+    assert x.max() > 0  # the bump in the middle is preserved, not smoothed away
+
+
+def test_smooth_curve_never_goes_negative():
+    """PCHIP can overshoot near sharp jumps (e.g. a single nonzero bin between zeros);
+    the figure clips this so a rendered band never implies a negative count."""
+    from benchmarks.make_violation_distribution_figures import _smooth_curve
+
+    edges = np.logspace(-9, 3, 25)
+    counts = np.zeros(24)
+    counts[5] = 1.0  # an isolated spike -- the case most likely to overshoot
+
+    y, x = _smooth_curve(edges, counts)
+
+    assert np.all(x >= 0.0)
+
+
+def test_zero_violation_model_still_yields_a_plottable_curve():
+    """A model with no violations at all (n_satisfied == n_rows) must still produce a
+    valid, empty-but-not-omitted histogram -- the figure represents it, not silently
+    drops it (spec edge case)."""
+    h = histogram(np.zeros(500))
+
+    from benchmarks.make_violation_distribution_figures import _smooth_curve
+
+    y, x = _smooth_curve(h["bin_edges"], h["shortfall_counts"])
+    assert np.all(x == 0.0)  # a flat, empty (but present) contour, not an error
+
+
+# --- figure data prep (make_violation_distribution_figures._label_anchor/_angle) --
+
+def test_label_anchor_picks_true_peak_on_the_negative_shortfall_side():
+    """Regression test: x is signed (negative on the shortfall side), so "widest
+    point" means largest magnitude, not largest signed value -- a naive sort by -x
+    would treat the near-zero tail as "best" and the true (very negative) peak as
+    "worst" on this side."""
+    from benchmarks.make_violation_distribution_figures import _label_anchor
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+
+    fig, ax = plt.subplots()
+    ax.set_xlim(-1000, 1000)
+    ax.set_ylim(0, 10)
+    y = np.linspace(0, 10, 50)
+    x = -np.abs(np.sin(np.linspace(0, np.pi, 50))) * 900  # peak (most negative) at the middle
+
+    idx, _ = _label_anchor(ax, y, x, placed_px=[])
+
+    assert 20 <= idx <= 30  # near the middle, where |x| is largest
+
+
+def test_label_angle_always_in_readable_range():
+    """Regression test: the old sign-based +/-180 adjustment could leave the angle
+    outside (-90, 90], rendering the label upside-down/mirrored."""
+    from benchmarks.make_violation_distribution_figures import _label_angle
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+
+    fig, ax = plt.subplots()
+    ax.set_xlim(-1000, 1000)
+    ax.set_ylim(0, 10)
+    y = np.linspace(0, 10, 50)
+
+    for x in (np.linspace(-900, 900, 50), np.linspace(900, -900, 50), np.full(50, -500.0)):
+        angle = _label_angle(ax, y, x, idx=25)
+        assert -90 <= angle <= 90
