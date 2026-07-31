@@ -60,7 +60,7 @@ def _bar_figure(df, models, value_col, ylabel, title, out_path, log_floor=None):
     x = np.arange(len(models))
     w = 0.26
 
-    fig, ax = plt.subplots(figsize=(9.5, 5.0))
+    fig, ax = plt.subplots(figsize=(max(9.5, 1.5 * len(models)), 5.0))
     bars_by_config = {}
     for i, config in enumerate(CONFIG_ORDER):
         sub = df[df["configuration"] == config].set_index("model").reindex(models["model"])

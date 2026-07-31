@@ -25,6 +25,7 @@ from benchmarks import aggregate_residual_tradeoff as AG
 from benchmarks import models as M
 from benchmarks import residual as R
 from benchmarks import solve as SV
+from benchmarks import violation_histogram as VH
 
 RESULTS_002 = HERE / "results"
 RESULTS = HERE / "results" / "residual_tradeoff"
@@ -114,6 +115,17 @@ def _solve_residual_0(model, time_limit):
 
     rows_violated = res.feasibility.get("stoich_rows_violated_1e6")
 
+    eq_viol = VH.signed_row_violations(S_eq, b_eq, b_eq, res.fluxes)
+    violation_histogram_equations = VH.histogram(eq_viol)
+
+    violation_histogram_constraints = None
+    if lp.get("C") is not None:
+        C = sp.csr_matrix(lp["C"])
+        d_lb = np.asarray(lp["d_lb"], dtype=np.float64)
+        d_ub = np.asarray(lp["d_ub"], dtype=np.float64)
+        con_viol = VH.signed_row_violations(C, d_lb, d_ub, res.fluxes)
+        violation_histogram_constraints = VH.histogram(con_viol)
+
     return {
         "configuration": "residual_0",
         "source": "fresh",
@@ -124,14 +136,19 @@ def _solve_residual_0(model, time_limit):
         "residual_inf": resid,
         "rows_violated": rows_violated,
         "time_limit": time_limit,
+        "violation_histogram_equations": violation_histogram_equations,
+        "violation_histogram_constraints": violation_histogram_constraints,
     }
 
 
 def run_model(model, force):
     out = RESULTS / (model + ".json")
     if out.exists() and not force:
-        print("[skip] %s (exists; --force to rerun)" % model)
-        return json.loads(out.read_text())
+        existing = json.loads(out.read_text())
+        if "violation_histogram_equations" in existing.get("residual_0", {}):
+            print("[skip] %s (exists; --force to rerun)" % model)
+            return existing
+        print("[backfill] %s (missing violation histogram data; re-solving)" % model)
 
     shipped_default, gurobi, scale, n_cols = _load_002_result(model)
     print("[%s] shipped_default (reused): solve_s=%.3f  residual_inf=%.3e" % (
