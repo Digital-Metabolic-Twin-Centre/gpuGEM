@@ -1,4 +1,4 @@
 .claude/settings.local.json
 __pycache__/
 *.pyc
-benchmarks/model_cache/*.mat
+benchmarks/model_cache/*_lifted.mat

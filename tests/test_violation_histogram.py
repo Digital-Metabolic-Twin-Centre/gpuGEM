@@ -152,6 +152,34 @@ def test_label_anchor_picks_true_peak_on_the_negative_shortfall_side():
     assert 20 <= idx <= 30  # near the middle, where |x| is largest
 
 
+def test_label_anchor_avoids_a_cluster_of_near_duplicate_candidates():
+    """Regression test: with several already-placed labels, a naive "next-highest-
+    magnitude-anywhere" search can burn through hundreds of points immediately
+    adjacent to a rejected peak (all near-duplicates of it in pixel space) before
+    reaching a genuinely different part of the curve, landing on a near-zero point
+    instead of a real, if smaller, peak. Two peaks of comparable height should each
+    get a real anchor, not one true peak and one meaningless flat point."""
+    from benchmarks.make_violation_distribution_figures import _label_anchor
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+
+    fig, ax = plt.subplots()
+    ax.set_xlim(-1000, 1000)
+    ax.set_ylim(0, 10)
+    y = np.linspace(0, 10, 200)
+    # two comparable peaks, far apart, separated by a flat near-zero valley
+    x = 900 * np.exp(-((y - 2) ** 2) / 0.05) + 850 * np.exp(-((y - 8) ** 2) / 0.05)
+
+    idx1, pt1 = _label_anchor(ax, y, x, placed_px=[])
+    idx2, pt2 = _label_anchor(ax, y, x, placed_px=[pt1])
+
+    # both anchors should sit near a real peak (y ~ 2 or y ~ 8), not in the flat valley
+    assert min(abs(y[idx1] - 2), abs(y[idx1] - 8)) < 0.5
+    assert min(abs(y[idx2] - 2), abs(y[idx2] - 8)) < 0.5
+    assert abs(x[idx2]) > 0.5 * x.max()  # a real peak, not a near-zero fallback point
+
+
 def test_label_angle_always_in_readable_range():
     """Regression test: the old sign-based +/-180 adjustment could leave the angle
     outside (-90, 90], rendering the label upside-down/mirrored."""

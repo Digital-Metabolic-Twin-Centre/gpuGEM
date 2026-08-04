@@ -1,0 +1,103 @@
+{
+  "provenance": {
+    "model": "Harvetta",
+    "scale": "whole-body",
+    "kind": "mat",
+    "objective_rxn": "Whole_body_objective_rxn",
+    "objective_idx": 83124,
+    "source": "/home/farid/projects/gpuGEM/benchmarks/model_cache/Harvetta_1_03d.mat",
+    "sha256": "98810012918a5df1e46499fe2bd59cfc9730a570c10d1d4e146ab82ef671fad3",
+    "n_cols": 83521,
+    "n_eq_rows": 58851,
+    "n_total_rows": 166202,
+    "nnz": 508151,
+    "obj_nonzero": 1,
+    "maximize": true
+  },
+  "build_s": 12.2751299245283,
+  "reps": 3,
+  "time_limit": 900.0,
+  "res_tol": 0.0001,
+  "obj_tol": 1e-06,
+  "versions": {
+    "gpu_name": "NVIDIA RTX A4500",
+    "gurobi_version": "13.0.2",
+    "cuopt_version": "26.06.00",
+    "python": "3.13.13"
+  },
+  "timestamp": "2026-08-04T13:34:15.495462+00:00",
+  "gurobi": {
+    "repeats": [
+      {
+        "repeat": 0,
+        "solve_s": 3.529323379509151,
+        "objective": 1.0,
+        "status": "Optimal",
+        "iters": 71,
+        "residual_inf": 2.4156179279088974e-09,
+        "feasible": true
+      },
+      {
+        "repeat": 1,
+        "solve_s": 3.5155563866719604,
+        "objective": 1.0,
+        "status": "Optimal",
+        "iters": 71,
+        "residual_inf": 2.4156179279088974e-09,
+        "feasible": true
+      },
+      {
+        "repeat": 2,
+        "solve_s": 3.5345178907737136,
+        "objective": 1.0,
+        "status": "Optimal",
+        "iters": 71,
+        "residual_inf": 2.4156179279088974e-09,
+        "feasible": true
+      }
+    ],
+    "solve_s_median": 3.529323379509151,
+    "solve_s_min": 3.5155563866719604,
+    "solve_s_max": 3.5345178907737136,
+    "objective": 1.0,
+    "feasible": true
+  },
+  "cuopt": {
+    "repeats": [
+      {
+        "repeat": 0,
+        "solve_s": 1.6316,
+        "objective": 1.0,
+        "status": "Optimal",
+        "iters": 24800,
+        "residual_inf": 3.2092831958322026e-09,
+        "feasible": true
+      },
+      {
+        "repeat": 1,
+        "solve_s": 1.4192,
+        "objective": 1.0,
+        "status": "Optimal",
+        "iters": 24800,
+        "residual_inf": 3.2092831958322026e-09,
+        "feasible": true
+      },
+      {
+        "repeat": 2,
+        "solve_s": 1.4076,
+        "objective": 1.0,
+        "status": "Optimal",
+        "iters": 24800,
+        "residual_inf": 3.2092831958322026e-09,
+        "feasible": true
+      }
+    ],
+    "solve_s_median": 1.4192,
+    "solve_s_min": 1.4076,
+    "solve_s_max": 1.6316,
+    "objective": 1.0,
+    "feasible": true
+  },
+  "obj_rel_diff": 0.0,
+  "both_feasible": true
+}

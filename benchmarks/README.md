@@ -1,7 +1,7 @@
 # Cross-scale cuOpt vs Gurobi LP benchmark
 
 Compares the GPU LP solver (NVIDIA cuOpt, via gpuGEM's shipped size-selected
-defaults) against Gurobi standalone on the max-biomass FBA LP of nine models
+defaults) against Gurobi standalone on the max-biomass FBA LP of ten models
 spanning four orders of magnitude:
 
 | model | scale | source | loader |
@@ -9,6 +9,7 @@ spanning four orders of magnitude:
 | e_coli_core | small | BiGG (cached) | cobra -> gpugem.loaders.from_cobra |
 | iML1515 | medium | BiGG (cached) | cobra -> gpugem.loaders.from_cobra |
 | Harvey | whole-body | Harvey_1_03c_reduced.mat | gpugem.loaders.from_mat |
+| Harvetta | whole-body | Harvetta_1_03d.mat (model_cache/) | gpugem.loaders.from_mat |
 | S84 | microbiome | mWBM_S84_male.mat | gpugem.loaders.from_mat |
 | S85 | microbiome | mWBM_S85_male.mat | gpugem.loaders.from_mat |
 | S23 | microbiome | mWBM_S23_male.mat (model_cache/) | gpugem.loaders.from_mat |
@@ -16,11 +17,26 @@ spanning four orders of magnitude:
 | S9 | microbiome | mWBM_S9_male.mat (model_cache/) | gpugem.loaders.from_mat |
 | S83 | microbiome | mWBM_S83_male.mat (model_cache/) | gpugem.loaders.from_mat |
 
+Harvetta is the female whole-body counterpart to Harvey (male) — same reconstruction
+family, same `Whole_body_objective_rxn` objective reaction, a genuine coupling block,
+and a comparable variable count (83,521 vs Harvey's 81,094), loaded via `model_key=
+"female"` (Harvey's `.mat` nests its struct under `"modelReduced"` instead — the two
+files use different top-level keys despite otherwise matching structure).
+
 S9/S15/S23/S83 are all larger than S85 (874,634 vars) — 1,007,742 to 1,179,186
-variables — and live under `benchmarks/model_cache/` rather than the `MWBM_DIR`
-location S84/S85 use (gitignored, never committed: ~637MB across the plain and
-`_lifted` variants). The comparison figure orders all nine models strictly by
-variable count, not by the table order above.
+variables — and live under `benchmarks/model_cache/` alongside Harvetta, rather than
+the `MWBM_DIR` location S84/S85 use. The comparison figure orders all ten models
+strictly by variable count, not by the table order above.
+
+**Model files under `benchmarks/model_cache/` are committed to this repository** —
+every `.mat`/`.xml` file the registry above references (≈ 299 MB total: Harvetta,
+S9/S15/S23/S83's plain variants, plus the small BiGG XMLs) is tracked, so the full
+benchmark suite is reproducible from a checkout of this repository alone, with no
+separate download or `MWBM_DIR`/`HARVEY_MAT` environment configuration needed for
+these ten models. This reverses an earlier size-driven decision to gitignore these
+files; `benchmarks/model_cache/*_lifted.mat` remains excluded, since the `_lifted`
+variants aren't used by any registered model or published result — only the plain
+variant each `S9`/`S15`/`S23`/`S83` entry above actually loads.
 
 Both solvers receive the **identical** LP built by `gpugem.loaders`. cuOpt uses
 gpuGEM's shipped defaults (`gpugem._defaults.default_settings`, size-selected:
@@ -39,7 +55,7 @@ The 1e-4 absolute residual tolerance accommodates the microbiome whole-body
 models, whose stoichiometric coefficients span [1e-6, 2e5]; cuOpt's PaPILO
 integration has a hardcoded feastol ~1e-5 (see gpugem/_defaults.py), so an
 absolute 1e-6 gate would reject a solution that reaches the identical optimum
-as Gurobi (objectives agree to 0 relative difference on all nine models).
+as Gurobi (objectives agree to 0 relative difference on all ten models).
 
 ## Run
 
@@ -184,10 +200,10 @@ unconditional re-solve of any model.
 
 Outputs (committed) under `results/residual_tradeoff/`: one `<model>.json` per model (all three
 configurations, plus per-row violation histograms for the S-block and, where present, C-block) and
-`comparison.csv` (27 rows: 9 models x 3 configurations). Figures under `figures/`:
+`comparison.csv` (30 rows: 10 models x 3 configurations). Figures under `figures/`:
 
 - `residual_tradeoff_violations.png` / `residual_tradeoff_solvetime.png` — the three-configuration
-  comparison for all nine models, hatched `per_constraint_residual=0` bars, both carrying an
+  comparison for all ten models, hatched `per_constraint_residual=0` bars, both carrying an
   explicit "not a recommended configuration" caption.
 - `violation_distribution_equations.png` — a population-pyramid-style figure showing, for every
   model, how many mass-balance equations are violated and by what magnitude under
@@ -197,7 +213,7 @@ configurations, plus per-row violation histograms for the S-block and, where pre
   overlaid as a semi-transparent filled distribution, colored by a single ordinal ramp keyed to
   model size and labeled directly by name.
 - `violation_distribution_constraints.png` — the same layout for coupling constraints, limited to
-  the seven models that have a coupling block (`e_coli_core`/`iML1515` are absent, not shown empty).
+  the eight models that have a coupling block (`e_coli_core`/`iML1515` are absent, not shown empty).
 
 **Result**: the effect scales with model conditioning, not just size — and it's essentially free
 for the two small, well-conditioned models.
@@ -207,6 +223,7 @@ for the two small, well-conditioned models.
 | e_coli_core | 95 | 7.78e-09 | 7.78e-09 (identical) | 0 | ~0.5x (already sub-second either way) |
 | iML1515 | 2,712 | 2.95e-09 | 4.45e-09 | 0 | ~1.0x (no meaningful difference) |
 | Harvey | 81,094 | 5.58e-09 | 3.19e-04 | 591 | ~1.4x |
+| Harvetta | 83,521 | 3.21e-09 | 4.89e-04 | 1,047 | ~1.0x (no meaningful difference) |
 | S84 | 685,998 | 4.72e-05 | 2.57 | 249,173 | ~2.8x |
 | S85 | 874,634 | 8.87e-05 | 156.4 | 372,156 | ~71.9x |
 | S23 | 1,007,742 | 3.12e-05 | 2.58 | 340,300 | ~54.7x |
@@ -216,11 +233,16 @@ for the two small, well-conditioned models.
 
 For the two small BiGG models, `per_constraint_residual` essentially never binds — the shipped
 default and cuOpt's own default land on the same iteration count and residual, confirming this is
-specifically a large/ill-conditioned-model phenomenon, not a general cuOpt inefficiency. The
-effect grows sharply with scale and coefficient-range severity: across the seven whole-body/
-microbiome models, disabling the per-row check leaves hundreds of thousands of constraint rows
-(roughly a fifth to a third of each model's rows) violated beyond `1e-6` — a real, large
-correctness regression, not numerical noise, which is exactly why `gpugem` pays the iteration cost
+specifically a large/ill-conditioned-model phenomenon, not a general cuOpt inefficiency. Harvetta
+behaves like Harvey rather than like the microbiome models here — despite being whole-body scale
+and having a genuine coupling block, its speedup is negligible (~1.0x), reinforcing that this
+effect tracks conditioning severity, not just size: Harvey and Harvetta are both well-conditioned
+enough (relative to the microbiome models) that the per-row check costs little extra time even
+though it still meaningfully changes the correctness residual (3.2e-09 -> 4.9e-04, 1,047 rows
+newly violated). The effect grows sharply with scale and coefficient-range severity: across the
+eight whole-body/microbiome models, disabling the per-row check leaves hundreds to hundreds of
+thousands of constraint rows violated beyond `1e-6` — a real correctness regression, not numerical
+noise, which is exactly why `gpugem` pays the iteration cost
 to avoid it. The magnitude of that regression (not just the row count) varies by nearly two orders
 of magnitude across the largest models even at similar scale (S9's worst-row residual ~294.7 vs
 S23's ~2.58) — visible directly in `violation_distribution_equations.png`, which the single

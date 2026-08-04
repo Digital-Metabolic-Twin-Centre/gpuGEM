@@ -46,6 +46,9 @@ REGISTRY = {
                     "source": str(CACHE / "mWBM_S23_male.mat"), "model_key": None, "objective": None},
     "S83":         {"scale": "microbiome", "order": 8, "kind": "mat",
                     "source": str(CACHE / "mWBM_S83_male.mat"), "model_key": None, "objective": None},
+    "Harvetta":    {"scale": "whole-body", "order": 9, "kind": "mat",
+                    "source": str(CACHE / "Harvetta_1_03d.mat"), "model_key": "female",
+                    "objective": "Whole_body_objective_rxn"},
 }
 
 ALL_MODELS = list(REGISTRY.keys())

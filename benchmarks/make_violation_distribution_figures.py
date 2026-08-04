@@ -94,15 +94,39 @@ def _label_anchor(ax, y, x, placed_px, min_px=85):
     ascending index rather than left to argsort's unspecified tie order -- otherwise
     two identical all-zero curves can each resolve to a different, effectively
     arbitrary index and land anywhere on the axis, including on top of each other.
+
+    On a smooth curve, the points immediately around the true peak are near-duplicates
+    of it in pixel space -- if the peak collides with an already-placed label, dozens
+    of the next-highest-magnitude candidates collide for the exact same reason before
+    the search reaches a genuinely different part of the curve. Once a candidate is
+    rejected, later candidates within `min_px` of it are skipped without re-testing,
+    forcing the search to jump to spatially distinct regions instead of exhausting a
+    cluster of near-duplicates.
+
+    That jump can still land somewhere collision-free but nearly meaningless (e.g. a
+    flat, near-zero stretch of the curve) if every genuinely wide region is already
+    claimed. A candidate is only accepted if its magnitude is at least 20% of this
+    curve's own true peak; a label anchored near a real (if smaller) peak and slightly
+    overlapping a neighbor reads better than one anchored at a point that doesn't
+    represent this model's data at all, so a collision is accepted as the lesser
+    problem once no qualifying collision-free candidate exists.
     """
     order = np.lexsort((np.arange(len(x)), -np.abs(x)))
+    own_peak = np.abs(x).max()
+    quality_floor = 0.20 * own_peak
     fallback = None
+    tried_px = []
     for idx in order:
         if idx < 3 or idx > len(y) - 4:
             continue
         pt = ax.transData.transform((x[idx], y[idx]))
+        if any(np.hypot(pt[0] - p[0], pt[1] - p[1]) < min_px for p in tried_px):
+            continue
+        tried_px.append(pt)
         if fallback is None:
             fallback = (idx, pt)
+        if abs(x[idx]) < quality_floor:
+            break  # remaining candidates are only ever narrower -- not worth continuing
         if all(np.hypot(pt[0] - p[0], pt[1] - p[1]) >= min_px for p in placed_px):
             return idx, pt
     return fallback if fallback is not None else (order[0], ax.transData.transform((x[order[0]], y[order[0]])))
