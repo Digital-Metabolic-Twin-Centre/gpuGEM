@@ -67,6 +67,14 @@ python -m benchmarks.run_benchmark --all --reps 3               # all (resumable
 python -m benchmarks.make_figure                                # figure from CSV, no GPU
 ```
 
+The figure's right-hand panel is a separate Gurobi-only method comparison on the
+Harvey Kynuric two-demand biomarker LP (`C02470[bc]` and `kynate[bc]`, both
+increased). Its three cold repeats are stored in
+`results/harvey_two_demand_gurobi.json`: dual simplex has a 25.245 s median and
+barrier with default crossover has a 5.215 s median (4.84x faster). This
+supplemental problem is labelled separately because it is not the canonical
+whole-body-objective Harvey LP used in the main cross-solver panel.
+
 `--all` skips models whose `results/<model>.json` already exists unless `--force`.
 
 Model file locations can be overridden with `MWBM_DIR` and `HARVEY_MAT` env vars.

@@ -1,0 +1,52 @@
+{
+  "provenance": {
+    "model": "Harvey",
+    "source": "/home/farid/projects/cuGEM/metabolic_modelling/Harvey_1_03c_reduced.mat",
+    "sha256": "cb095063917b19b38530a7f05abc6d3b77ef3f14c466fe3eb749812cb06d8db7",
+    "n_cols": 81096,
+    "n_total_rows": 160052,
+    "objective_nonzero": 3,
+    "whole_body_fixed": 1.0,
+    "demand_reactions": [
+      "C02470[bc]",
+      "kynate[bc]"
+    ],
+    "demand_direction": "increased",
+    "demand_bounds": [0.0, 100.0]
+  },
+  "reps": 3,
+  "time_limit_s": 120.0,
+  "timestamp": "2026-08-05",
+  "versions": {
+    "gurobi_version": "13.0.2"
+  },
+  "methods": {
+    "dual_simplex": {
+      "method": 1,
+      "label": "Dual simplex",
+      "repeats_s": [25.122933, 25.245277, 25.253642],
+      "solve_s_median": 25.245277,
+      "solve_s_min": 25.122933,
+      "solve_s_max": 25.253642,
+      "objective": 6.4536242409364775,
+      "status": "Optimal",
+      "simplex_iterations": 40024,
+      "barrier_iterations": 0
+    },
+    "barrier_crossover": {
+      "method": 2,
+      "crossover": "default",
+      "label": "Barrier + crossover",
+      "repeats_s": [5.250273, 5.214776, 5.192537],
+      "solve_s_median": 5.214776,
+      "solve_s_min": 5.192537,
+      "solve_s_max": 5.250273,
+      "objective": 6.453624240895888,
+      "status": "Optimal",
+      "simplex_iterations": 26580,
+      "barrier_iterations": 117
+    }
+  },
+  "barrier_speedup_vs_dual_simplex": 4.841105609826404,
+  "objective_abs_diff": 4.0589753780295725e-11
+}

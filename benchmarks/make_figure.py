@@ -4,6 +4,7 @@
 """
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 import numpy as np
@@ -14,6 +15,7 @@ import matplotlib.pyplot as plt
 
 HERE = Path(__file__).resolve().parent
 CSV = HERE / "results" / "benchmark.csv"
+HARVEY_DEMAND = HERE / "results" / "harvey_two_demand_gurobi.json"
 OUT = HERE / "figures" / "benchmark_solvetime.png"
 
 def main():
@@ -24,7 +26,15 @@ def main():
     x = np.arange(len(df))
     w = 0.38
 
-    fig, ax = plt.subplots(figsize=(max(8.2, 1.5 * len(df)), 4.6))
+    has_demand = HARVEY_DEMAND.exists()
+    if has_demand:
+        fig = plt.figure(figsize=(max(11.0, 1.5 * len(df) + 3.2), 4.8))
+        grid = fig.add_gridspec(1, 2, width_ratios=[max(len(df), 4), 2.2], wspace=0.16)
+        ax = fig.add_subplot(grid[0, 0])
+        demand_ax = fig.add_subplot(grid[0, 1], sharey=ax)
+    else:
+        fig, ax = plt.subplots(figsize=(max(8.2, 1.5 * len(df)), 4.6))
+        demand_ax = None
     b1 = ax.bar(x - w / 2, df["gurobi_solve_s_median"], w, label="Gurobi (barrier+crossover)",
                 color="#c44e52", edgecolor="black", linewidth=0.4)
     b2 = ax.bar(x + w / 2, df["cuopt_solve_s_median"], w, label="cuOpt (gpuGEM default, GPU)",
@@ -59,10 +69,15 @@ def main():
             ax.annotate("gate\nfail", (x[i], ax.get_ylim()[0]), ha="center", va="bottom",
                         fontsize=6, color="red")
 
+    if demand_ax is not None:
+        _plot_harvey_demand_panel(demand_ax)
+
     v = df.iloc[0]
-    cap = ("N=%d repeats; error bars = min/max. Same LP (built by gpugem.loaders) handed to both "
+    cap = ("N=%d repeats; error bars = min/max. Main panel: same canonical LP (built by "
+           "gpugem.loaders) handed to both "
            "solvers; every bar passed the correctness gate (residual<=1e-4, objectives agree). "
-           "cuOpt %s, Gurobi %s, GPU %s.") % (
+           "Right panel: separate Harvey two-demand biomarker LP, Gurobi only; both methods "
+           "returned Optimal and objectives differed by 4.1e-11. cuOpt %s, Gurobi %s, GPU %s.") % (
         _reps_from_csv(df), v["cuopt_version"], v["gurobi_version"], v["gpu_name"])
     fig.text(0.5, -0.02, cap, ha="center", va="top", fontsize=6.8, wrap=True)
 
@@ -70,6 +85,30 @@ def main():
     fig.tight_layout()
     fig.savefig(OUT, dpi=300, bbox_inches="tight")
     print("wrote", OUT)
+
+
+def _plot_harvey_demand_panel(ax):
+    data = json.loads(HARVEY_DEMAND.read_text())
+    methods = [data["methods"]["dual_simplex"], data["methods"]["barrier_crossover"]]
+    medians = np.array([m["solve_s_median"] for m in methods])
+    minima = np.array([m["solve_s_min"] for m in methods])
+    maxima = np.array([m["solve_s_max"] for m in methods])
+    x = np.arange(len(methods))
+    bars = ax.bar(x, medians, 0.62, color=["#8172b2", "#c44e52"],
+                  edgecolor="black", linewidth=0.4)
+    ax.errorbar(x, medians, yerr=[medians - minima, maxima - medians], fmt="none",
+                ecolor="black", elinewidth=0.7, capsize=2)
+    ax.set_xticks(x)
+    ax.set_xticklabels(["Dual\nsimplex", "Barrier +\ncrossover"], fontsize=8)
+    ax.set_title("Harvey two-demand LP\n(Gurobi method comparison)", fontsize=9)
+    ax.tick_params(axis="y", labelleft=False)
+    ax.grid(axis="y", alpha=0.18, linewidth=0.5)
+    for rect, value in zip(bars, medians):
+        ax.annotate("%.3g" % value, (rect.get_x() + rect.get_width() / 2, value),
+                    ha="center", va="bottom", fontsize=7, xytext=(0, 1.5),
+                    textcoords="offset points")
+    ax.text(0.5, 0.03, "Barrier 4.84x faster\nN=3 cold solves",
+            transform=ax.transAxes, ha="center", va="bottom", fontsize=7)
 
 
 def _reps_from_csv(df):
