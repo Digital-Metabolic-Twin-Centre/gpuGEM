@@ -1,0 +1,14 @@
+{
+  "model": "S15",
+  "n_cols": 1084341,
+  "solve_s": 106.65540899336338,
+  "objective": 1.0,
+  "status": "Optimal",
+  "residual_inf": 9.611478597999998e-07,
+  "bar_iters": 120,
+  "simplex_iters": 231171,
+  "solved_by": "barrier",
+  "feasible": true,
+  "obj_agree_with_cuopt": true,
+  "time_limit": 900.0
+}

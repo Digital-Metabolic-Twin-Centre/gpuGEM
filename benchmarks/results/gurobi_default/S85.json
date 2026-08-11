@@ -1,0 +1,14 @@
+{
+  "model": "S85",
+  "n_cols": 874634,
+  "solve_s": 75.65212674532086,
+  "objective": 1.0,
+  "status": "Optimal",
+  "residual_inf": 8.679267279899997e-07,
+  "bar_iters": 89,
+  "simplex_iters": 197350,
+  "solved_by": "barrier",
+  "feasible": true,
+  "obj_agree_with_cuopt": true,
+  "time_limit": 900.0
+}

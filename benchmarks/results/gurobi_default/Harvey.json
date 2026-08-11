@@ -1,0 +1,14 @@
+{
+  "model": "Harvey",
+  "n_cols": 81094,
+  "solve_s": 3.7994016222655773,
+  "objective": 1.0,
+  "status": "Optimal",
+  "residual_inf": 4.706180334324017e-09,
+  "bar_iters": 71,
+  "simplex_iters": 27103,
+  "solved_by": "barrier",
+  "feasible": true,
+  "obj_agree_with_cuopt": true,
+  "time_limit": 900.0
+}

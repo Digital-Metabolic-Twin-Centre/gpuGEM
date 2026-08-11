@@ -1,0 +1,14 @@
+{
+  "model": "S9",
+  "n_cols": 1111943,
+  "solve_s": 92.57022708375007,
+  "objective": 1.0,
+  "status": "Optimal",
+  "residual_inf": 9.597365673601704e-07,
+  "bar_iters": 108,
+  "simplex_iters": 236076,
+  "solved_by": "barrier",
+  "feasible": true,
+  "obj_agree_with_cuopt": true,
+  "time_limit": 900.0
+}

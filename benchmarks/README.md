@@ -255,3 +255,54 @@ to avoid it. The magnitude of that regression (not just the row count) varies by
 of magnitude across the largest models even at similar scale (S9's worst-row residual ~294.7 vs
 S23's ~2.58) — visible directly in `violation_distribution_equations.png`, which the single
 worst-row number in the table above can't show.
+
+## Gurobi default-settings benchmark
+
+Every Gurobi number published above uses `method=2` (barrier + default crossover), a
+deliberate choice this project's benchmark tooling makes. `run_gurobi_default_benchmark.py`
+adds a third Gurobi data point per model: `method=-1`, Gurobi's own untouched factory
+default (automatic algorithm selection) — exactly what any user who never touches Gurobi's
+tuning parameters would get. It reuses, never re-solves, each model's existing cuOpt and
+`method=2` results (see `specs/010-gurobi-default-benchmark/`).
+
+```bash
+python -m benchmarks.run_gurobi_default_benchmark --all   # reuse existing results + solve method=-1
+python -m benchmarks.aggregate_gurobi_default              # comparison.csv from committed JSON, no solver
+python -m benchmarks.make_gurobi_default_figure             # solve-time comparison figure from the CSV, no solver
+```
+
+`--all` skips a model whose `results/gurobi_default/<model>.json` already exists; `--force`
+forces an unconditional re-solve. A default-settings solve that fails the correctness gate
+(non-optimal status, out-of-tolerance residual, or objective disagreement with the model's
+existing cuOpt result) is still recorded, marked `feasible: false`, and shown as failed on the
+figure rather than silently dropped.
+
+Outputs (committed) under `results/gurobi_default/`: one `<model>.json` per model and
+`comparison.csv` (10 rows, one per model). Figure under `figures/`:
+`gurobi_default_comparison.png` — cuOpt, Gurobi (barrier), and Gurobi (default settings) solve
+time, log scale, per-bar annotations.
+
+**Result**: on this host, Gurobi's automatic mode picks simplex for the two small BiGG models
+and barrier for every whole-body/microbiome model — the same family of algorithm the project's
+deliberate `method=2` choice already uses at that scale, so the two Gurobi numbers land close
+together (within roughly 0.7x-1.2x of each other) rather than automatic mode finding something
+qualitatively different:
+
+| model | vars | Gurobi (barrier) | Gurobi (default) | default picked | default vs. barrier |
+|---|---|---|---|---|---|
+| e_coli_core | 95 | 0.00079s | 0.00090s | simplex | ~0.87x |
+| iML1515 | 2,712 | 0.034s | 0.028s | simplex | ~1.22x |
+| Harvey | 81,094 | 2.82s | 3.80s | barrier | ~0.74x |
+| Harvetta | 83,521 | 3.53s | 4.60s | barrier | ~0.77x |
+| S84 | 685,998 | 40.6s | 57.5s | barrier | ~0.71x |
+| S85 | 874,634 | 52.6s | 75.7s | barrier | ~0.70x |
+| S23 | 1,007,742 | 85.3s | 83.7s | barrier | ~1.02x |
+| S15 | 1,084,341 | 82.6s | 106.7s | barrier | ~0.77x |
+| S9 | 1,111,943 | 73.0s | 92.6s | barrier | ~0.79x |
+| S83 | 1,179,186 | 99.6s | 93.5s | barrier | ~1.07x |
+
+Every default-settings solve reached `Optimal` and agreed with cuOpt's objective, so this run
+found no model where automatic mode's choice changes the correctness picture — only, in most
+cases, a modest time cost relative to this project's already-deliberately-chosen `method=2`.
+`gpugem/_defaults.py` and this project's shipped Gurobi wrapper default are unchanged by this
+benchmark regardless of what it shows.

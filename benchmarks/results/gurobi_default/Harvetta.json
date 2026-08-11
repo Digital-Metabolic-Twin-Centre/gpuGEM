@@ -1,0 +1,14 @@
+{
+  "model": "Harvetta",
+  "n_cols": 83521,
+  "solve_s": 4.604666267521679,
+  "objective": 1.0,
+  "status": "Optimal",
+  "residual_inf": 2.561137080192566e-09,
+  "bar_iters": 94,
+  "simplex_iters": 26901,
+  "solved_by": "barrier",
+  "feasible": true,
+  "obj_agree_with_cuopt": true,
+  "time_limit": 900.0
+}

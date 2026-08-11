@@ -94,13 +94,15 @@ def solve_gurobi(lp, time_limit=900.0, method=2):
     obj = None
     fluxes = None
     iters = None
+    bar_iters = None
+    simplex_iters = None
     if m.SolCount > 0:
         obj = float(m.ObjVal)
         fluxes = np.asarray(v.X, dtype=np.float64)
     try:
-        bar = int(m.BarIterCount)
-        simp = int(m.IterCount)
-        iters = bar if bar > 0 else simp
+        bar_iters = int(m.BarIterCount)
+        simplex_iters = int(m.IterCount)
+        iters = bar_iters if bar_iters > 0 else simplex_iters
     except Exception:
         pass
 
@@ -114,4 +116,6 @@ def solve_gurobi(lp, time_limit=900.0, method=2):
         "iters": iters,
         "fluxes": fluxes,
         "method": method,
+        "bar_iters": bar_iters,
+        "simplex_iters": simplex_iters,
     }

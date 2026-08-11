@@ -1,0 +1,14 @@
+{
+  "model": "e_coli_core",
+  "n_cols": 95,
+  "solve_s": 0.0009011896327137947,
+  "objective": 0.8739215069684305,
+  "status": "Optimal",
+  "residual_inf": 1.4210854715202004e-13,
+  "bar_iters": 0,
+  "simplex_iters": 38,
+  "solved_by": "simplex",
+  "feasible": true,
+  "obj_agree_with_cuopt": true,
+  "time_limit": 900.0
+}
