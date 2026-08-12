@@ -1,0 +1,11 @@
+reaction_id,reaction_name,formula,category,why_selected,notes
+BIOMASS_Ecoli_core_w_GAM,Biomass Objective Function with GAM,1.496 3pg_c + 3.7478 accoa_c + 59.81 atp_c + 0.361 e4p_c + 0.0709 f6p_c + 0.129 g3p_c + 0.205 g6p_c + 0.2557 gln__L_c + 4.9414 glu__L_c + 59.81 h2o_c + 3.547 nad_c + 13.0279 nadph_c + 1.7867 oaa_c + 0.5191 pep_c + 2.8328 pyr_c + 0.8977 r5p_c --> 59.81 adp_c + 4.1182 akg_c + 3.7478 coa_c + 59.81 h_c + 3.547 nadh_c + 13.0279 nadp_c + 59.81 pi_c,growth,The model's canonical growth objective -- included as the baseline everything else is compared against.,
+ATPM,ATP maintenance requirement,atp_c + h2o_c --> adp_c + h_c + pi_c,energy_maintenance,Non-growth-associated maintenance ATP demand -- a standard alternative FBA objective distinct from growth.,
+EX_ac_e,Acetate exchange,ac_e --> ,fermentation_product,Acetate -- classic E. coli overflow-metabolism secretion product under excess glucose/aerobic conditions.,
+EX_etoh_e,Ethanol exchange,etoh_e --> ,fermentation_product,Ethanol -- major mixed-acid/anaerobic fermentation product.,
+EX_for_e,Formate exchange,for_e --> ,fermentation_product,Formate -- classic mixed-acid fermentation product (pyruvate-formate lyase pathway).,
+EX_lac__D_e,D-lactate exchange,lac__D_e --> ,fermentation_product,"D-lactate -- classic mixed-acid fermentation product, industrially relevant (bioplastics feedstock).",
+EX_succ_e,Succinate exchange,succ_e --> ,fermentation_product,"Succinate -- fermentation/TCA-branch product, industrially relevant bio-based chemical.",
+EX_pyr_e,Pyruvate exchange,pyr_e --> ,central_metabolite_secretion,Pyruvate -- central metabolic branch-point metabolite; secretion capacity probes glycolysis/TCA balance.,
+EX_fum_e,Fumarate exchange,fum_e --> ,central_metabolite_secretion,"Fumarate -- TCA-cycle intermediate, also an anaerobic electron-acceptor product.",
+EX_co2_e,CO2 exchange,co2_e <=> ,respiration_byproduct,CO2 -- terminal respiration/fermentation byproduct; secretion capacity reflects the aerobic/anaerobic balance chosen by the solution.,
