@@ -1,0 +1,94 @@
+{
+  "model": "S83",
+  "objective_id": "Spleen_biomass_maintenance",
+  "reaction_id": "Spleen_biomass_maintenance",
+  "category": "organ_biomass",
+  "build_s": 97.74432155769318,
+  "reps": 3,
+  "time_limit": 900.0,
+  "res_tol": 0.0001,
+  "obj_tol": 1e-06,
+  "versions": {
+    "gpu_name": null,
+    "gurobi_version": "13.0.2",
+    "cuopt_version": "26.06.00",
+    "python": "3.13.13"
+  },
+  "timestamp": "2026-08-19T13:22:29.337288+00:00",
+  "gurobi": {
+    "repeats": [
+      {
+        "repeat": 0,
+        "solve_s": 108.14499126467854,
+        "objective": 0.2571428571428571,
+        "status": "Optimal",
+        "iters": 115,
+        "residual_inf": 9.901326588386526e-07,
+        "feasible": true
+      },
+      {
+        "repeat": 1,
+        "solve_s": 106.22484999615699,
+        "objective": 0.2571428571428571,
+        "status": "Optimal",
+        "iters": 115,
+        "residual_inf": 9.901326588386526e-07,
+        "feasible": true
+      },
+      {
+        "repeat": 2,
+        "solve_s": 109.1663335673511,
+        "objective": 0.2571428571428571,
+        "status": "Optimal",
+        "iters": 115,
+        "residual_inf": 9.901326588386526e-07,
+        "feasible": true
+      }
+    ],
+    "solve_s_median": 108.14499126467854,
+    "objective_median": 0.2571428571428571,
+    "residual_inf_median": 9.901326588386526e-07,
+    "iters_median": 115,
+    "status": "Optimal",
+    "feasible": true
+  },
+  "cuopt": {
+    "repeats": [
+      {
+        "repeat": 0,
+        "solve_s": 597.3993,
+        "objective": 0.2571428571428571,
+        "status": "Optimal",
+        "iters": 935600,
+        "residual_inf": 2.1417177295218574e-05,
+        "feasible": true
+      },
+      {
+        "repeat": 1,
+        "solve_s": 575.355,
+        "objective": 0.2571428571428571,
+        "status": "Optimal",
+        "iters": 935600,
+        "residual_inf": 2.1417177295218574e-05,
+        "feasible": true
+      },
+      {
+        "repeat": 2,
+        "solve_s": 611.8039,
+        "objective": 0.2571428571428571,
+        "status": "Optimal",
+        "iters": 935600,
+        "residual_inf": 2.1417177295218574e-05,
+        "feasible": true
+      }
+    ],
+    "solve_s_median": 597.3993,
+    "objective_median": 0.2571428571428571,
+    "residual_inf_median": 2.1417177295218574e-05,
+    "iters_median": 935600,
+    "status": "Optimal",
+    "feasible": true
+  },
+  "obj_agree_with_cuopt": true,
+  "both_feasible": true
+}

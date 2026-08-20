@@ -1,0 +1,94 @@
+{
+  "model": "S9",
+  "objective_id": "panBifidobacterium_longum_biomassPan",
+  "reaction_id": "panBifidobacterium_longum_biomassPan",
+  "category": "microbiome_taxon",
+  "build_s": 89.80580911133438,
+  "reps": 3,
+  "time_limit": 900.0,
+  "res_tol": 0.0001,
+  "obj_tol": 1e-06,
+  "versions": {
+    "gpu_name": null,
+    "gurobi_version": "13.0.2",
+    "cuopt_version": "26.06.00",
+    "python": "3.13.13"
+  },
+  "timestamp": "2026-08-16T09:43:57.395708+00:00",
+  "gurobi": {
+    "repeats": [
+      {
+        "repeat": 0,
+        "solve_s": 72.75314902327955,
+        "objective": 0.000606986,
+        "status": "Optimal",
+        "iters": 85,
+        "residual_inf": 9.602922006607395e-07,
+        "feasible": true
+      },
+      {
+        "repeat": 1,
+        "solve_s": 72.96457058563828,
+        "objective": 0.000606986,
+        "status": "Optimal",
+        "iters": 85,
+        "residual_inf": 9.602922006607395e-07,
+        "feasible": true
+      },
+      {
+        "repeat": 2,
+        "solve_s": 72.69927487242967,
+        "objective": 0.000606986,
+        "status": "Optimal",
+        "iters": 85,
+        "residual_inf": 9.602922006607395e-07,
+        "feasible": true
+      }
+    ],
+    "solve_s_median": 72.75314902327955,
+    "objective_median": 0.000606986,
+    "residual_inf_median": 9.602922006607395e-07,
+    "iters_median": 85,
+    "status": "Optimal",
+    "feasible": true
+  },
+  "cuopt": {
+    "repeats": [
+      {
+        "repeat": 0,
+        "solve_s": 533.077,
+        "objective": 0.000606986,
+        "status": "Optimal",
+        "iters": 928600,
+        "residual_inf": 5.564041222375516e-05,
+        "feasible": true
+      },
+      {
+        "repeat": 1,
+        "solve_s": 536.8034,
+        "objective": 0.000606986,
+        "status": "Optimal",
+        "iters": 928600,
+        "residual_inf": 5.564041222375516e-05,
+        "feasible": true
+      },
+      {
+        "repeat": 2,
+        "solve_s": 537.2554,
+        "objective": 0.000606986,
+        "status": "Optimal",
+        "iters": 928600,
+        "residual_inf": 5.564041222375516e-05,
+        "feasible": true
+      }
+    ],
+    "solve_s_median": 536.8034,
+    "objective_median": 0.000606986,
+    "residual_inf_median": 5.564041222375516e-05,
+    "iters_median": 928600,
+    "status": "Optimal",
+    "feasible": true
+  },
+  "obj_agree_with_cuopt": true,
+  "both_feasible": true
+}

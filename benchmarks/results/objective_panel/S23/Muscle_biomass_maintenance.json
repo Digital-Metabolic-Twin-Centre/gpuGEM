@@ -1,0 +1,94 @@
+{
+  "model": "S23",
+  "objective_id": "Muscle_biomass_maintenance",
+  "reaction_id": "Muscle_biomass_maintenance",
+  "category": "organ_biomass",
+  "build_s": 81.10609677806497,
+  "reps": 3,
+  "time_limit": 900.0,
+  "res_tol": 0.0001,
+  "obj_tol": 1e-06,
+  "versions": {
+    "gpu_name": null,
+    "gurobi_version": "13.0.2",
+    "cuopt_version": "26.06.00",
+    "python": "3.13.13"
+  },
+  "timestamp": "2026-08-17T22:09:58.245424+00:00",
+  "gurobi": {
+    "repeats": [
+      {
+        "repeat": 0,
+        "solve_s": 76.58686056733131,
+        "objective": 40.0,
+        "status": "Optimal",
+        "iters": 98,
+        "residual_inf": 9.761321824626468e-07,
+        "feasible": true
+      },
+      {
+        "repeat": 1,
+        "solve_s": 76.32906396314502,
+        "objective": 40.0,
+        "status": "Optimal",
+        "iters": 98,
+        "residual_inf": 9.761321824626468e-07,
+        "feasible": true
+      },
+      {
+        "repeat": 2,
+        "solve_s": 76.31343857944012,
+        "objective": 40.0,
+        "status": "Optimal",
+        "iters": 98,
+        "residual_inf": 9.761321824626468e-07,
+        "feasible": true
+      }
+    ],
+    "solve_s_median": 76.32906396314502,
+    "objective_median": 40.0,
+    "residual_inf_median": 9.761321824626468e-07,
+    "iters_median": 98,
+    "status": "Optimal",
+    "feasible": true
+  },
+  "cuopt": {
+    "repeats": [
+      {
+        "repeat": 0,
+        "solve_s": 723.6349,
+        "objective": 40.0,
+        "status": "Optimal",
+        "iters": 1272000,
+        "residual_inf": 8.834831798770662e-05,
+        "feasible": true
+      },
+      {
+        "repeat": 1,
+        "solve_s": 727.517,
+        "objective": 40.0,
+        "status": "Optimal",
+        "iters": 1272000,
+        "residual_inf": 8.834831798770662e-05,
+        "feasible": true
+      },
+      {
+        "repeat": 2,
+        "solve_s": 727.9458,
+        "objective": 40.0,
+        "status": "Optimal",
+        "iters": 1272000,
+        "residual_inf": 8.834831798770662e-05,
+        "feasible": true
+      }
+    ],
+    "solve_s_median": 727.517,
+    "objective_median": 40.0,
+    "residual_inf_median": 8.834831798770662e-05,
+    "iters_median": 1272000,
+    "status": "Optimal",
+    "feasible": true
+  },
+  "obj_agree_with_cuopt": true,
+  "both_feasible": true
+}

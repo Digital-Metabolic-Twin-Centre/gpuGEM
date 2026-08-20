@@ -1,0 +1,94 @@
+{
+  "model": "e_coli_core",
+  "objective_id": "EX_pyr_e",
+  "reaction_id": "EX_pyr_e",
+  "category": "central_metabolite_secretion",
+  "build_s": 0.27658081240952015,
+  "reps": 3,
+  "time_limit": 900.0,
+  "res_tol": 0.0001,
+  "obj_tol": 1e-06,
+  "versions": {
+    "gpu_name": null,
+    "gurobi_version": "13.0.2",
+    "cuopt_version": "26.06.00",
+    "python": "3.13.13"
+  },
+  "timestamp": "2026-08-14T11:13:07.672018+00:00",
+  "gurobi": {
+    "repeats": [
+      {
+        "repeat": 0,
+        "solve_s": 0.0010451972484588623,
+        "objective": 20.0,
+        "status": "Optimal",
+        "iters": 9,
+        "residual_inf": 0.0,
+        "feasible": true
+      },
+      {
+        "repeat": 1,
+        "solve_s": 0.0008297320455312729,
+        "objective": 20.0,
+        "status": "Optimal",
+        "iters": 9,
+        "residual_inf": 0.0,
+        "feasible": true
+      },
+      {
+        "repeat": 2,
+        "solve_s": 0.0007987190037965775,
+        "objective": 20.0,
+        "status": "Optimal",
+        "iters": 9,
+        "residual_inf": 0.0,
+        "feasible": true
+      }
+    ],
+    "solve_s_median": 0.0008297320455312729,
+    "objective_median": 20.0,
+    "residual_inf_median": 0.0,
+    "iters_median": 9,
+    "status": "Optimal",
+    "feasible": true
+  },
+  "cuopt": {
+    "repeats": [
+      {
+        "repeat": 0,
+        "solve_s": 0.1363,
+        "objective": 19.999999998695042,
+        "status": "Optimal",
+        "iters": 2900,
+        "residual_inf": 1.3656773489856278e-09,
+        "feasible": true
+      },
+      {
+        "repeat": 1,
+        "solve_s": 0.1345,
+        "objective": 19.999999998695042,
+        "status": "Optimal",
+        "iters": 2900,
+        "residual_inf": 1.3656773489856278e-09,
+        "feasible": true
+      },
+      {
+        "repeat": 2,
+        "solve_s": 0.1348,
+        "objective": 19.999999998695042,
+        "status": "Optimal",
+        "iters": 2900,
+        "residual_inf": 1.3656773489856278e-09,
+        "feasible": true
+      }
+    ],
+    "solve_s_median": 0.1348,
+    "objective_median": 19.999999998695042,
+    "residual_inf_median": 1.3656773489856278e-09,
+    "iters_median": 2900,
+    "status": "Optimal",
+    "feasible": true
+  },
+  "obj_agree_with_cuopt": true,
+  "both_feasible": true
+}

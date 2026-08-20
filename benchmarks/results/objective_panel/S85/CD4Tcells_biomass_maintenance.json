@@ -1,0 +1,94 @@
+{
+  "model": "S85",
+  "objective_id": "CD4Tcells_biomass_maintenance",
+  "reaction_id": "CD4Tcells_biomass_maintenance",
+  "category": "immune_cell_biomass",
+  "build_s": 70.74296297505498,
+  "reps": 3,
+  "time_limit": 900.0,
+  "res_tol": 0.0001,
+  "obj_tol": 1e-06,
+  "versions": {
+    "gpu_name": null,
+    "gurobi_version": "13.0.2",
+    "cuopt_version": "26.06.00",
+    "python": "3.13.13"
+  },
+  "timestamp": "2026-08-14T18:21:15.559769+00:00",
+  "gurobi": {
+    "repeats": [
+      {
+        "repeat": 0,
+        "solve_s": 52.37418576981872,
+        "objective": 0.011785714285714287,
+        "status": "Optimal",
+        "iters": 91,
+        "residual_inf": 9.8540391428e-07,
+        "feasible": true
+      },
+      {
+        "repeat": 1,
+        "solve_s": 52.49049796722829,
+        "objective": 0.011785714285714287,
+        "status": "Optimal",
+        "iters": 91,
+        "residual_inf": 9.8540391428e-07,
+        "feasible": true
+      },
+      {
+        "repeat": 2,
+        "solve_s": 52.247190767899156,
+        "objective": 0.011785714285714287,
+        "status": "Optimal",
+        "iters": 91,
+        "residual_inf": 9.8540391428e-07,
+        "feasible": true
+      }
+    ],
+    "solve_s_median": 52.37418576981872,
+    "objective_median": 0.011785714285714287,
+    "residual_inf_median": 9.8540391428e-07,
+    "iters_median": 91,
+    "status": "Optimal",
+    "feasible": true
+  },
+  "cuopt": {
+    "repeats": [
+      {
+        "repeat": 0,
+        "solve_s": 508.4293,
+        "objective": 0.011785714285714287,
+        "status": "Optimal",
+        "iters": 984000,
+        "residual_inf": 8.868415896295202e-05,
+        "feasible": true
+      },
+      {
+        "repeat": 1,
+        "solve_s": 510.9368,
+        "objective": 0.011785714285714287,
+        "status": "Optimal",
+        "iters": 984000,
+        "residual_inf": 8.868415896295202e-05,
+        "feasible": true
+      },
+      {
+        "repeat": 2,
+        "solve_s": 510.5274,
+        "objective": 0.011785714285714287,
+        "status": "Optimal",
+        "iters": 984000,
+        "residual_inf": 8.868415896295202e-05,
+        "feasible": true
+      }
+    ],
+    "solve_s_median": 510.5274,
+    "objective_median": 0.011785714285714287,
+    "residual_inf_median": 8.868415896295202e-05,
+    "iters_median": 984000,
+    "status": "Optimal",
+    "feasible": true
+  },
+  "obj_agree_with_cuopt": true,
+  "both_feasible": true
+}

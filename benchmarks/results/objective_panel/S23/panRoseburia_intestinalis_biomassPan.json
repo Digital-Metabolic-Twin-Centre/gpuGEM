@@ -1,0 +1,94 @@
+{
+  "model": "S23",
+  "objective_id": "panRoseburia_intestinalis_biomassPan",
+  "reaction_id": "panRoseburia_intestinalis_biomassPan",
+  "category": "microbiome_taxon",
+  "build_s": 80.9810691466555,
+  "reps": 3,
+  "time_limit": 900.0,
+  "res_tol": 0.0001,
+  "obj_tol": 1e-06,
+  "versions": {
+    "gpu_name": null,
+    "gurobi_version": "13.0.2",
+    "cuopt_version": "26.06.00",
+    "python": "3.13.13"
+  },
+  "timestamp": "2026-08-18T13:08:03.927872+00:00",
+  "gurobi": {
+    "repeats": [
+      {
+        "repeat": 0,
+        "solve_s": 78.96147413365543,
+        "objective": 0.00355995,
+        "status": "Optimal",
+        "iters": 98,
+        "residual_inf": 9.761321824626468e-07,
+        "feasible": true
+      },
+      {
+        "repeat": 1,
+        "solve_s": 78.809056869708,
+        "objective": 0.00355995,
+        "status": "Optimal",
+        "iters": 98,
+        "residual_inf": 9.761321824626468e-07,
+        "feasible": true
+      },
+      {
+        "repeat": 2,
+        "solve_s": 78.33463756926358,
+        "objective": 0.00355995,
+        "status": "Optimal",
+        "iters": 98,
+        "residual_inf": 9.761321824626468e-07,
+        "feasible": true
+      }
+    ],
+    "solve_s_median": 78.809056869708,
+    "objective_median": 0.00355995,
+    "residual_inf_median": 9.761321824626468e-07,
+    "iters_median": 98,
+    "status": "Optimal",
+    "feasible": true
+  },
+  "cuopt": {
+    "repeats": [
+      {
+        "repeat": 0,
+        "solve_s": 739.0064,
+        "objective": 0.00355995,
+        "status": "Optimal",
+        "iters": 1295200,
+        "residual_inf": 1.4250234664846088e-05,
+        "feasible": true
+      },
+      {
+        "repeat": 1,
+        "solve_s": 742.8485,
+        "objective": 0.00355995,
+        "status": "Optimal",
+        "iters": 1295200,
+        "residual_inf": 1.4250234664846088e-05,
+        "feasible": true
+      },
+      {
+        "repeat": 2,
+        "solve_s": 742.9748,
+        "objective": 0.00355995,
+        "status": "Optimal",
+        "iters": 1295200,
+        "residual_inf": 1.4250234664846088e-05,
+        "feasible": true
+      }
+    ],
+    "solve_s_median": 742.8485,
+    "objective_median": 0.00355995,
+    "residual_inf_median": 1.4250234664846088e-05,
+    "iters_median": 1295200,
+    "status": "Optimal",
+    "feasible": true
+  },
+  "obj_agree_with_cuopt": true,
+  "both_feasible": true
+}

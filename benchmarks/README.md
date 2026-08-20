@@ -306,3 +306,41 @@ found no model where automatic mode's choice changes the correctness picture —
 cases, a modest time cost relative to this project's already-deliberately-chosen `method=2`.
 `gpugem/_defaults.py` and this project's shipped Gurobi wrapper default are unchanged by this
 benchmark regardless of what it shows.
+
+## Cross-model objective-panel credibility benchmark
+
+Every runtime number published above (and in the two benchmarks before it) comes from solving
+each model with exactly one objective — that model's own shipped whole-body or biomass reaction.
+`run_objective_panel.py` checks whether that one number is representative of the model in
+general: for every model, it solves *every* objective reaction already curated and committed in
+`benchmarks/objective_candidates/<model>.csv` (10 to 50 objectives per model, ~385 total), with
+both solvers exactly as already published for that model — never a different setting — repeated
+and reported as medians (see `specs/011-objective-panel-benchmark/`).
+
+```bash
+python -m benchmarks.run_objective_panel --model NAME    # one model's full panel; --all for every model
+python -m benchmarks.aggregate_objective_panel            # two CSVs from committed JSON, no solver
+python -m benchmarks.make_objective_panel_figures          # one figure per model from the CSVs, no solver
+```
+
+`run_objective_panel.py` skips a (model, objective) combination whose
+`results/objective_panel/<model>/<objective_id>.json` already exists unless `--force` is given, so
+an interrupted run resumes without re-solving anything already completed — expected, since a full
+run across every model's panel is realistically multi-day wall-clock time, dominated by the six
+large personalized microbiome models. `--reps` defaults to `3`, matching every model's own
+already-published repeat count. A `--heartbeat-s` (default `30`) progress line prints during each
+long solve so a multi-hour run stays distinguishable from a hang.
+
+A combination that fails the correctness gate (non-optimal status, out-of-tolerance residual on
+*any individual repeat* — not just the median — or objective disagreement between solvers) is
+still recorded, marked `both_feasible: false`, and shown as failed on its figure rather than
+silently dropped; only the *displayed* residual value is a median across repeats, the pass/fail
+gate itself is never loosened by that.
+
+Outputs (committed) under `results/objective_panel/`: one `<objective_id>.json` per (model,
+objective) pair under `<model>/`, plus two additive aggregate views —
+`objective_runtime.csv` (model, objective, solver, objective value, runtime — nothing else) and
+`benchmark_details.csv` (adds status, constraint-violation residual, and the correctness-gate
+outcome). Figures under `figures/`: one `objective_panel_<model>.png` per model, log-scale solve
+time, both solvers, with that model's already-published baseline objective highlighted so it's
+visible at a glance whether it sits with the rest of the panel or is an outlier.

@@ -1,0 +1,94 @@
+{
+  "model": "iML1515",
+  "objective_id": "EX_glu__L_e",
+  "reaction_id": "EX_glu__L_e",
+  "category": "amino_acid_production",
+  "build_s": 6.001060048118234,
+  "reps": 3,
+  "time_limit": 900.0,
+  "res_tol": 0.0001,
+  "obj_tol": 1e-06,
+  "versions": {
+    "gpu_name": null,
+    "gurobi_version": "13.0.2",
+    "cuopt_version": "26.06.00",
+    "python": "3.13.13"
+  },
+  "timestamp": "2026-08-14T11:23:44.841563+00:00",
+  "gurobi": {
+    "repeats": [
+      {
+        "repeat": 0,
+        "solve_s": 0.036199270747601986,
+        "objective": 11.814927835051723,
+        "status": "Optimal",
+        "iters": 26,
+        "residual_inf": 2.334132886971929e-12,
+        "feasible": true
+      },
+      {
+        "repeat": 1,
+        "solve_s": 0.03595294523984194,
+        "objective": 11.814927835051723,
+        "status": "Optimal",
+        "iters": 26,
+        "residual_inf": 2.334132886971929e-12,
+        "feasible": true
+      },
+      {
+        "repeat": 2,
+        "solve_s": 0.03729478735476732,
+        "objective": 11.814927835051723,
+        "status": "Optimal",
+        "iters": 26,
+        "residual_inf": 2.334132886971929e-12,
+        "feasible": true
+      }
+    ],
+    "solve_s_median": 0.036199270747601986,
+    "objective_median": 11.814927835051723,
+    "residual_inf_median": 2.334132886971929e-12,
+    "iters_median": 26,
+    "status": "Optimal",
+    "feasible": true
+  },
+  "cuopt": {
+    "repeats": [
+      {
+        "repeat": 0,
+        "solve_s": 1.353,
+        "objective": 11.814927834131714,
+        "status": "Optimal",
+        "iters": 40800,
+        "residual_inf": 7.0431506098698006e-09,
+        "feasible": true
+      },
+      {
+        "repeat": 1,
+        "solve_s": 1.3424,
+        "objective": 11.814927834131714,
+        "status": "Optimal",
+        "iters": 40800,
+        "residual_inf": 7.0431506098698006e-09,
+        "feasible": true
+      },
+      {
+        "repeat": 2,
+        "solve_s": 1.3295,
+        "objective": 11.814927834131714,
+        "status": "Optimal",
+        "iters": 40800,
+        "residual_inf": 7.0431506098698006e-09,
+        "feasible": true
+      }
+    ],
+    "solve_s_median": 1.3424,
+    "objective_median": 11.814927834131714,
+    "residual_inf_median": 7.0431506098698006e-09,
+    "iters_median": 40800,
+    "status": "Optimal",
+    "feasible": true
+  },
+  "obj_agree_with_cuopt": true,
+  "both_feasible": true
+}
