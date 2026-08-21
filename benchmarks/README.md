@@ -440,3 +440,94 @@ to (spec FR-008/SC-003) — not reported as a win despite the attractive raw spe
 **Promoting the `26.8.0` upgrade to a shipped default is a distinct, separate decision** requiring
 its own validation across every model in the cross-scale benchmark (not just S85) — explicitly out
 of this feature's scope (see Assumptions in `specs/012-cuopt-native-tuning/spec.md`).
+
+## Opt-in model lifting
+
+`gpugem.solve(..., lift=True)` transforms badly-scaled mass-balance and coupling-constraint rows
+into an equivalent, better-scaled formulation before solving, then maps the result back to the
+original model's variable space — a faithful Python port of COBRA Toolbox's `reformulate.m`
+(`gpugem/lifting.py`), not an approximation of it. `lift` defaults to `False`: every existing
+caller of `gpugem.solve`/`solve_cobra`/`FBASolver` is completely unaffected unless lifting is
+explicitly requested. See `specs/013-cobra-model-lifting/`.
+
+```python
+result = gpugem.solve(S, b, lb, ub, c, lift=True, lift_big=1000.0)   # or gpugem.solve_cobra(model, lift=True)
+```
+
+Because original variables are never reordered, rescaled, or removed by `reformulate.m` — only
+appended after — mapping a lifted solution back is a literal prefix slice, not an inverse
+transform (unlike `specs/012-cuopt-native-tuning/`'s external-scaling preprocessing candidate,
+whose accuracy was lost through its own inverse mapping). `FBAResult.feasibility` under
+`lift=True` is always recomputed against the *original*, unlifted model, so a caller's diagnostics
+never silently describe an internal system they never see.
+
+`gpugem/lifting.py` is a **separate, different algorithm** from the pre-existing
+`gpugem/scaling.py` (`decompose_stoichiometry`/`scale_model`) — the two are not interchangeable:
+`scaling.py` uses one independent chain per badly-scaled entry and handles both large and small
+coefficients but never lifts coupling constraints; `gpugem.lifting` shares one chain per row
+(`reformulate.m`'s own optimization), handles only large coefficients, and lifts coupling rows
+matching a specific two-nonzero-opposite-sign pattern too. `gpugem/scaling.py` is untouched by
+this feature.
+
+```bash
+python -m benchmarks.run_model_lifting_validation --model e_coli_core   # small, safe no-op case
+python -m benchmarks.run_model_lifting_validation --model S85           # large, both blocks exercised
+```
+
+Outputs (committed) under `results/model_lifting/`: one `<model>.json` per validated model,
+containing a correctness comparison (lifted-and-mapped-back vs. unlifted, spec FR-006) and a
+before/after coefficient-range scale report (spec FR-007).
+
+**A genuine, verified property of `reformulate.m`'s own algorithm, found while implementing this
+feature (not a translation bug)**: its row-shared step size (a `mode()`/minimum across a row's
+large entries, needed to translate MATLAB's `mode()` on all-distinct floats correctly — see
+`gpugem/lifting.py`'s `_row_step_size`) is not mathematically guaranteed to bring *every* entry in
+a shared row within `lift_big` when that row's large entries span a wide magnitude range —
+confirmed by direct stress-testing (a synthetic adversarial row can overshoot the threshold by
+orders of magnitude) and mathematically explained: the shared step is set by whichever entry needs
+the fewest chain levels, which can leave an entry needing more levels under-corrected. The linear
+algebra itself remains exactly correct regardless (verified independently via solving the
+auxiliary block and confirming exact reproduction of the original system) — only the
+scale-*correction* goal is affected, not correctness. `run_model_lifting_validation.py` measures
+and reports this per model rather than asserting it away.
+
+**Runtime/performance comparison between lifted and unlifted solves is explicit future work**, not
+a claim of this feature — `unlifted_solve_s`/`lifted_solve_s` are recorded in each result for
+context only (spec FR-009).
+
+**Result**: `e_coli_core` (small, no coefficient exceeds `lift_big=1000.0`): `[OK]` verified-correct
+— lifting is a confirmed, bit-identical no-op (same objective, same iteration count, zero
+auxiliary variables added).
+
+`S85` (large, both blocks genuinely exercised — 242 mass-balance rows and 68,259 coupling rows
+lifted, 68,501 auxiliary variables added, both blocks' coefficients measurably brought within
+`lift_big` — `mass_balance_fully_corrected`/`coupling_fully_corrected` both `true`): **`[FAILED]`
+against this project's own correctness gate** — objective matches exactly (`1.0` vs. `1.0`), but
+the mapped-back residual against the *original* system (1.32e-3) exceeds this project's 1e-4
+tolerance by an order of magnitude, despite `lifted_status="Optimal"` (cuOpt itself reports
+converged). This is reported honestly as a failure, exactly as spec FR-006 Acceptance Scenario 3
+requires, not glossed over.
+
+**Root cause, confirmed by a targeted follow-up (not just theorized)**: the lifting transform's
+own linear algebra is independently verified exact (residual `0` on hand-constructed examples,
+solved via linear algebra rather than trusting the implementation's own bookkeeping) and the
+map-back is a lossless prefix slice — so the gap is not in the transform itself. It is in how
+cuOpt's own convergence tolerance interacts with the auxiliary chain: each chain's connecting
+step size (`stp`, here as large as ~999 for single-level mass-balance chains and up to ~141 for
+coupling chains) *amplifies* whatever residual cuOpt leaves on the auxiliary equations when that
+error is read back through to the original row. A follow-up run with explicitly tighter tolerances
+(`1e-9` vs. the large-model default) reduced the residual to 8.24e-4 — a real but partial
+improvement — while failing to even reach `Optimal` within the same 900s time budget, because the
+lifted system (68,501 more variables) needs meaningfully more solver work to reach the *same*
+original-system accuracy than the unlifted system does under this project's existing large-model
+default settings.
+
+**This is a genuine, useful negative result, not a feature defect**: lifting's correctness proof
+(the transform is exact) and its practical usability under this project's *existing* default
+solver settings are two different questions, and this validation correctly separates them — the
+transform works exactly as `reformulate.m` specifies; achieving the same wall-clock accuracy
+*after* lifting a model this large and this badly-scaled needs either a longer time budget or
+tighter, lift-aware tolerance settings, neither of which this feature was scoped to tune (see
+Constitution Principle I — no default is promoted without its own benchmark-backed justification,
+and none is proposed here). See `README.md`'s Known Limitations for the recorded statement of
+this finding.

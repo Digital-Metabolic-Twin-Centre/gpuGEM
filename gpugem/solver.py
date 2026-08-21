@@ -43,6 +43,8 @@ def solve(
     maximize: bool = False,
     time_limit: float = 60.0,
     check_feasibility: bool = True,
+    lift: bool = False,
+    lift_big: float = 1000.0,
     **cuopt_kwargs: Any,
 ) -> FBAResult:
     """
@@ -79,6 +81,16 @@ def solve(
         Wall-clock time limit in seconds (passed to cuOpt).
     check_feasibility:
         If ``True``, compute constraint residuals and include them in the result.
+    lift:
+        If ``True``, transform badly-scaled mass-balance and coupling rows into
+        an equivalent, better-scaled formulation before solving (a faithful
+        port of COBRA Toolbox's ``reformulate.m``, see :mod:`gpugem.lifting`),
+        then map the result back to the original variable space. ``False``
+        (default) preserves today's behavior exactly -- no existing caller is
+        affected. See ``specs/013-cobra-model-lifting/``.
+    lift_big:
+        Magnitude threshold for lifting (``reformulate.m``'s ``BIG``). Ignored
+        when ``lift=False``.
     **cuopt_kwargs:
         Any additional cuOpt parameter passed directly to ``SolverSettings``,
         overriding the defaults (e.g. ``pdlp_solver_mode=0``, ``presolve=0``).
@@ -105,27 +117,80 @@ def solve(
     """
     from cuopt.linear_programming import DataModel, Solve, SolverSettings
 
-    S_csr = sp.csr_matrix(S)
+    INF = 1e30
+
+    # Original (never-lifted) arrays -- FBAResult is always reported in this
+    # space, and feasibility is always checked against this space, regardless
+    # of whether lifting is used internally (specs/013-cobra-model-lifting/
+    # research.md R6).
+    S_orig = sp.csr_matrix(S).astype(np.float64)
+    b_orig = np.asarray(b, dtype=np.float64)
+    lb_orig = np.asarray(lb, dtype=np.float64)
+    ub_orig = np.asarray(ub, dtype=np.float64)
+    c_orig = np.asarray(c, dtype=np.float64)
+    C_orig = sp.csr_matrix(C).astype(np.float64) if C is not None else None
+    n_vars_original = S_orig.shape[1]
+    n_stoich_original = S_orig.shape[0]
+    if C_orig is not None:
+        d_lb_orig = (np.asarray(d_lb, dtype=np.float64) if d_lb is not None
+                     else np.full(C_orig.shape[0], -INF))
+        d_ub_orig = (np.asarray(d_ub, dtype=np.float64) if d_ub is not None
+                     else np.full(C_orig.shape[0], INF))
+    else:
+        d_lb_orig = d_ub_orig = None
+
+    lifting_mapping = None
+    if lift:
+        from gpugem.lifting import lift_coupling as _lift_coupling
+        from gpugem.lifting import lift_mass_balance as _lift_mass_balance
+
+        S_solve, b_solve, lifting_mapping = _lift_mass_balance(S_orig, b_orig, big=lift_big)
+        n_mb_aux = lifting_mapping.n_aux_vars
+
+        if C_orig is not None:
+            C_solve, d_lb_solve, d_ub_solve, lifting_mapping = _lift_coupling(
+                C_orig, d_lb_orig, d_ub_orig, lift_big, lifting_mapping
+            )
+            n_extra_aux = lifting_mapping.n_aux_vars - n_mb_aux
+            if n_extra_aux > 0:
+                # S and C share one variable space -- pad S with zero columns
+                # for any auxiliary variables lift_coupling added beyond
+                # lift_mass_balance's own (mirrors gpugem/scaling.py's
+                # analogous C-padding for S's own aux vars, in reverse).
+                S_solve = sp.hstack(
+                    [S_solve, sp.csr_matrix((S_solve.shape[0], n_extra_aux))],
+                    format="csr",
+                )
+        else:
+            C_solve, d_lb_solve, d_ub_solve = None, None, None
+            n_extra_aux = 0
+
+        n_aux_total = lifting_mapping.n_aux_vars
+        lb_solve = np.concatenate([lb_orig, np.full(n_aux_total, -INF)])
+        ub_solve = np.concatenate([ub_orig, np.full(n_aux_total, INF)])
+        c_solve = np.concatenate([c_orig, np.zeros(n_aux_total)])
+    else:
+        S_solve, b_solve = S_orig, b_orig
+        lb_solve, ub_solve, c_solve = lb_orig, ub_orig, c_orig
+        C_solve, d_lb_solve, d_ub_solve = C_orig, d_lb_orig, d_ub_orig
+
+    S_csr = sp.csr_matrix(S_solve)
     n_vars = S_csr.shape[1]
     n_stoich = S_csr.shape[0]
 
-    # Build full constraint matrix A = [S; C]
-    INF = 1e30
-    if C is not None:
-        C_csr = sp.csr_matrix(C)
+    # Build full constraint matrix A = [S; C] (possibly lifted)
+    if C_solve is not None:
+        C_csr = sp.csr_matrix(C_solve)
         A = sp.vstack([S_csr, C_csr], format="csr")
-
-        _d_lb = np.asarray(d_lb, dtype=np.float64) if d_lb is not None else np.full(C_csr.shape[0], -INF)
-        _d_ub = np.asarray(d_ub, dtype=np.float64) if d_ub is not None else np.full(C_csr.shape[0],  INF)
-
-        con_lb = np.concatenate([b, _d_lb])
-        con_ub = np.concatenate([b, _d_ub])
+        con_lb = np.concatenate([b_solve, d_lb_solve])
+        con_ub = np.concatenate([b_solve, d_ub_solve])
     else:
         A = S_csr
-        con_lb = np.asarray(b, dtype=np.float64)
-        con_ub = np.asarray(b, dtype=np.float64)
+        con_lb = np.asarray(b_solve, dtype=np.float64)
+        con_ub = np.asarray(b_solve, dtype=np.float64)
 
     A = A.astype(np.float64)
+    lb, ub, c = lb_solve, ub_solve, c_solve
 
     # Build DataModel
     dm = DataModel()
@@ -192,19 +257,43 @@ def solve(
             objective = float(sol.get_primal_objective())
 
             if len(x) == n_vars:
-                fluxes = x
-                if check_feasibility:
-                    Ax = A @ x
-                    con_viol = np.maximum(con_lb - Ax, 0.0) + np.maximum(Ax - con_ub, 0.0)
-                    var_viol = np.maximum(lb - x, 0.0) + np.maximum(x - ub, 0.0)
-                    stoich_viol = con_viol[:n_stoich]
+                if lift:
+                    from gpugem.lifting import map_back as _map_back
 
-                    feasibility = {
-                        "stoich_max_residual": float(stoich_viol.max()),
-                        "stoich_rows_violated_1e6": int((stoich_viol > 1e-6).sum()),
-                        "coupling_max_residual": float(con_viol[n_stoich:].max()) if C is not None else 0.0,
-                        "var_bounds_max_violation": float(var_viol.max()),
-                    }
+                    x = _map_back(x, lifting_mapping)
+
+                if len(x) == n_vars_original:
+                    fluxes = x
+                    if check_feasibility:
+                        # Always checked against the ORIGINAL, unlifted system
+                        # -- a caller sees honest diagnostics about the model
+                        # they asked to solve, never the internally-lifted one
+                        # (specs/013-cobra-model-lifting/research.md R6).
+                        if C_orig is not None:
+                            A_orig = sp.vstack([S_orig, C_orig], format="csr")
+                            con_lb_orig = np.concatenate([b_orig, d_lb_orig])
+                            con_ub_orig = np.concatenate([b_orig, d_ub_orig])
+                        else:
+                            A_orig = S_orig
+                            con_lb_orig = b_orig
+                            con_ub_orig = b_orig
+
+                        Ax = A_orig @ fluxes
+                        con_viol = (np.maximum(con_lb_orig - Ax, 0.0)
+                                    + np.maximum(Ax - con_ub_orig, 0.0))
+                        var_viol = (np.maximum(lb_orig - fluxes, 0.0)
+                                    + np.maximum(fluxes - ub_orig, 0.0))
+                        stoich_viol = con_viol[:n_stoich_original]
+
+                        feasibility = {
+                            "stoich_max_residual": float(stoich_viol.max()),
+                            "stoich_rows_violated_1e6": int((stoich_viol > 1e-6).sum()),
+                            "coupling_max_residual": (
+                                float(con_viol[n_stoich_original:].max())
+                                if C_orig is not None else 0.0
+                            ),
+                            "var_bounds_max_violation": float(var_viol.max()),
+                        }
         except Exception:
             pass
 

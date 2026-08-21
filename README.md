@@ -183,6 +183,22 @@ result.feasibility  # dict: stoich_max_residual, stoich_rows_violated_1e6, ...
   (`Fast1`: reproduced deterministically on a capped-iteration `e_coli_core` test). Since S85's
   cold solves don't converge in a practical budget for the modes warm start supports, this is a
   structural chicken-and-egg problem on this model, not a configuration mistake.
+- **Opt-in model lifting (`gpugem.solve(..., lift=True)`, a faithful port of COBRA Toolbox's
+  `reformulate.m`, see `specs/013-cobra-model-lifting/`) is verified exact as a transform** (its
+  linear algebra independently checked via solving hand-constructed examples, and its map-back is
+  a lossless prefix slice — original variables are never rescaled) **but does not preserve
+  this project's own correctness tolerance on S85 under the existing large-model default solver
+  settings.** Lifting S85 measurably corrects both blocks' badly-scaled coefficients (mass-balance
+  `2e5 -> 999`, coupling `2e4 -> 141`, both within the `1000` threshold), and the lifted solve
+  reports `Optimal` with the exact same objective as the unlifted solve — but the mapped-back
+  residual against the *original* system (1.32e-3) exceeds this project's 1e-4 tolerance. Root
+  cause: the auxiliary chain's step size (up to ~999) amplifies whatever residual cuOpt leaves on
+  the auxiliary equations when read back into the original row; a tighter-tolerance follow-up
+  reduced but did not close this gap, and did not converge within the same 900s budget on the
+  larger (68,501-more-variable) lifted system. Confirmed only on `e_coli_core`-scale correctness
+  (a safe no-op there, since no coefficient exceeds the default threshold) — not yet on any large
+  model under either a longer time budget or lift-aware tighter tolerances, neither of which this
+  feature was scoped to tune.
 
 ---
 

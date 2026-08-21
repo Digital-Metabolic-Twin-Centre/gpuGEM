@@ -1,0 +1,28 @@
+{
+  "comparison": {
+    "model": "e_coli_core",
+    "unlifted_status": "Optimal",
+    "lifted_status": "Optimal",
+    "unlifted_objective": 0.8739215056938601,
+    "lifted_objective": 0.8739215056938601,
+    "objective_agrees": true,
+    "unlifted_residual_inf": 7.779511312921983e-09,
+    "lifted_residual_inf": 7.779511312921983e-09,
+    "verified_correct": true,
+    "unlifted_solve_s": 1.0231907172128558,
+    "lifted_solve_s": 0.24828605726361275
+  },
+  "scale_report": {
+    "model": "e_coli_core",
+    "big": 1000.0,
+    "mass_balance_max_abs_before": 0.0,
+    "mass_balance_max_abs_after": 0.0,
+    "coupling_max_abs_before": null,
+    "coupling_max_abs_after": null,
+    "n_mass_balance_rows_lifted": 0,
+    "n_coupling_rows_lifted": 0,
+    "n_aux_vars_added": 0,
+    "mass_balance_fully_corrected": true,
+    "coupling_fully_corrected": true
+  }
+}

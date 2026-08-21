@@ -1,0 +1,28 @@
+{
+  "comparison": {
+    "model": "S85",
+    "unlifted_status": "Optimal",
+    "lifted_status": "Optimal",
+    "unlifted_objective": 1.0,
+    "lifted_objective": 1.0,
+    "objective_agrees": true,
+    "unlifted_residual_inf": 8.868415896295202e-05,
+    "lifted_residual_inf": 0.0013172209384180178,
+    "verified_correct": false,
+    "unlifted_solve_s": 506.6091879308224,
+    "lifted_solve_s": 450.9311599629
+  },
+  "scale_report": {
+    "model": "S85",
+    "big": 1000.0,
+    "mass_balance_max_abs_before": 199999.0,
+    "mass_balance_max_abs_after": 999.0,
+    "coupling_max_abs_before": 20000.0,
+    "coupling_max_abs_after": 141.4213562373095,
+    "n_mass_balance_rows_lifted": 242,
+    "n_coupling_rows_lifted": 68259,
+    "n_aux_vars_added": 68501,
+    "mass_balance_fully_corrected": true,
+    "coupling_fully_corrected": true
+  }
+}
