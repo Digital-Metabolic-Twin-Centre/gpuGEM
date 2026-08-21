@@ -1,0 +1,27 @@
+{
+  "id": "first_primal_feasible",
+  "user_story": "US1",
+  "cuopt_version": "26.06.00",
+  "cuopt_kwargs": {
+    "first_primal_feasible": true
+  },
+  "phases": [
+    {
+      "phase": "single",
+      "solve_s": 433.6229,
+      "status": "PrimalFeasible",
+      "iterations": 834000,
+      "objective": 1.0
+    }
+  ],
+  "status": "PrimalFeasible",
+  "solve_s": 433.6229,
+  "iterations": 834000,
+  "objective": 1.0,
+  "residual_inf": 9.855897763485535e-05,
+  "source_note": "R2: new, untested axis -- stop as soon as a primal-feasible iterate is found rather than waiting for full dual/gap convergence, directly relevant since S85's bottleneck is convergence speed, not feasibility per se.",
+  "reconstruction_verified": null,
+  "objective_agrees_with_gurobi": true,
+  "verified_correct": false,
+  "error": null
+}

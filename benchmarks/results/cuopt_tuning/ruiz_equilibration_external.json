@@ -1,0 +1,25 @@
+{
+  "id": "ruiz_equilibration_external",
+  "user_story": "US3",
+  "cuopt_version": "26.06.00",
+  "cuopt_kwargs": {},
+  "phases": [
+    {
+      "phase": "preprocessing_reconstructed",
+      "solve_s": 66.51,
+      "status": "Optimal",
+      "iterations": 159200,
+      "objective": 1.0
+    }
+  ],
+  "status": "Optimal",
+  "solve_s": 66.51,
+  "iterations": 159200,
+  "objective": 1.0,
+  "residual_inf": 0.003365806979666952,
+  "source_note": "R8: external row/column Ruiz-style equilibration tuned to S85's known [1e-6, 2e5] coefficient range (R5) -- exact, invertible linear reformulation, not an approximation. Last resort: cuOpt already performs its own internal Ruiz equilibration non-configurably (R5), so this is not expected to add much on top of that.",
+  "reconstruction_verified": false,
+  "objective_agrees_with_gurobi": true,
+  "verified_correct": false,
+  "error": null
+}

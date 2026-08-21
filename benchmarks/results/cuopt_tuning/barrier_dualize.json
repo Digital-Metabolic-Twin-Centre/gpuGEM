@@ -1,0 +1,28 @@
+{
+  "id": "barrier_dualize",
+  "user_story": "US1",
+  "cuopt_version": "26.06.00",
+  "cuopt_kwargs": {
+    "method": 3,
+    "dualize": 1
+  },
+  "phases": [
+    {
+      "phase": "single",
+      "solve_s": 7.2242,
+      "status": "NumericalError",
+      "iterations": 0,
+      "objective": null
+    }
+  ],
+  "status": "NumericalError",
+  "solve_s": 7.2242,
+  "iterations": 0,
+  "objective": null,
+  "residual_inf": Infinity,
+  "source_note": "R4-followup: solve S85's dual instead of its primal via Barrier -- the dual's conditioning is not identical to the primal's and has never been checked on this model family.",
+  "reconstruction_verified": null,
+  "objective_agrees_with_gurobi": false,
+  "verified_correct": false,
+  "error": null
+}

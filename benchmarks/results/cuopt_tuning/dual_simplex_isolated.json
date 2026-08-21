@@ -1,0 +1,27 @@
+{
+  "id": "dual_simplex_isolated",
+  "user_story": "US1",
+  "cuopt_version": "26.06.00",
+  "cuopt_kwargs": {
+    "method": 2
+  },
+  "phases": [
+    {
+      "phase": "single",
+      "solve_s": 900.5473,
+      "status": "TimeLimit",
+      "iterations": 78554,
+      "objective": NaN
+    }
+  ],
+  "status": "TimeLimit",
+  "solve_s": 900.5473,
+  "iterations": 78554,
+  "objective": NaN,
+  "residual_inf": 1393.124,
+  "source_note": "R2-followup: pure DualSimplex, isolated -- specs/004-s85-solver-mode-experiment/ only ever exercised it indirectly (raced inside method=Concurrent, where PDLP won). The 26.06 release notes record dual simplex performance work ('16% faster on NETLIB LP') and a new right-looking Markowitz LU factorization since whatever version informed that Concurrent race -- worth an isolated head-to-head.",
+  "reconstruction_verified": null,
+  "objective_agrees_with_gurobi": false,
+  "verified_correct": false,
+  "error": null
+}

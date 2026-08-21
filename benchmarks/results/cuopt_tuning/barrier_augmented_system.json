@@ -1,0 +1,28 @@
+{
+  "id": "barrier_augmented_system",
+  "user_story": "US1",
+  "cuopt_version": "26.06.00",
+  "cuopt_kwargs": {
+    "method": 3,
+    "augmented": 1
+  },
+  "phases": [
+    {
+      "phase": "single",
+      "solve_s": 901.038,
+      "status": "TimeLimit",
+      "iterations": 0,
+      "objective": NaN
+    }
+  ],
+  "status": "TimeLimit",
+  "solve_s": 901.038,
+  "iterations": 0,
+  "objective": NaN,
+  "residual_inf": 1393.124,
+  "source_note": "R4-followup: specs/004-s85-solver-mode-experiment/ found cold Barrier fails almost immediately with NumericalError (~7s) on S85. Barrier's default linear-system formulation (augmented=-1, auto) typically means normal equations (ADAT), which SQUARES the condition number of the constraint matrix -- S85's raw condition number is ~2e11 (research.md R5), so ADAT would face ~4e22, well past float64 factorization limits. augmented=1 forces the augmented-system formulation instead, which does not square the conditioning -- a concrete, well-motivated hypothesis for why cold Barrier failed, never tried.",
+  "reconstruction_verified": null,
+  "objective_agrees_with_gurobi": false,
+  "verified_correct": false,
+  "error": null
+}

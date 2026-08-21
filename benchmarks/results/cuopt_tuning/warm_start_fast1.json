@@ -1,0 +1,35 @@
+{
+  "id": "warm_start_fast1",
+  "user_story": "US1",
+  "cuopt_version": "26.06.00",
+  "cuopt_kwargs": {
+    "presolve": 0,
+    "pdlp_solver_mode": 3
+  },
+  "phases": [
+    {
+      "phase": "cold",
+      "solve_s": 900.3451190358028,
+      "status": "TimeLimit",
+      "iterations": 871416,
+      "objective": 1.0
+    },
+    {
+      "phase": "warm",
+      "solve_s": 0.2705753669142723,
+      "status": "NoTermination",
+      "iterations": -1,
+      "objective": null
+    }
+  ],
+  "status": "NoTermination",
+  "solve_s": 0.2705753669142723,
+  "iterations": -1,
+  "objective": null,
+  "residual_inf": Infinity,
+  "source_note": "R4: the other of the two warm-start-supported modes per the installed docstring.",
+  "reconstruction_verified": null,
+  "objective_agrees_with_gurobi": false,
+  "verified_correct": false,
+  "error": null
+}

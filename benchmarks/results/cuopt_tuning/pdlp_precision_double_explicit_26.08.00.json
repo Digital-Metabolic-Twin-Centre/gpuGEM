@@ -1,0 +1,27 @@
+{
+  "id": "pdlp_precision_double_explicit",
+  "user_story": "US1",
+  "cuopt_version": "26.08.00",
+  "cuopt_kwargs": {
+    "pdlp_precision": 1
+  },
+  "phases": [
+    {
+      "phase": "single",
+      "solve_s": 243.9594,
+      "status": "Optimal",
+      "iterations": 467800,
+      "objective": 1.0
+    }
+  ],
+  "status": "Optimal",
+  "solve_s": 243.9594,
+  "iterations": 467800,
+  "objective": 1.0,
+  "residual_inf": 3.3564910464081825e-05,
+  "source_note": "R3: explicit Double precision. On e_coli_core this produced a bit-identical result to pdlp_precision=-1 (cuOpt's own Default). This candidate confirms whether that equivalence (Default==Double) also holds at S85's scale, or whether Default resolves differently on a problem this large/ill-conditioned.",
+  "reconstruction_verified": null,
+  "objective_agrees_with_gurobi": true,
+  "verified_correct": true,
+  "error": null
+}

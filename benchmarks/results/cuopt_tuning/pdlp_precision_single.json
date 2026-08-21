@@ -1,0 +1,27 @@
+{
+  "id": "pdlp_precision_single",
+  "user_story": "US1",
+  "cuopt_version": "26.06.00",
+  "cuopt_kwargs": {
+    "pdlp_precision": 0
+  },
+  "phases": [
+    {
+      "phase": "single",
+      "solve_s": 900.6568,
+      "status": "TimeLimit",
+      "iterations": 3277400,
+      "objective": 1.0
+    }
+  ],
+  "status": "TimeLimit",
+  "solve_s": 900.6568,
+  "iterations": 3277400,
+  "objective": 1.0,
+  "residual_inf": 0.07829570770263672,
+  "source_note": "R3: Single/FP32 precision, included for completeness (spec FR-001 -- every documented parameter). Expected to hit the FP32 precision floor observed empirically on e_coli_core (residual floors ~2.7e-3, cannot reach this project's tolerances) -- included to confirm that expectation holds at S85's scale too, not assumed.",
+  "reconstruction_verified": null,
+  "objective_agrees_with_gurobi": true,
+  "verified_correct": false,
+  "error": null
+}

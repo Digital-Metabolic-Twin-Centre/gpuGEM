@@ -1,0 +1,35 @@
+{
+  "id": "warm_start_stable2",
+  "user_story": "US1",
+  "cuopt_version": "26.06.00",
+  "cuopt_kwargs": {
+    "presolve": 0,
+    "pdlp_solver_mode": 1
+  },
+  "phases": [
+    {
+      "phase": "cold",
+      "solve_s": 900.3332116091624,
+      "status": "TimeLimit",
+      "iterations": 830960,
+      "objective": 1.0
+    },
+    {
+      "phase": "warm",
+      "solve_s": 900.303302006796,
+      "status": "TimeLimit",
+      "iterations": 832000,
+      "objective": 1.0
+    }
+  ],
+  "status": "TimeLimit",
+  "solve_s": 900.303302006796,
+  "iterations": 832000,
+  "objective": 1.0,
+  "residual_inf": 5.415189563971903,
+  "source_note": "R4: presolve=0 is fully OFF (distinct from PSLP=2) -- verified via constants.h and required for PDLP warm start per the 26.02 release notes ('presolve must now be explicitly disabled by setting CUOPT_PRESOLVE=0'). pdlp_solver_mode=Stable2 is one of the two modes SolverSettings.set_pdlp_warm_start_data's own installed docstring confirms are supported ('Only supported solver modes are Stable2 and Fast1') -- kept separate from the PSLP re-test above, not combined.",
+  "reconstruction_verified": null,
+  "objective_agrees_with_gurobi": true,
+  "verified_correct": false,
+  "error": null
+}

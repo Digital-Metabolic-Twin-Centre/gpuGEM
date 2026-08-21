@@ -1,0 +1,28 @@
+{
+  "id": "barrier_ordering_amd",
+  "user_story": "US1",
+  "cuopt_version": "26.06.00",
+  "cuopt_kwargs": {
+    "method": 3,
+    "ordering": 1
+  },
+  "phases": [
+    {
+      "phase": "single",
+      "solve_s": 7.2564,
+      "status": "NumericalError",
+      "iterations": 0,
+      "objective": null
+    }
+  ],
+  "status": "NumericalError",
+  "solve_s": 7.2564,
+  "iterations": 0,
+  "objective": null,
+  "residual_inf": Infinity,
+  "source_note": "R4-followup: AMD fill-reducing ordering instead of cuDSS's own default (ordering=-1/0) for Barrier's sparse factorization -- a different ordering can materially change numerical stability on an extreme-coefficient-range matrix, untested on this model family.",
+  "reconstruction_verified": null,
+  "objective_agrees_with_gurobi": false,
+  "verified_correct": false,
+  "error": null
+}

@@ -1,0 +1,27 @@
+{
+  "id": "presolve_pslp_retest",
+  "user_story": "US1",
+  "cuopt_version": "26.06.00",
+  "cuopt_kwargs": {
+    "presolve": 2
+  },
+  "phases": [
+    {
+      "phase": "single",
+      "solve_s": 1.8261,
+      "status": "Infeasible",
+      "iterations": -1,
+      "objective": null
+    }
+  ],
+  "status": "Infeasible",
+  "solve_s": 1.8261,
+  "iterations": -1,
+  "objective": null,
+  "residual_inf": Infinity,
+  "source_note": "R4: presolve=PSLP (verified enum: -1=Default, 0=OFF, 1=PaPILO, 2=PSLP). gpugem's large-model default forces PaPILO (1) specifically because PSLP was found to falsely report Infeasible on extreme-coefficient-range models. The 26.04 release notes record 'Update to the latest version of PSLP which includes bug fixes for incorrect infeasible classification' -- this candidate re-tests whether that fix (already present in the installed 26.6.0) resolves it for S85, which would make PSLP a viable, likely-faster alternative to PaPILO (PaPILO's postsolve is documented to add reconstruction error).",
+  "reconstruction_verified": null,
+  "objective_agrees_with_gurobi": false,
+  "verified_correct": false,
+  "error": null
+}

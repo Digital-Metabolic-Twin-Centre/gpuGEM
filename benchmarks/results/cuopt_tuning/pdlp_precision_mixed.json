@@ -1,0 +1,27 @@
+{
+  "id": "pdlp_precision_mixed",
+  "user_story": "US1",
+  "cuopt_version": "26.06.00",
+  "cuopt_kwargs": {
+    "pdlp_precision": 2
+  },
+  "phases": [
+    {
+      "phase": "single",
+      "solve_s": 900.7457,
+      "status": "TimeLimit",
+      "iterations": 1669200,
+      "objective": 1.0
+    }
+  ],
+  "status": "TimeLimit",
+  "solve_s": 900.7457,
+  "iterations": 1669200,
+  "objective": 1.0,
+  "residual_inf": 0.004315260291225068,
+  "source_note": "R3: true Mixed precision (verified enum: -1=Default, 0=Single, 1=Double, 2=Mixed, from cpp/include/.../constants.h). Never actually exercised on any model in this project under either name -- gpugem's own pdlp_precision=1 comment mislabels Double as 'mixed'; true Mixed has never been tried.",
+  "reconstruction_verified": null,
+  "objective_agrees_with_gurobi": true,
+  "verified_correct": false,
+  "error": null
+}

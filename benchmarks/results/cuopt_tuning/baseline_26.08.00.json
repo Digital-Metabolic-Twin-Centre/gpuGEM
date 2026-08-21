@@ -1,0 +1,25 @@
+{
+  "id": "baseline",
+  "user_story": "US1",
+  "cuopt_version": "26.08.00",
+  "cuopt_kwargs": {},
+  "phases": [
+    {
+      "phase": "single",
+      "solve_s": 240.4558,
+      "status": "Optimal",
+      "iterations": 467800,
+      "objective": 1.0
+    }
+  ],
+  "status": "Optimal",
+  "solve_s": 240.4558,
+  "iterations": 467800,
+  "objective": 1.0,
+  "residual_inf": 3.3564910464081825e-05,
+  "source_note": "R1 cross-check: gpugem's current shipped large-model defaults (method=PDLP, presolve=PaPILO, per_constraint_residual=1), applied by giving no overrides at all so this can never silently drift from what gpugem._defaults.default_settings actually ships.",
+  "reconstruction_verified": null,
+  "objective_agrees_with_gurobi": true,
+  "verified_correct": true,
+  "error": null
+}

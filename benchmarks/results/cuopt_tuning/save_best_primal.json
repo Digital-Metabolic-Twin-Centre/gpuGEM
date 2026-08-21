@@ -1,0 +1,27 @@
+{
+  "id": "save_best_primal",
+  "user_story": "US1",
+  "cuopt_version": "26.06.00",
+  "cuopt_kwargs": {
+    "save_best_primal_so_far": true
+  },
+  "phases": [
+    {
+      "phase": "single",
+      "solve_s": 511.6841,
+      "status": "Optimal",
+      "iterations": 984000,
+      "objective": 1.0
+    }
+  ],
+  "status": "Optimal",
+  "solve_s": 511.6841,
+  "iterations": 984000,
+  "objective": 1.0,
+  "residual_inf": 8.868415896295202e-05,
+  "source_note": "R2: new, untested axis -- retains the best-seen primal iterate rather than the last one, in case PDLP's iterate quality is non-monotonic on this ill-conditioned problem.",
+  "reconstruction_verified": null,
+  "objective_agrees_with_gurobi": true,
+  "verified_correct": true,
+  "error": null
+}

@@ -166,6 +166,23 @@ result.feasibility  # dict: stoich_max_residual, stoich_rows_violated_1e6, ...
   plausibly cuDSS's sparse factorization failing on this matrix's ill-conditioning without a warm
   start to help it, consistent with `26.6.0`'s separately-confirmed broken warm-start path
   (`benchmarks/run_solver_mode_experiment.py`, see `specs/004-s85-solver-mode-experiment/`).
+- A follow-up, broader settings sweep (`benchmarks/run_cuopt_tuning.py`,
+  `specs/012-cuopt-native-tuning/`) tried 11 further cuOpt-native configurations on S85 —
+  `pdlp_solver_mode=Fast1`, true Mixed precision, Single precision, an explicit Double-precision
+  re-test, a PSLP false-infeasible re-test, `first_primal_feasible`, `infeasibility_detection`
+  +`strict_infeasibility`, `save_best_primal_so_far`, and PDLP warm start (`presolve=0` +
+  `pdlp_solver_mode` in `{Stable2, Fast1}`) — **none beat the baseline**. PSLP's false-infeasible
+  bug (see the postsolve-accuracy bullet above) is confirmed still present in `26.6.0` despite a
+  26.04 PSLP update that targeted "incorrect infeasible classification" generally — it does not
+  cover this model's specific failure mode. **PDLP warm start does not help on this model for a
+  root-cause reason, isolated and reproduced on a small model**: cuOpt's warm-start data is only
+  usable when the seeding ("cold") solve itself reached `Optimal`/`PrimalFeasible` — feeding it
+  data from a solve that only reached `TimeLimit`/`IterationLimit` either yields no measurable
+  benefit (`Stable2`: the warm phase re-ran its full budget with essentially the same iteration
+  count as the cold phase) or an immediate, silent `NoTermination` with no iterations at all
+  (`Fast1`: reproduced deterministically on a capped-iteration `e_coli_core` test). Since S85's
+  cold solves don't converge in a practical budget for the modes warm start supports, this is a
+  structural chicken-and-egg problem on this model, not a configuration mistake.
 
 ---
 

@@ -1,0 +1,28 @@
+{
+  "id": "infeasibility_detection_strict",
+  "user_story": "US1",
+  "cuopt_version": "26.06.00",
+  "cuopt_kwargs": {
+    "infeasibility_detection": true,
+    "strict_infeasibility": true
+  },
+  "phases": [
+    {
+      "phase": "single",
+      "solve_s": 511.6114,
+      "status": "Optimal",
+      "iterations": 984000,
+      "objective": 1.0
+    }
+  ],
+  "status": "Optimal",
+  "solve_s": 511.6114,
+  "iterations": 984000,
+  "objective": 1.0,
+  "residual_inf": 8.868415896295202e-05,
+  "source_note": "R2: new, untested axis -- PDLP-only infeasibility-detection options; included for completeness of the documented parameter space.",
+  "reconstruction_verified": null,
+  "objective_agrees_with_gurobi": true,
+  "verified_correct": true,
+  "error": null
+}

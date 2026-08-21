@@ -1,0 +1,26 @@
+{
+  "id": "pdlp_mode_fast1",
+  "user_story": "US1",
+  "cuopt_version": "26.06.00",
+  "cuopt_kwargs": {
+    "pdlp_solver_mode": 3
+  },
+  "phases": [
+    {
+      "phase": "single",
+      "solve_s": 900.6804,
+      "status": "TimeLimit",
+      "iterations": 1526764,
+      "objective": 1.0
+    }
+  ],
+  "status": "TimeLimit",
+  "solve_s": 900.6804,
+  "iterations": 1526764,
+  "objective": 1.0,
+  "residual_inf": 1.5349776704793459,
+  "source_note": "R2: pdlp_solver_mode=Fast1 -- 'fastest mode, but with less success in convergence' per the installed package's own enum docstring. Never tried in specs/004-s85-solver-mode-experiment/, which only tested Methodical1 vs. the Stable3 baseline.",
+  "objective_agrees_with_gurobi": true,
+  "verified_correct": false,
+  "error": null
+}

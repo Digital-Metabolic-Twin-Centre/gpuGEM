@@ -344,3 +344,99 @@ objective) pair under `<model>/`, plus two additive aggregate views —
 outcome). Figures under `figures/`: one `objective_panel_<model>.png` per model, log-scale solve
 time, both solvers, with that model's already-published baseline objective highlighted so it's
 visible at a glance whether it sits with the rest of the panel or is an outlier.
+
+## cuOpt-native settings tuning (S85)
+
+Given the ~9-10x cuOpt/Gurobi gap on S85 confirmed structural by the objective-panel and
+solver-mode benchmarks above, `run_cuopt_tuning.py` systematically sweeps cuOpt's documented,
+LP-relevant solver settings — grounded directly in the installed package's own verified enum
+semantics and the primary cuOpt source repository's release notes, not guessed — to check whether
+any purely cuOpt-native configuration closes that gap. **The project's real preferred goal here is
+beating Gurobi outright**, not merely improving on cuOpt's own prior baseline, so every candidate's
+speedup is reported against both (see `specs/012-cuopt-native-tuning/`).
+
+Three avenues, in priority order:
+
+1. **Settings sweep** (`--settings`): every candidate is a `**cuopt_kwargs` override through
+   `gpugem.solve`'s existing per-call mechanism (`gpugem/_defaults.py` is never touched) —
+   `pdlp_solver_mode=Fast1` (never tried by the earlier solver-mode experiment), true Mixed
+   precision (`pdlp_precision=2` — distinct from the shipped small-model default's `1`, which is
+   actually Double, not Mixed; see the documentation-correction note below), a PSLP
+   false-infeasible re-test (`presolve=2`, checking whether a later PSLP bugfix resolved the issue
+   that originally forced large models onto PaPILO), an explicit PDLP warm start
+   (`presolve=0` + `pdlp_solver_mode` in `{Stable2, Fast1}`, the only combination the installed
+   package's own `set_pdlp_warm_start_data` docstring supports), and a few other previously-untested
+   axes (`first_primal_feasible`, `infeasibility_detection`/`strict_infeasibility`,
+   `save_best_primal_so_far`).
+2. **cuOpt version upgrade** (`--upgrade-venv PATH`): re-runs the baseline and the best
+   verified-correct settings candidate under `cuopt-cu12==26.8.0` in an isolated venv that never
+   touches the shared environment every other benchmark in this project depends on.
+3. **Non-simplifying preprocessing** (`--preprocessing`, last resort): one external row/column
+   (Ruiz-style) equilibration candidate, tuned to S85's known `[1e-6, 2e5]` coefficient range. Its
+   reconstructed result is checked against the same correctness gate as every other candidate
+   *before* its speed is even reported — a failed reconstruction is disqualified outright,
+   regardless of how fast it solved.
+
+```bash
+python -m benchmarks.run_cuopt_tuning --baseline                       # sanity-check baseline alone
+python -m benchmarks.run_cuopt_tuning --settings                       # the full settings sweep
+python3 -m venv /tmp/cuopt-26.8-venv && /tmp/cuopt-26.8-venv/bin/pip install cuopt-cu12==26.8.0 numpy scipy
+python -m benchmarks.run_cuopt_tuning --upgrade-venv /tmp/cuopt-26.8-venv
+python -m benchmarks.run_cuopt_tuning --preprocessing                  # only meaningful if 1-2 found no win
+python -m benchmarks.aggregate_cuopt_tuning                            # ranked comparison from committed JSON, no solver
+```
+
+Every candidate runs in its own subprocess (an untested setting hanging or crashing cannot take
+down the rest of the sweep, mirroring the solver-mode experiment's isolation pattern) with its own
+900s time budget. `--force` re-runs a candidate whose result already exists.
+
+Outputs (committed) under `results/cuopt_tuning/`: one `<candidate_id>.json` per candidate (plus
+`<candidate_id>_<version>.json` for version-upgrade re-runs), and `summary.json`/`summary.csv` — a
+single ranked comparison, sorted by verified-correctness first and **speedup vs. Gurobi** (not just
+speedup vs. baseline) second, so the ranking itself reflects the project's actual goal. A candidate
+that fails the correctness gate, times out, or is rejected as an invalid combination is still
+recorded, never silently dropped.
+
+**Documentation correction found during this investigation (no published result changed):**
+`gpugem/_defaults.py`'s comment on the small-model default's `pdlp_precision=1` mislabels it as
+"mixed FP32/FP64" — verified against the installed package's own C++ source
+(`CUOPT_PDLP_DOUBLE_PRECISION=1`, `CUOPT_PDLP_MIXED_PRECISION=2`) and confirmed empirically
+(`pdlp_precision=1` and `pdlp_precision=-1`/Default produce bit-identical results on `e_coli_core`),
+`pdlp_precision=1` is actually **Double** precision, not Mixed. The shipped numeric default and its
+validated, published result are unaffected — this is a comment-accuracy correction, not a behavior
+change — but it means true Mixed precision (`2`) had never actually been exercised on any model in
+this project under either name before this investigation's settings sweep.
+
+**Result**: 19 candidates tried across all three avenues (15 fresh settings-sweep solves under
+`26.6.0`, 2 re-runs under `26.8.0`, 1 preprocessing candidate, 1 linked result from
+`specs/005-residual-tradeoff-benchmark/`). **No candidate beats Gurobi.** No purely cuOpt-native
+*setting* beats the shipped baseline either — every one of the 15 settings-sweep candidates on
+`26.6.0` either ties the baseline (`pdlp_precision=1` explicitly, `infeasibility_detection`+
+`strict_infeasibility`, `save_best_primal_so_far`), fails outright (PSLP still falsely reports
+`Infeasible` despite a 26.04 PSLP bugfix; cold `Barrier` still crashes with `NumericalError` unless
+`augmented=1` is forced, in which case it instead times out with zero completed iterations — the
+augmented-system matrix is simply too large to factor in the time budget; `DualSimplex` alone times
+out), or is disqualified on a technicality (`first_primal_feasible` finishes in 433.6s but at
+status `PrimalFeasible`, never `Optimal`). PDLP warm start does not help — see the Known
+Limitations entry below for the root cause, isolated and reproduced on a small model.
+
+**The one genuinely large, verified win came from upgrading cuOpt itself**, not from any setting:
+plain baseline settings under `cuopt-cu12==26.8.0` solve S85 in **240.5s vs. 513.5s** under
+`26.6.0` — a **2.13x speedup**, roughly half the iterations (467,800 vs. 984,000), and an even
+*tighter* residual (3.36e-05 vs. 8.87e-05). This nearly halves the gap to Gurobi: **4.6x slower**
+under `26.8.0`, down from **9.8x** under `26.6.0`. Still short of the project's real goal (beating
+Gurobi outright), but by a wide margin the most impactful lever found in this entire investigation
+— whatever changed in PDLP's internals between the two releases matters far more than any
+individual solver-setting choice tried here.
+
+The one preprocessing candidate tried (external Ruiz-style row/column equilibration, last resort)
+is scientifically informative but not viable: the rescaled problem converges in **66.5s** (close to
+Gurobi!), strong indirect confirmation that ill-conditioning really is the bottleneck — but the
+reconstructed result's residual (3.37e-3) is ~34x over tolerance once mapped back to the original,
+unscaled variable space, because a tolerance that's tight in rescaled units doesn't stay tight
+after the inverse transform. Correctly disqualified by the same gate every other candidate is held
+to (spec FR-008/SC-003) — not reported as a win despite the attractive raw speed.
+
+**Promoting the `26.8.0` upgrade to a shipped default is a distinct, separate decision** requiring
+its own validation across every model in the cross-scale benchmark (not just S85) — explicitly out
+of this feature's scope (see Assumptions in `specs/012-cuopt-native-tuning/spec.md`).
