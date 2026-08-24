@@ -531,3 +531,69 @@ tighter, lift-aware tolerance settings, neither of which this feature was scoped
 Constitution Principle I — no default is promoted without its own benchmark-backed justification,
 and none is proposed here). See `README.md`'s Known Limitations for the recorded statement of
 this finding.
+
+## Version x lifting runtime comparison
+
+Extends the very first comparison in this README (`benchmark_solvetime.png`) with three more
+cuOpt configurations per model — the newer cuOpt release (`26.8.0`) unlifted, the current release
+(`26.6.0`) lifted, and the newer release lifted — beside the two already-recorded bars (Gurobi,
+current-release unlifted), for six models: `e_coli_core`, `iML1515`, `Harvey`, `Harvetta`, `S84`,
+`S85`. The remaining four microbiome models are excluded — `S84`'s and `S85`'s own results below
+are the reason why: they already show the pattern the excluded models were expected to share. See
+`specs/014-version-lifting-runtime-comparison/`.
+
+```bash
+python -m benchmarks.run_version_lifting_comparison             # all six in-scope models
+python -m benchmarks.aggregate_version_lifting_comparison        # derived CSV, no solver
+python -m benchmarks.make_extended_solvetime_figure               # writes benchmark_solvetime.png
+```
+
+`benchmark.csv` and `make_figure.py` are **never modified** by this comparison — it reads
+`benchmark.csv` (unchanged) and writes a new, derived `version_lifting_comparison.csv`, then a new
+figure script overwrites `benchmark_solvetime.png` with the richer, 5-bar version for the six
+in-scope models (2-bar, exactly as before, for the other four) — `make_figure.py` remains
+independently runnable and still regenerates today's original 2-bar view from `benchmark.csv`
+alone. Of 24 (model x configuration) data points, 8 already existed (6 from this README's own
+first comparison, 2 from the model-lifting feature above) and were reused verbatim; the other 16
+were freshly solved for this comparison.
+
+**Result — all six models, all four configurations, correctness-gated exactly like everywhere
+else in this project:**
+
+| model | vars | Gurobi | cuOpt 26.6.0 unlifted | cuOpt 26.8.0 unlifted | cuOpt 26.6.0 lifted | cuOpt 26.8.0 lifted |
+|---|---|---|---|---|---|---|
+| e_coli_core | 95 | 0.0008s | 0.249s | 0.467s | 0.248s ✓ | 0.461s ✓ |
+| iML1515 | 2,712 | 0.034s | 3.75s | 3.96s | 3.98s ✓ | 4.00s ✓ |
+| Harvey | 81,094 | 2.82s | 1.67s | 1.91s | 2.43s ✓ | 3.16s ✓ |
+| Harvetta | 83,521 | 3.53s | 1.42s | 1.65s | 3.01s ✓ | 3.09s ✓ |
+| S84 | 685,998 | 40.6s | 24.6s | 27.2s | 900.6s **FAILED** | 900.8s **FAILED** |
+| S85 | 874,634 | 52.6s | 509.4s | 242.8s | 450.9s **FAILED** | 60.3s **FAILED** |
+
+(✓ = verified-correct; **FAILED** = reached a terminal solver status but did not pass this
+project's residual/objective correctness gate — never plotted or reported as if it had.)
+
+**Two findings, both against the initial expectation, both real:**
+
+1. **The `26.6.0` → `26.8.0` speedup found for S85 does not generalize — it is slightly *slower*
+   for every other model.** e_coli_core roughly doubles (0.25s → 0.47s), and every other model in
+   between is 5-30% slower under the newer release. S85 is the one exception, and a large one
+   (509s → 243s). Whatever changed between the two releases evidently helps this specific
+   large/ill-conditioned problem class and does not come free elsewhere — a materially more
+   precise statement than `specs/012-cuopt-native-tuning/`'s original single-model finding.
+2. **Lifting passes this project's correctness gate cleanly on four of six models and fails
+   cleanly on the other two — split exactly at the microbiome-scale boundary, not the whole-body
+   one.** `e_coli_core`, `iML1515`, `Harvey`, and `Harvetta` (up to 83,521 vars) are all
+   verified-correct lifted, under both cuOpt versions. `S84` and `S85` (685,998 and 874,634 vars)
+   both fail on both versions — `S84` never even reaches `Optimal` within the 900s budget lifted
+   (matching the amplification mechanism already identified for `S85` above), while `S85`'s
+   `26.8.0`-lifted run *does* reach `Optimal`, quickly (60.3s) — but its residual (0.0123) is still
+   ~123x over tolerance, the same "fast, `Optimal`, but not actually accurate" pattern as its
+   `26.6.0` result, just faster at being wrong. Whole-body scale alone (`Harvey`/`Harvetta`, ~81-84K
+   vars) is not what breaks lifting's practical accuracy — crossing into this project's
+   microbiome-scale models is.
+
+**Answering the motivating question directly (spec SC-003)**: does lifting reduce cuOpt's
+runtime? For the four smaller models, no — lifted is consistently as slow as or slightly slower
+than unlifted (more variables to solve, for a model that didn't need scale correction in any
+way that mattered). For the two microbiome models, the honest answer is "not meaningfully
+answerable yet" — neither reaches a trustworthy result to compare a runtime against.

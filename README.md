@@ -199,6 +199,20 @@ result.feasibility  # dict: stoich_max_residual, stoich_rows_violated_1e6, ...
   (a safe no-op there, since no coefficient exceeds the default threshold) — not yet on any large
   model under either a longer time budget or lift-aware tighter tolerances, neither of which this
   feature was scoped to tune.
+- **The lifting-accuracy limitation above generalizes to `S84`, and to the newer cuOpt release —
+  it is not S85-specific or version-specific** (`specs/014-version-lifting-runtime-comparison/`).
+  Extending the comparison above to `e_coli_core`, `iML1515`, `Harvey`, `Harvetta`, `S84`, and
+  `S85` under both `26.6.0` and `26.8.0`: lifting is verified-correct on all four smaller models
+  (up to Harvey/Harvetta's ~81-84K vars) under both versions, but fails this project's correctness
+  gate on **both** `S84` (685,998 vars) and `S85` (874,634 vars) under **both** versions — the
+  boundary is specifically the microbiome-scale models, not whole-body scale generally. `S84`
+  lifted does not even reach `Optimal` within the 900s budget on either version (900.6s/900.8s,
+  `TimeLimit`); `S85`'s `26.8.0`-lifted run does reach `Optimal`, quickly (60.3s), but its residual
+  (0.0123) is still ~123x over tolerance — fast and `Optimal` continues to not mean accurate for
+  this transform on these two models. Separately, and only tangentially about lifting: the
+  `26.6.0` → `26.8.0` version upgrade that helped S85 so much (`specs/012-cuopt-native-tuning/`)
+  is **not a general speedup** — every other model in this six-model comparison is 5-30% *slower*
+  under `26.8.0` than `26.6.0`, unlifted.
 
 ---
 

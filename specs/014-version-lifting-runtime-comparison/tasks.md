@@ -37,7 +37,7 @@ far.
 **Purpose**: Prepare the output location for this feature's new per-model results, distinct from
 every prior feature's `results/` subdirectory.
 
-- [ ] T001 Create `benchmarks/results/version_lifting/` directory with a `.gitkeep`
+- [X] T001 Create `benchmarks/results/version_lifting/` directory with a `.gitkeep`
 
 **Checkpoint**: Output location exists; no new dependency required (plan.md confirms
 pandas/matplotlib/numpy/scipy/gpugem/cuopt-cu12/gurobipy already satisfy this feature).
@@ -52,7 +52,7 @@ actually reused (not reimplemented), US3 needs their output to document.
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T002 Create `benchmarks/_version_lifting_worker.py` per contracts/cli-contract.md:
+- [X] T002 Create `benchmarks/_version_lifting_worker.py` per contracts/cli-contract.md:
   `--model NAME --lift/--no-lift --time-limit SECONDS`, resolves the model via
   `benchmarks.models.build_lp`, calls `gpugem.solve(**lp, lift=<flag>, time_limit=...)` (no new
   `gpugem` surface — reuses `specs/013-cobra-model-lifting/`'s existing `lift`/`lift_big`
@@ -61,7 +61,7 @@ actually reused (not reimplemented), US3 needs their output to document.
   object (data-model.md) to stdout as the last line (cuOpt's native logging bypasses
   `sys.stdout`, same convention as every prior worker in this project) — subprocess entry point,
   never invoked directly
-- [ ] T003 Create `benchmarks/run_version_lifting_comparison.py` per contracts/cli-contract.md:
+- [X] T003 Create `benchmarks/run_version_lifting_comparison.py` per contracts/cli-contract.md:
   for each requested model (default: all six in-scope models), determine which of the three
   additional configurations are missing per research.md R3's exact accounting (read
   `benchmark.csv` for old-unlifted; check `specs/013-cobra-model-lifting/benchmarks/results/
@@ -73,13 +73,13 @@ actually reused (not reimplemented), US3 needs their output to document.
   `benchmarks/results/version_lifting/<model>.json` (data-model.md `VersionLiftingResult`);
   `--force` re-runs an existing combination; skip logic prints `[skip] <model>/<config>` matching
   this project's established resumability convention (depends on T002)
-- [ ] T004 [P] Create `tests/test_version_lifting_comparison.py` with tests for the
+- [X] T004 [P] Create `tests/test_version_lifting_comparison.py` with tests for the
   "which combinations are missing" determination logic (research.md R3) on synthetic/mocked
   presence of `benchmark.csv` rows and `model_lifting/*.json` files — no GPU required: confirms
   exactly 6 old-unlifted + 2 old-lifted (`e_coli_core`, `S85`) are recognized as already existing
   and never re-solved, and that the remaining up-to-16 combinations are correctly identified as
   missing (depends on T003)
-- [ ] T005 [P] Create `benchmarks/aggregate_version_lifting_comparison.py` per
+- [X] T005 [P] Create `benchmarks/aggregate_version_lifting_comparison.py` per
   contracts/cli-contract.md: read `benchmark.csv` (unmodified — all 10 models' existing Gurobi +
   old-unlifted-cuOpt columns), `benchmarks/results/version_lifting/*.json`, and
   `specs/013-cobra-model-lifting/benchmarks/results/model_lifting/{e_coli_core,S85}.json`; write
@@ -88,7 +88,7 @@ actually reused (not reimplemented), US3 needs their output to document.
   `benchmarks.residual.objectives_agree`/`feasibility_residual` for any gate recomputation needed
   rather than reimplementing them (research.md R7); standalone, no GPU/solver import required
   (mirrors this project's established "regenerable from committed results alone" convention)
-- [ ] T006 [P] In `tests/test_version_lifting_comparison.py`, add tests for the CSV row-building
+- [X] T006 [P] In `tests/test_version_lifting_comparison.py`, add tests for the CSV row-building
   logic on synthetic `RuntimeConfiguration`/`VersionLiftingResult`-shaped data (no GPU): a model
   with all three new configurations present produces a 5-column-group row; a model with none
   present (the four out-of-scope models) produces `NaN` for all new columns, not zeros or omitted
@@ -111,7 +111,7 @@ out-of-scope models are unaffected.
 
 ### Implementation for User Story 1
 
-- [ ] T007 [US1] Create `benchmarks/make_extended_solvetime_figure.py` per contracts/
+- [X] T007 [US1] Create `benchmarks/make_extended_solvetime_figure.py` per contracts/
   cli-contract.md: read `version_lifting_comparison.csv`, plot up to 5 bars per model (Gurobi +
   up to 4 cuOpt configurations) in a fixed, documented color order (never re-cycled per model —
   Constitution Principle VI), gracefully rendering only the original 2 bars for any row whose new
@@ -120,23 +120,23 @@ out-of-scope models are unaffected.
   columns are present for a row; write to `benchmarks/figures/benchmark_solvetime.png` (same path
   as `make_figure.py`'s own output — research.md R6); `make_figure.py` itself is not modified
   (depends on T005)
-- [ ] T008 [US1] On the GPU host, run `python -m benchmarks.run_version_lifting_comparison
+- [X] T008 [US1] On the GPU host, run `python -m benchmarks.run_version_lifting_comparison
   --model e_coli_core --model iML1515 --model Harvey --model Harvetta` and confirm: the six
   already-existing old-unlifted combinations are skipped (not re-solved), `e_coli_core`'s
   already-existing old-lifted combination (from `specs/013-.../`) is reused, and the remaining
   new combinations for these four models solve quickly, consistent with research.md R2's
   fast-baseline table (depends on T003)
-- [ ] T009 [US1] On the GPU host, run `python -m benchmarks.run_version_lifting_comparison
+- [X] T009 [US1] On the GPU host, run `python -m benchmarks.run_version_lifting_comparison
   --model S84` and confirm all three new configurations solve (S84 is the largest of the
   fast-baseline group at ~24.6s old-unlifted — worth confirming individually rather than assuming
   it behaves like the smaller models) (depends on T003)
-- [ ] T010 [US1] On the GPU host, run `python -m benchmarks.run_version_lifting_comparison
+- [X] T010 [US1] On the GPU host, run `python -m benchmarks.run_version_lifting_comparison
   --model S85` and confirm: the isolated venv is provisioned (if not already present) or reused
   without disturbing the shared environment (verify `cuopt.__version__` outside the venv still
   reports the old version afterward), `S85`'s already-existing old-lifted result (with its known
   `verified_correct=False`) is reused rather than re-solved, and the two new S85 configurations
   (new-unlifted, new-lifted) complete — whatever their outcome, per User Story 2 (depends on T003)
-- [ ] T011 [US1] On the GPU host, run `python -m benchmarks.aggregate_version_lifting_comparison`
+- [X] T011 [US1] On the GPU host, run `python -m benchmarks.aggregate_version_lifting_comparison`
   and `python -m benchmarks.make_extended_solvetime_figure`, then visually confirm the figure
   shows 5 bars for each of the six in-scope models and exactly today's original 2 bars,
   unchanged, for the other four; confirm via `git diff` that `benchmark.csv` and `make_figure.py`
@@ -158,15 +158,15 @@ way, never omitted.
 
 ### Implementation for User Story 2
 
-- [ ] T012 [US2] On the GPU host (or from T011's already-generated CSV), confirm
+- [X] T012 [US2] On the GPU host (or from T011's already-generated CSV), confirm
   `version_lifting_comparison.csv`'s `S85` row has `cuopt_old_lifted_verified_correct == False`
   — the already-known failure from `specs/013-cobra-model-lifting/`, reused and carried through,
   not silently dropped or reinterpreted as a pass (quickstart.md step 3; depends on T011)
-- [ ] T013 [US2] Visually inspect the regenerated `benchmark_solvetime.png` and confirm S85's
+- [X] T013 [US2] Visually inspect the regenerated `benchmark_solvetime.png` and confirm S85's
   old-lifted bar carries a gate-fail annotation matching the figure's existing visual convention
   (spec FR-004/User Story 2 Acceptance Scenario 2) — not omitted, not rendered as if it passed
   (depends on T011)
-- [ ] T014 [P] [US2] In `tests/test_version_lifting_comparison.py`, add a regression test
+- [X] T014 [P] [US2] In `tests/test_version_lifting_comparison.py`, add a regression test
   confirming the aggregator never silently drops or reinterprets a combination whose
   `verified_correct` is `False` — synthetic input mirroring the S85 case, asserting the resulting
   row is present with `verified_correct == False`, not omitted or overwritten (depends on T005)
@@ -186,13 +186,13 @@ benchmark section, stating the fastest configuration per model and any correctne
 
 ### Implementation for User Story 3
 
-- [ ] T015 [US3] Append a "Version x lifting runtime comparison" section to
+- [X] T015 [US3] Append a "Version x lifting runtime comparison" section to
   `benchmarks/README.md` documenting the new scripts (usage per quickstart.md), the exact
   reused-vs-newly-solved accounting (research.md R3), and — once T011's real results exist — a
   plain-language summary per model of which configuration is fastest and whether lifting and/or
   the version upgrade changes the answer (spec SC-003/SC-004), explicitly calling out S85's known
   correctness failure rather than only reporting its speed (depends on T011, T012)
-- [ ] T016 [US3] If any new correctness failure beyond the already-known S85 one is found during
+- [X] T016 [US3] If any new correctness failure beyond the already-known S85 one is found during
   the host runs (T008-T010), add it to `README.md`'s "Known limitations" section per Constitution
   Principle V — conditional: only makes a change if a new failure is actually found (depends on
   T008, T009, T010)
@@ -206,16 +206,16 @@ correct and honestly reported, and is documented.
 
 **Purpose**: Lint, full regression check, and final end-to-end confirmation.
 
-- [ ] T017 [P] Run `ruff check` on `benchmarks/_version_lifting_worker.py`,
+- [X] T017 [P] Run `ruff check` on `benchmarks/_version_lifting_worker.py`,
   `benchmarks/run_version_lifting_comparison.py`,
   `benchmarks/aggregate_version_lifting_comparison.py`,
   `benchmarks/make_extended_solvetime_figure.py`, `tests/test_version_lifting_comparison.py` and
   fix any violations (Constitution Quality Standards: `line-length = 100`), matching the
   established project style
-- [ ] T018 [P] Run the full repo-wide test suite (`pytest tests/`) and confirm no regressions —
+- [X] T018 [P] Run the full repo-wide test suite (`pytest tests/`) and confirm no regressions —
   in particular that `tests/test_scaling.py`, `tests/test_lifting.py`, and every prior feature's
   tests still pass unchanged, since this feature touches no `gpugem/` file
-- [ ] T019 Run quickstart.md end-to-end (steps 1-4) on the GPU host, confirm via `git diff` that
+- [X] T019 Run quickstart.md end-to-end (steps 1-4) on the GPU host, confirm via `git diff` that
   `benchmark.csv`, `make_figure.py`, `gpugem/scaling.py`, and `gpugem/lifting.py` are all
   untouched (research.md R6, plan.md Constraints), and record the final answer to spec
   SC-003/SC-004 in `benchmarks/README.md` (depends on T011, T015, T017, T018)

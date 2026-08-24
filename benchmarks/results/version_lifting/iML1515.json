@@ -1,0 +1,35 @@
+{
+  "new_unlifted": {
+    "model": "iML1515",
+    "cuopt_version": "26.08.00",
+    "lifted": false,
+    "solve_s": 3.9593,
+    "status": "Optimal",
+    "objective": 0.876997198833092,
+    "residual_inf": 2.9543798518716358e-09,
+    "iterations": 124400,
+    "version_tag": "new"
+  },
+  "old_lifted": {
+    "model": "iML1515",
+    "cuopt_version": "26.06.00",
+    "lifted": true,
+    "solve_s": 3.9842,
+    "status": "Optimal",
+    "objective": 0.876997198833092,
+    "residual_inf": 2.9543798518716358e-09,
+    "iterations": 124400,
+    "version_tag": "old"
+  },
+  "new_lifted": {
+    "model": "iML1515",
+    "cuopt_version": "26.08.00",
+    "lifted": true,
+    "solve_s": 3.9954,
+    "status": "Optimal",
+    "objective": 0.876997198833092,
+    "residual_inf": 2.9543798518716358e-09,
+    "iterations": 124400,
+    "version_tag": "new"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "new_unlifted": {
+    "model": "Harvey",
+    "cuopt_version": "26.08.00",
+    "lifted": false,
+    "solve_s": 1.9077,
+    "status": "Optimal",
+    "objective": 1.0,
+    "residual_inf": 5.5791078423794715e-09,
+    "iterations": 31600,
+    "version_tag": "new"
+  },
+  "old_lifted": {
+    "model": "Harvey",
+    "cuopt_version": "26.06.00",
+    "lifted": true,
+    "solve_s": 2.4287,
+    "status": "Optimal",
+    "objective": 1.0,
+    "residual_inf": 5.9715949109151196e-05,
+    "iterations": 19800,
+    "version_tag": "old"
+  },
+  "new_lifted": {
+    "model": "Harvey",
+    "cuopt_version": "26.08.00",
+    "lifted": true,
+    "solve_s": 3.1643,
+    "status": "Optimal",
+    "objective": 1.0,
+    "residual_inf": 4.748754513843285e-06,
+    "iterations": 34200,
+    "version_tag": "new"
+  }
+}

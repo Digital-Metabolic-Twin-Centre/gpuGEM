@@ -1,0 +1,24 @@
+{
+  "new_unlifted": {
+    "model": "e_coli_core",
+    "cuopt_version": "26.08.00",
+    "lifted": false,
+    "solve_s": 0.467,
+    "status": "Optimal",
+    "objective": 0.8739215056938601,
+    "residual_inf": 7.779511312921983e-09,
+    "iterations": 8200,
+    "version_tag": "new"
+  },
+  "new_lifted": {
+    "model": "e_coli_core",
+    "cuopt_version": "26.08.00",
+    "lifted": true,
+    "solve_s": 0.4608,
+    "status": "Optimal",
+    "objective": 0.8739215056938601,
+    "residual_inf": 7.779511312921983e-09,
+    "iterations": 8200,
+    "version_tag": "new"
+  }
+}

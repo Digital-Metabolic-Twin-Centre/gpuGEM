@@ -1,0 +1,35 @@
+{
+  "new_unlifted": {
+    "model": "Harvetta",
+    "cuopt_version": "26.08.00",
+    "lifted": false,
+    "solve_s": 1.6494,
+    "status": "Optimal",
+    "objective": 1.0,
+    "residual_inf": 3.2092831958322026e-09,
+    "iterations": 24800,
+    "version_tag": "new"
+  },
+  "old_lifted": {
+    "model": "Harvetta",
+    "cuopt_version": "26.06.00",
+    "lifted": true,
+    "solve_s": 3.0083,
+    "status": "Optimal",
+    "objective": 1.0,
+    "residual_inf": 9.710158490294774e-05,
+    "iterations": 22800,
+    "version_tag": "old"
+  },
+  "new_lifted": {
+    "model": "Harvetta",
+    "cuopt_version": "26.08.00",
+    "lifted": true,
+    "solve_s": 3.0925,
+    "status": "Optimal",
+    "objective": 1.0,
+    "residual_inf": 5.749238997271126e-06,
+    "iterations": 30600,
+    "version_tag": "new"
+  }
+}

@@ -1,0 +1,11 @@
+model,n_cols,gurobi_solve_s_median,cuopt_old_unlifted_solve_s_median,cuopt_old_unlifted_verified_correct,cuopt_new_unlifted_solve_s_median,cuopt_new_unlifted_verified_correct,cuopt_old_lifted_solve_s_median,cuopt_old_lifted_verified_correct,cuopt_new_lifted_solve_s_median,cuopt_new_lifted_verified_correct
+e_coli_core,95,0.0008,0.2489,True,0.467,True,0.24828605726361275,True,0.4608,True
+iML1515,2712,0.0337,3.75,True,3.9593,True,3.9842,True,3.9954,True
+Harvey,81094,2.8153,1.6727,True,1.9077,True,2.4287,True,3.1643,True
+S84,685998,40.6161,24.6368,True,27.1795,True,900.595,False,900.8414,False
+S85,874634,52.6179,509.3895,True,242.8289,True,450.9311599629,False,60.2639,False
+S9,1111943,73.0452,534.389,True,,,,,,
+S15,1084341,82.5934,295.286,True,,,,,,
+S23,1007742,85.3108,739.9042,True,,,,,,
+S83,1179186,99.6209,526.7454,True,,,,,,
+Harvetta,83521,3.5293,1.4192,True,1.6494,True,3.0083,True,3.0925,True

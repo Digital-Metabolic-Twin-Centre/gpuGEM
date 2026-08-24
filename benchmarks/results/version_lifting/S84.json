@@ -1,0 +1,35 @@
+{
+  "new_unlifted": {
+    "model": "S84",
+    "cuopt_version": "26.08.00",
+    "lifted": false,
+    "solve_s": 27.1795,
+    "status": "Optimal",
+    "objective": 1.0,
+    "residual_inf": 7.591373767983078e-05,
+    "iterations": 63400,
+    "version_tag": "new"
+  },
+  "old_lifted": {
+    "model": "S84",
+    "cuopt_version": "26.06.00",
+    "lifted": true,
+    "solve_s": 900.595,
+    "status": "TimeLimit",
+    "objective": 1.0,
+    "residual_inf": 0.005100123276863597,
+    "iterations": 2364000,
+    "version_tag": "old"
+  },
+  "new_lifted": {
+    "model": "S84",
+    "cuopt_version": "26.08.00",
+    "lifted": true,
+    "solve_s": 900.8414,
+    "status": "TimeLimit",
+    "objective": 1.0,
+    "residual_inf": 0.009879977848514266,
+    "iterations": 2365600,
+    "version_tag": "new"
+  }
+}

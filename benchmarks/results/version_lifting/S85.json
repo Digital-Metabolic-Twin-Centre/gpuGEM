@@ -1,0 +1,24 @@
+{
+  "new_unlifted": {
+    "model": "S85",
+    "cuopt_version": "26.08.00",
+    "lifted": false,
+    "solve_s": 242.8289,
+    "status": "Optimal",
+    "objective": 1.0,
+    "residual_inf": 3.3564910464081825e-05,
+    "iterations": 467800,
+    "version_tag": "new"
+  },
+  "new_lifted": {
+    "model": "S85",
+    "cuopt_version": "26.08.00",
+    "lifted": true,
+    "solve_s": 60.2639,
+    "status": "Optimal",
+    "objective": 1.0,
+    "residual_inf": 0.012295039725687764,
+    "iterations": 108000,
+    "version_tag": "new"
+  }
+}
