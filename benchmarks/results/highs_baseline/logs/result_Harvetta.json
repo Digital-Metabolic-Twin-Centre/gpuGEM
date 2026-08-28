@@ -1,0 +1,28 @@
+{
+ "model": "Harvetta",
+ "n_cols": 83521,
+ "n_total_rows": 166202,
+ "maximize": true,
+ "build_s": 13.322,
+ "solve_s": 27.442,
+ "status": "kOptimal",
+ "time_limit_s": 86400.0,
+ "threads": 0,
+ "simplex_iterations": 34204,
+ "objective": 1.0,
+ "residual_inf": 9.655173016653862e-08,
+ "load_before": {
+  "load1": 3.57,
+  "load5": 3.01,
+  "load15": 2.93,
+  "cpu_count": 20
+ },
+ "load_after": {
+  "load1": 4.05,
+  "load5": 3.21,
+  "load15": 3.01,
+  "cpu_count": 20
+ },
+ "wall_s": 40.799,
+ "started_utc": "2026-08-26T14:37:30+00:00"
+}

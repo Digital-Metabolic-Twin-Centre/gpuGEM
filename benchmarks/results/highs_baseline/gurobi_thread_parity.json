@@ -1,0 +1,40 @@
+{
+ "Harvetta": {
+  "n_cols": 83521,
+  "runs": [
+   {
+    "threads": 1,
+    "solve_s": 9.232,
+    "obj": 1.0,
+    "status": 2,
+    "bar_iters": 83
+   },
+   {
+    "threads": 0,
+    "solve_s": 3.368,
+    "obj": 1.0,
+    "status": 2,
+    "bar_iters": 71
+   }
+  ]
+ },
+ "S84": {
+  "n_cols": 685998,
+  "runs": [
+   {
+    "threads": 1,
+    "solve_s": 465.927,
+    "obj": 1.0,
+    "status": 2,
+    "bar_iters": 82
+   },
+   {
+    "threads": 0,
+    "solve_s": 40.004,
+    "obj": 1.0,
+    "status": 2,
+    "bar_iters": 94
+   }
+  ]
+ }
+}

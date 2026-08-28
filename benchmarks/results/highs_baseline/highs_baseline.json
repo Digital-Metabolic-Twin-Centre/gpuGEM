@@ -1,0 +1,292 @@
+{
+ "environment": {
+  "platform": "Linux-6.5.0-44-generic-x86_64-with-glibc2.39",
+  "processor": "x86_64",
+  "python": "3.13.13",
+  "highs_version": "1.14.0",
+  "cpu_count": 20,
+  "threads_requested": 0
+ },
+ "results": [
+  {
+   "model": "e_coli_core",
+   "n_cols": 95,
+   "n_total_rows": 72,
+   "maximize": true,
+   "build_s": 1.082,
+   "solve_s": 0.002,
+   "status": "kOptimal",
+   "time_limit_s": 86400.0,
+   "threads": 0,
+   "simplex_iterations": 42,
+   "objective": 0.8739215069684304,
+   "residual_inf": 5.684341886080802e-14,
+   "load_before": {
+    "load1": 2.62,
+    "load5": 2.8,
+    "load15": 2.86,
+    "cpu_count": 20
+   },
+   "load_after": {
+    "load1": 2.49,
+    "load5": 2.77,
+    "load15": 2.85,
+    "cpu_count": 20
+   },
+   "wall_s": 1.097,
+   "started_utc": "2026-08-26T14:36:10+00:00"
+  },
+  {
+   "model": "iML1515",
+   "n_cols": 2712,
+   "n_total_rows": 1877,
+   "maximize": true,
+   "build_s": 3.033,
+   "solve_s": 0.07,
+   "status": "kOptimal",
+   "time_limit_s": 86400.0,
+   "threads": 0,
+   "simplex_iterations": 1008,
+   "objective": 0.8769972144269721,
+   "residual_inf": 2.5721647034515627e-12,
+   "load_before": {
+    "load1": 2.49,
+    "load5": 2.77,
+    "load15": 2.85,
+    "cpu_count": 20
+   },
+   "load_after": {
+    "load1": 2.49,
+    "load5": 2.77,
+    "load15": 2.85,
+    "cpu_count": 20
+   },
+   "wall_s": 3.104,
+   "started_utc": "2026-08-26T14:36:13+00:00"
+  },
+  {
+   "model": "Harvey",
+   "n_cols": 81094,
+   "n_total_rows": 160052,
+   "maximize": true,
+   "build_s": 2.903,
+   "solve_s": 32.986,
+   "status": "kOptimal",
+   "time_limit_s": 86400.0,
+   "threads": 0,
+   "simplex_iterations": 39312,
+   "objective": 1.0,
+   "residual_inf": 6.857135304016992e-08,
+   "load_before": {
+    "load1": 2.49,
+    "load5": 2.77,
+    "load15": 2.85,
+    "cpu_count": 20
+   },
+   "load_after": {
+    "load1": 3.57,
+    "load5": 3.01,
+    "load15": 2.93,
+    "cpu_count": 20
+   },
+   "wall_s": 35.919,
+   "started_utc": "2026-08-26T14:36:49+00:00"
+  },
+  {
+   "model": "Harvetta",
+   "n_cols": 83521,
+   "n_total_rows": 166202,
+   "maximize": true,
+   "build_s": 13.322,
+   "solve_s": 27.442,
+   "status": "kOptimal",
+   "time_limit_s": 86400.0,
+   "threads": 0,
+   "simplex_iterations": 34204,
+   "objective": 1.0,
+   "residual_inf": 9.655173016653862e-08,
+   "load_before": {
+    "load1": 3.57,
+    "load5": 3.01,
+    "load15": 2.93,
+    "cpu_count": 20
+   },
+   "load_after": {
+    "load1": 4.05,
+    "load5": 3.21,
+    "load15": 3.01,
+    "cpu_count": 20
+   },
+   "wall_s": 40.799,
+   "started_utc": "2026-08-26T14:37:30+00:00"
+  },
+  {
+   "model": "S84",
+   "n_cols": 685998,
+   "n_total_rows": 1558374,
+   "maximize": true,
+   "build_s": 31.368,
+   "solve_s": 2315.705,
+   "status": "kOptimal",
+   "time_limit_s": 86400.0,
+   "threads": 0,
+   "simplex_iterations": 363380,
+   "objective": 1.0,
+   "residual_inf": 9.964001722187824e-08,
+   "load_before": {
+    "load1": 4.05,
+    "load5": 3.21,
+    "load15": 3.01,
+    "cpu_count": 20
+   },
+   "load_after": {
+    "load1": 1.57,
+    "load5": 1.22,
+    "load15": 1.51,
+    "cpu_count": 20
+   },
+   "wall_s": 2347.441,
+   "started_utc": "2026-08-26T15:16:37+00:00"
+  },
+  {
+   "model": "S23",
+   "n_cols": 1007742,
+   "n_total_rows": 2299101,
+   "maximize": true,
+   "build_s": 45.771,
+   "solve_s": 5041.479,
+   "status": "kOptimal",
+   "time_limit_s": 86400.0,
+   "threads": 0,
+   "simplex_iterations": 495163,
+   "objective": 1.0,
+   "residual_inf": 9.991816204800031e-08,
+   "load_before": {
+    "load1": 1.57,
+    "load5": 1.22,
+    "load15": 1.51,
+    "cpu_count": 20
+   },
+   "load_after": {
+    "load1": 1.17,
+    "load5": 1.14,
+    "load15": 1.1,
+    "cpu_count": 20
+   },
+   "wall_s": 5087.768,
+   "started_utc": "2026-08-26T16:41:25+00:00"
+  },
+  {
+   "model": "S83",
+   "n_cols": 1179186,
+   "n_total_rows": 2702853,
+   "maximize": true,
+   "build_s": 51.64,
+   "solve_s": 6569.924,
+   "status": "kOptimal",
+   "time_limit_s": 86400.0,
+   "threads": 0,
+   "simplex_iterations": 577259,
+   "objective": 1.0,
+   "residual_inf": 9.958461495e-08,
+   "load_before": {
+    "load1": 1.17,
+    "load5": 1.14,
+    "load15": 1.1,
+    "cpu_count": 20
+   },
+   "load_after": {
+    "load1": 1.15,
+    "load5": 1.12,
+    "load15": 1.11,
+    "cpu_count": 20
+   },
+   "wall_s": 6622.165,
+   "started_utc": "2026-08-26T18:31:47+00:00"
+  },
+  {
+   "model": "S85",
+   "n_cols": 874634,
+   "n_total_rows": 1993029,
+   "maximize": true,
+   "build_s": 38.105,
+   "solve_s": 3099.88,
+   "status": "kOptimal",
+   "time_limit_s": 86400.0,
+   "threads": 0,
+   "simplex_iterations": 431984,
+   "objective": 1.0,
+   "residual_inf": 9.909013808200025e-08,
+   "load_before": {
+    "load1": 1.15,
+    "load5": 1.12,
+    "load15": 1.11,
+    "cpu_count": 20
+   },
+   "load_after": {
+    "load1": 1.06,
+    "load5": 1.15,
+    "load15": 1.15,
+    "cpu_count": 20
+   },
+   "wall_s": 3138.442,
+   "started_utc": "2026-08-26T19:24:06+00:00"
+  },
+  {
+   "model": "S15",
+   "n_cols": 1084341,
+   "n_total_rows": 2481676,
+   "maximize": true,
+   "build_s": 47.392,
+   "solve_s": 6613.338,
+   "status": "kOptimal",
+   "time_limit_s": 86400.0,
+   "threads": 0,
+   "simplex_iterations": 565253,
+   "objective": 1.0,
+   "residual_inf": 9.99425540000598e-08,
+   "load_before": {
+    "load1": 1.06,
+    "load5": 1.15,
+    "load15": 1.15,
+    "cpu_count": 20
+   },
+   "load_after": {
+    "load1": 1.79,
+    "load5": 1.39,
+    "load15": 1.27,
+    "cpu_count": 20
+   },
+   "wall_s": 6661.25,
+   "started_utc": "2026-08-26T21:15:07+00:00"
+  },
+  {
+   "model": "S9",
+   "n_cols": 1111943,
+   "n_total_rows": 2545377,
+   "maximize": true,
+   "build_s": 50.647,
+   "solve_s": 7557.712,
+   "status": "kOptimal",
+   "time_limit_s": 86400.0,
+   "threads": 0,
+   "simplex_iterations": 602951,
+   "objective": 1.0,
+   "residual_inf": 9.955346828000002e-08,
+   "load_before": {
+    "load1": 1.79,
+    "load5": 1.39,
+    "load15": 1.27,
+    "cpu_count": 20
+   },
+   "load_after": {
+    "load1": 1.21,
+    "load5": 1.13,
+    "load15": 1.04,
+    "cpu_count": 20
+   },
+   "wall_s": 7608.929,
+   "started_utc": "2026-08-26T23:21:56+00:00"
+  }
+ ]
+}

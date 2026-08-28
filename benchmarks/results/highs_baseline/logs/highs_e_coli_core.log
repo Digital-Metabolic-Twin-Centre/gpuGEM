@@ -1,0 +1,56 @@
+Running HiGHS 1.14.0 (git hash: 7df0786): Copyright (c) 2026 under MIT licence terms
+LP has 72 rows; 95 cols; 360 nonzeros
+Coefficient ranges:
+  Matrix  [7e-02, 6e+01]
+  Cost    [1e+00, 1e+00]
+  Bound   [8e+00, 1e+03]
+  RHS     [0e+00, 0e+00]
+Presolving model
+39 rows, 58 cols, 266 nonzeros 0s
+29 rows, 52 cols, 210 nonzeros 0s
+Dependent equations search running on 28 equations with time limit of 864.00s
+Dependent equations search removed 0 rows and 0 nonzeros in 0.00s (limit = 864.00s)
+28 rows, 51 cols, 208 nonzeros 0s
+Presolve reductions: rows 28(-44); columns 51(-44); nonzeros 208(-152) 
+Solving the presolved LP
+Using dual simplex solver
+  Iteration        Objective     Infeasibilities num(sum)
+          0     0.0000000000e+00 Ph1: 0(0) 0.0s
+         42    -8.7392150697e-01 Pr: 0(0) 0.0s
+
+Performed postsolve
+Solving the original LP from the solution after postsolve
+
+Model status        : Optimal
+Simplex   iterations: 42
+Objective value     :  8.7392150697e-01
+P-D objective error :  4.0403437132e-17
+HiGHS run time      :          0.00
+Running HiGHS 1.14.0 (git hash: 7df0786): Copyright (c) 2026 under MIT licence terms
+LP has 72 rows; 95 cols; 360 nonzeros
+Coefficient ranges:
+  Matrix  [7e-02, 6e+01]
+  Cost    [1e+00, 1e+00]
+  Bound   [8e+00, 1e+03]
+  RHS     [0e+00, 0e+00]
+Presolving model
+39 rows, 58 cols, 266 nonzeros 0s
+29 rows, 52 cols, 210 nonzeros 0s
+Dependent equations search running on 28 equations with time limit of 864.00s
+Dependent equations search removed 0 rows and 0 nonzeros in 0.00s (limit = 864.00s)
+28 rows, 51 cols, 208 nonzeros 0s
+Presolve reductions: rows 28(-44); columns 51(-44); nonzeros 208(-152) 
+Solving the presolved LP
+Using dual simplex solver
+  Iteration        Objective     Infeasibilities num(sum)
+          0     0.0000000000e+00 Ph1: 0(0) 0.0s
+         42    -8.7392150697e-01 Pr: 0(0) 0.0s
+
+Performed postsolve
+Solving the original LP from the solution after postsolve
+
+Model status        : Optimal
+Simplex   iterations: 42
+Objective value     :  8.7392150697e-01
+P-D objective error :  4.0403437132e-17
+HiGHS run time      :          0.00

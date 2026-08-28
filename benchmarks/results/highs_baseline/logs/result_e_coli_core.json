@@ -1,0 +1,28 @@
+{
+ "model": "e_coli_core",
+ "n_cols": 95,
+ "n_total_rows": 72,
+ "maximize": true,
+ "build_s": 1.082,
+ "solve_s": 0.002,
+ "status": "kOptimal",
+ "time_limit_s": 86400.0,
+ "threads": 0,
+ "simplex_iterations": 42,
+ "objective": 0.8739215069684304,
+ "residual_inf": 5.684341886080802e-14,
+ "load_before": {
+  "load1": 2.62,
+  "load5": 2.8,
+  "load15": 2.86,
+  "cpu_count": 20
+ },
+ "load_after": {
+  "load1": 2.49,
+  "load5": 2.77,
+  "load15": 2.85,
+  "cpu_count": 20
+ },
+ "wall_s": 1.097,
+ "started_utc": "2026-08-26T14:36:10+00:00"
+}

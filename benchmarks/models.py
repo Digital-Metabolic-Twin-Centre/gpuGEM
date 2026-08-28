@@ -20,11 +20,11 @@ HERE = Path(__file__).resolve().parent
 CACHE = HERE / "model_cache"
 CACHE.mkdir(exist_ok=True)
 
-MODELS_DIR = Path(os.environ.get("MWBM_DIR", Path.home() / "projects" / "cuGEM" / "microbiome_models"))
-HARVEY_MAT = Path(os.environ.get(
-    "HARVEY_MAT",
-    Path.home() / "projects" / "cuGEM" / "metabolic_modelling" / "Harvey_1_03c_reduced.mat",
-))
+# All benchmark models are vendored in benchmarks/model_cache so the suite is
+# reproducible from a clean checkout. The env vars remain as overrides for
+# anyone who keeps the originals elsewhere.
+MODELS_DIR = Path(os.environ.get("MWBM_DIR", CACHE))
+HARVEY_MAT = Path(os.environ.get("HARVEY_MAT", CACHE / "Harvey_1_03c_reduced.mat"))
 
 # order is cosmetic (dict literal position only) -- the comparison figure sorts by
 # each model's actual solved n_cols, not by this field (see make_figure.py)
@@ -35,9 +35,9 @@ REGISTRY = {
                     "source": str(HARVEY_MAT), "model_key": "modelReduced",
                     "objective": "Whole_body_objective_rxn"},
     "S84":         {"scale": "microbiome", "order": 3, "kind": "mat",
-                    "source": str(MODELS_DIR / "mWBM_S84_male.mat"), "model_key": None, "objective": None},
+                    "source": str(CACHE / "mWBM_S84_male.mat"), "model_key": None, "objective": None},
     "S85":         {"scale": "microbiome", "order": 4, "kind": "mat",
-                    "source": str(MODELS_DIR / "mWBM_S85_male.mat"), "model_key": None, "objective": None},
+                    "source": str(CACHE / "mWBM_S85_male.mat"), "model_key": None, "objective": None},
     "S9":          {"scale": "microbiome", "order": 5, "kind": "mat",
                     "source": str(CACHE / "mWBM_S9_male.mat"), "model_key": None, "objective": None},
     "S15":         {"scale": "microbiome", "order": 6, "kind": "mat",

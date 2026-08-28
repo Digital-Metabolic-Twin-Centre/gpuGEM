@@ -1,0 +1,28 @@
+{
+ "model": "S84",
+ "n_cols": 685998,
+ "n_total_rows": 1558374,
+ "maximize": true,
+ "build_s": 31.368,
+ "solve_s": 2315.705,
+ "status": "kOptimal",
+ "time_limit_s": 86400.0,
+ "threads": 0,
+ "simplex_iterations": 363380,
+ "objective": 1.0,
+ "residual_inf": 9.964001722187824e-08,
+ "load_before": {
+  "load1": 4.05,
+  "load5": 3.21,
+  "load15": 3.01,
+  "cpu_count": 20
+ },
+ "load_after": {
+  "load1": 1.57,
+  "load5": 1.22,
+  "load15": 1.51,
+  "cpu_count": 20
+ },
+ "wall_s": 2347.441,
+ "started_utc": "2026-08-26T15:16:37+00:00"
+}

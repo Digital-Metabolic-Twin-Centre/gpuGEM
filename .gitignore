@@ -2,3 +2,4 @@
 __pycache__/
 *.pyc
 benchmarks/model_cache/*_lifted.mat
+*.bak

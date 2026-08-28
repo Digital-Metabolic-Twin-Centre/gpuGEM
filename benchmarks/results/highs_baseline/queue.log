@@ -1,0 +1,9 @@
+[2026-08-26T14:57:35Z] queue started; waiting on HiGHS sweep pid 3274563
+[2026-08-26T23:22:37Z] HiGHS sweep pid 3274563 has exited
+[2026-08-26T23:22:37Z] settling for 120 s before calibration
+[2026-08-26T23:24:37Z] load at calibration start: 0.38 0.83 0.94 1/3023 3293893
+[2026-08-26T23:24:37Z] running Gurobi thread-parity calibration
+[2026-08-26T23:34:03Z] calibration finished rc=0
+[2026-08-26T23:34:03Z] load at calibration end: 4.02 1.89 1.32 1/3016 3294195
+[2026-08-26T23:34:03Z] wrote final/gurobi_threads_clean.json
+[2026-08-26T23:34:03Z] queue complete

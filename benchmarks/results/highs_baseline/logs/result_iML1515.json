@@ -1,0 +1,28 @@
+{
+ "model": "iML1515",
+ "n_cols": 2712,
+ "n_total_rows": 1877,
+ "maximize": true,
+ "build_s": 3.033,
+ "solve_s": 0.07,
+ "status": "kOptimal",
+ "time_limit_s": 86400.0,
+ "threads": 0,
+ "simplex_iterations": 1008,
+ "objective": 0.8769972144269721,
+ "residual_inf": 2.5721647034515627e-12,
+ "load_before": {
+  "load1": 2.49,
+  "load5": 2.77,
+  "load15": 2.85,
+  "cpu_count": 20
+ },
+ "load_after": {
+  "load1": 2.49,
+  "load5": 2.77,
+  "load15": 2.85,
+  "cpu_count": 20
+ },
+ "wall_s": 3.104,
+ "started_utc": "2026-08-26T14:36:13+00:00"
+}

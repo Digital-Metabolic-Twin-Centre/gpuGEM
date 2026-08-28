@@ -1,0 +1,28 @@
+{
+ "model": "S9",
+ "n_cols": 1111943,
+ "n_total_rows": 2545377,
+ "maximize": true,
+ "build_s": 50.647,
+ "solve_s": 7557.712,
+ "status": "kOptimal",
+ "time_limit_s": 86400.0,
+ "threads": 0,
+ "simplex_iterations": 602951,
+ "objective": 1.0,
+ "residual_inf": 9.955346828000002e-08,
+ "load_before": {
+  "load1": 1.79,
+  "load5": 1.39,
+  "load15": 1.27,
+  "cpu_count": 20
+ },
+ "load_after": {
+  "load1": 1.21,
+  "load5": 1.13,
+  "load15": 1.04,
+  "cpu_count": 20
+ },
+ "wall_s": 7608.929,
+ "started_utc": "2026-08-26T23:21:56+00:00"
+}

@@ -1,0 +1,45 @@
+Running HiGHS 1.14.0 (git hash: 7df0786): Copyright (c) 2026 under MIT licence terms
+Rows:       72328 lower bounds    less than or equal to       -1e+20 are treated as -Infinity
+Rows:       35023 upper bounds greater than or equal to        1e+20 are treated as +Infinity
+LP has 166202 rows; 83521 cols; 508151 nonzeros
+Coefficient ranges:
+  Matrix  [1e-06, 2e+04]
+  Cost    [1e+00, 1e+00]
+  Bound   [6e-09, 1e+06]
+  RHS     [0e+00, 0e+00]
+WARNING: Problem has some excessively small column bounds
+Presolving model
+72066 rows, 44969 cols, 241818 nonzeros 0s
+18946 rows, 40655 cols, 182342 nonzeros 0s
+Dependent equations search running on 14991 equations with time limit of 864.00s
+Dependent equations search removed 68 rows and 956 nonzeros in 0.00s (limit = 864.00s)
+15798 rows, 35397 cols, 160145 nonzeros 1s
+Presolve reductions: rows 15798(-150404); columns 35397(-48124); nonzeros 160145(-348006) 
+Solving the presolved LP
+Using dual simplex solver
+  Iteration        Objective     Infeasibilities num(sum)
+          0    -1.0953118460e+02 Pr: 11575(1.67829e+09) 1.2s
+      13684    -2.5234507298e+01 Pr: 6104(4.91227e+07); Du: 0(2.02346e-05) 6.3s
+      18401    -2.5480020243e+01 Pr: 5339(1.60593e+07); Du: 0(1.98177e-05) 11.3s
+      23246    -2.5190484022e+01 Pr: 3377(369083); Du: 0(2.09061e-05) 16.5s
+      27890    -2.5345536742e+01 Pr: 2663(151958); Du: 0(2.05368e-05) 21.6s
+      32730    -2.5483476581e+01 Pr: 1062(1063.43); Du: 0(2.12122e-05) 26.7s
+      34197    -1.0000000000e+00 Pr: 0(0) 27.2s
+Using dual simplex solver
+  Iteration        Objective     Infeasibilities num(sum)
+      34197    -1.0000000000e+00 Pr: 3(8.64303e-07) 27.3s
+      34203    -1.0000000000e+00 Pr: 0(0) 27.3s
+
+Performed postsolve
+Solving the original LP from the solution after postsolve
+Using dual simplex solver
+  Iteration        Objective     Infeasibilities num(sum)
+      34203     1.0000000000e+00 Pr: 1(1.10345e-07) 27.4s
+      34204     1.0000000000e+00 Pr: 0(0) 27.4s
+Required 1 simplex iterations after postsolve
+
+Model status        : Optimal
+Simplex   iterations: 34204
+Objective value     :  1.0000000000e+00
+P-D objective error :  0.0000000000e+00
+HiGHS run time      :         27.44

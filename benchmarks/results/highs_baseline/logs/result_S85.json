@@ -1,0 +1,28 @@
+{
+ "model": "S85",
+ "n_cols": 874634,
+ "n_total_rows": 1993029,
+ "maximize": true,
+ "build_s": 38.105,
+ "solve_s": 3099.88,
+ "status": "kOptimal",
+ "time_limit_s": 86400.0,
+ "threads": 0,
+ "simplex_iterations": 431984,
+ "objective": 1.0,
+ "residual_inf": 9.909013808200025e-08,
+ "load_before": {
+  "load1": 1.15,
+  "load5": 1.12,
+  "load15": 1.11,
+  "cpu_count": 20
+ },
+ "load_after": {
+  "load1": 1.06,
+  "load5": 1.15,
+  "load15": 1.15,
+  "cpu_count": 20
+ },
+ "wall_s": 3138.442,
+ "started_utc": "2026-08-26T19:24:06+00:00"
+}
