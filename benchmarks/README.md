@@ -223,6 +223,21 @@ configurations, plus per-row violation histograms for the S-block and, where pre
 - `violation_distribution_constraints.png` — the same layout for coupling constraints, limited to
   the eight models that have a coupling block (`e_coli_core`/`iML1515` are absent, not shown empty).
 
+A derived, four-configuration view adds HiGHS (`results/highs_baseline/highs_baseline.json`,
+already committed, no solver needed) alongside the three above:
+
+```bash
+python -m benchmarks.make_residual_tradeoff_figures_with_highs
+```
+
+- `residual_tradeoff_violations_with_highs.png` / `residual_tradeoff_solvetime_with_highs.png` —
+  same layout and `comparison.csv` as above, with a fourth HiGHS bar per model. HiGHS's worst-row
+  violation sits consistently below Gurobi's (~1e-7 to 1e-8 vs Gurobi's ~1e-9 to 1e-13) and its
+  solve times are the slowest of the four on every model above `e_coli_core`/`iML1515` scale
+  (single-threaded simplex, no GPU) — expected for a CPU baseline included for license-neutral
+  comparison, not a regression. The original three-configuration figures are untouched; this is an
+  additive, derived view.
+
 **Result**: the effect scales with model conditioning, not just size — and it's essentially free
 for the two small, well-conditioned models.
 
