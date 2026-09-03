@@ -111,7 +111,10 @@ per_constraint_residual    = 1      # max-norm convergence check → better accu
 ```python
 presolve                   = 1      # PaPILO — required; default PSLP falsely reports Infeasible
 per_constraint_residual    = 1      # max-norm convergence → 44% fewer violations vs default
-# tolerances left at default 1e-4 — accuracy bottleneck is PaPILO's internal feastol, not PDLP
+absolute_primal_tolerance  = 1e-4   # cuOpt's internal default tolerance
+relative_primal_tolerance  = 1e-4
+absolute_dual_tolerance    = 1e-4
+relative_dual_tolerance    = 1e-4
 ```
 
 Any cuOpt parameter can be overridden:
@@ -151,76 +154,11 @@ result.feasibility  # dict: stoich_max_residual, stoich_rows_violated_1e6, ...
 
 ---
 
-## Known limitations
-
-- Requires an NVIDIA GPU with CUDA 12+ and the `cuopt-cu12` package (NVIDIA Developer licence).
-- The min-norm QP step (used in some FBA variants to select a unique flux vector) cannot currently be solved by cuOpt — Gurobi or another QP solver is needed for that step.
-- Postsolve accuracy on models > 100K reactions is bounded at ~1e-5 due to a hardcoded tolerance in cuOpt's PaPILO integration ([open issue](https://github.com/rapidsai/cuopt/issues)).
-- On the mWBM S85 microbiome model (coefficient range spanning `[1e-6, 2e5]`), cuOpt's PDLP is
-  structurally ~9-10x slower than Gurobi across every biologically distinct objective tested, not
-  just one (`benchmarks/run_objective_sweep.py`). None of `pdlp_solver_mode=Methodical1`,
-  `method=Concurrent`, or a cold (no warm-start) `method=Barrier` close that gap on this model:
-  Methodical1 did not converge within a 900s+60s budget (worse than baseline's ~505s); Concurrent
-  raced PDLP/DualSimplex/Barrier and PDLP won again (~513s, effectively tied with baseline); cold
-  Barrier failed almost immediately with `status=NumericalError` (~7s, no usable solution) —
-  plausibly cuDSS's sparse factorization failing on this matrix's ill-conditioning without a warm
-  start to help it, consistent with `26.6.0`'s separately-confirmed broken warm-start path
-  (`benchmarks/run_solver_mode_experiment.py`, see `specs/004-s85-solver-mode-experiment/`).
-- A follow-up, broader settings sweep (`benchmarks/run_cuopt_tuning.py`,
-  `specs/012-cuopt-native-tuning/`) tried 11 further cuOpt-native configurations on S85 —
-  `pdlp_solver_mode=Fast1`, true Mixed precision, Single precision, an explicit Double-precision
-  re-test, a PSLP false-infeasible re-test, `first_primal_feasible`, `infeasibility_detection`
-  +`strict_infeasibility`, `save_best_primal_so_far`, and PDLP warm start (`presolve=0` +
-  `pdlp_solver_mode` in `{Stable2, Fast1}`) — **none beat the baseline**. PSLP's false-infeasible
-  bug (see the postsolve-accuracy bullet above) is confirmed still present in `26.6.0` despite a
-  26.04 PSLP update that targeted "incorrect infeasible classification" generally — it does not
-  cover this model's specific failure mode. **PDLP warm start does not help on this model for a
-  root-cause reason, isolated and reproduced on a small model**: cuOpt's warm-start data is only
-  usable when the seeding ("cold") solve itself reached `Optimal`/`PrimalFeasible` — feeding it
-  data from a solve that only reached `TimeLimit`/`IterationLimit` either yields no measurable
-  benefit (`Stable2`: the warm phase re-ran its full budget with essentially the same iteration
-  count as the cold phase) or an immediate, silent `NoTermination` with no iterations at all
-  (`Fast1`: reproduced deterministically on a capped-iteration `e_coli_core` test). Since S85's
-  cold solves don't converge in a practical budget for the modes warm start supports, this is a
-  structural chicken-and-egg problem on this model, not a configuration mistake.
-- **Opt-in model lifting (`gpugem.solve(..., lift=True)`, a faithful port of COBRA Toolbox's
-  `reformulate.m`, see `specs/013-cobra-model-lifting/`) is verified exact as a transform** (its
-  linear algebra independently checked via solving hand-constructed examples, and its map-back is
-  a lossless prefix slice — original variables are never rescaled) **but does not preserve
-  this project's own correctness tolerance on S85 under the existing large-model default solver
-  settings.** Lifting S85 measurably corrects both blocks' badly-scaled coefficients (mass-balance
-  `2e5 -> 999`, coupling `2e4 -> 141`, both within the `1000` threshold), and the lifted solve
-  reports `Optimal` with the exact same objective as the unlifted solve — but the mapped-back
-  residual against the *original* system (1.32e-3) exceeds this project's 1e-4 tolerance. Root
-  cause: the auxiliary chain's step size (up to ~999) amplifies whatever residual cuOpt leaves on
-  the auxiliary equations when read back into the original row; a tighter-tolerance follow-up
-  reduced but did not close this gap, and did not converge within the same 900s budget on the
-  larger (68,501-more-variable) lifted system. Confirmed only on `e_coli_core`-scale correctness
-  (a safe no-op there, since no coefficient exceeds the default threshold) — not yet on any large
-  model under either a longer time budget or lift-aware tighter tolerances, neither of which this
-  feature was scoped to tune.
-- **The lifting-accuracy limitation above generalizes to `S84`, and to the newer cuOpt release —
-  it is not S85-specific or version-specific** (`specs/014-version-lifting-runtime-comparison/`).
-  Extending the comparison above to `e_coli_core`, `iML1515`, `Harvey`, `Harvetta`, `S84`, and
-  `S85` under both `26.6.0` and `26.8.0`: lifting is verified-correct on all four smaller models
-  (up to Harvey/Harvetta's ~81-84K vars) under both versions, but fails this project's correctness
-  gate on **both** `S84` (685,998 vars) and `S85` (874,634 vars) under **both** versions — the
-  boundary is specifically the microbiome-scale models, not whole-body scale generally. `S84`
-  lifted does not even reach `Optimal` within the 900s budget on either version (900.6s/900.8s,
-  `TimeLimit`); `S85`'s `26.8.0`-lifted run does reach `Optimal`, quickly (60.3s), but its residual
-  (0.0123) is still ~123x over tolerance — fast and `Optimal` continues to not mean accurate for
-  this transform on these two models. Separately, and only tangentially about lifting: the
-  `26.6.0` → `26.8.0` version upgrade that helped S85 so much (`specs/012-cuopt-native-tuning/`)
-  is **not a general speedup** — every other model in this six-model comparison is 5-30% *slower*
-  under `26.8.0` than `26.6.0`, unlifted.
-
----
-
 ## Citation
 
 If you use gpuGEM in your research, please cite:
 
-> *gpuGEM: GPU-accelerated Flux Balance Analysis for genome-scale metabolic models.*  
+> *gpuGEM: validated GPU solving of genome-scale metabolic LPs*  
 > Digital Metabolic Twin Centre, 2026. https://github.com/Digital-Metabolic-Twin-Centre/gpuGEM
 
 ---
