@@ -1,0 +1,19 @@
+{
+  "model": "Harvetta",
+  "pipeline": "python",
+  "lift_big": 1000.0,
+  "solve_s": 4.257141122012399,
+  "status": "Optimal",
+  "objective": 1.0,
+  "fluxes_available": true,
+  "flux_summary": {
+    "l2_norm": 15687451.058234874,
+    "max_abs": 1000000.0,
+    "residual_inf": 3.026798367500305e-09
+  },
+  "n_aux_vars": 70576,
+  "n_mass_balance_rows_lifted": 0,
+  "n_coupling_rows_lifted": 70576,
+  "excluded": false,
+  "excluded_reason": null
+}

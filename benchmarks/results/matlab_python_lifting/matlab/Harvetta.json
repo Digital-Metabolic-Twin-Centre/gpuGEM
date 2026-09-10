@@ -1,0 +1,1 @@
+{"model":"Harvetta","pipeline":"matlab","lift_big":1000,"solve_s":46.646022,"status":"Optimal","objective":1,"fluxes_available":true,"flux_summary":{"l2_norm":1.5692417919551808E+7,"max_abs":1.0E+6,"residual_inf":2.3428583517670631E-9},"n_aux_vars":70576,"n_mass_balance_rows_lifted":0,"n_coupling_rows_lifted":70576,"excluded":false,"excluded_reason":[]}

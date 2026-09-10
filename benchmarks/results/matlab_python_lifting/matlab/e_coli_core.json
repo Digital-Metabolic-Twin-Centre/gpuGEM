@@ -1,0 +1,1 @@
+{"model":"e_coli_core","pipeline":"matlab","lift_big":1000,"solve_s":0.091314,"status":"Optimal","objective":0.87392150696843052,"fluxes_available":true,"flux_summary":{"l2_norm":1414.6679683468817,"max_abs":1000,"residual_inf":1.3500311979441904E-13},"n_aux_vars":0,"n_mass_balance_rows_lifted":0,"n_coupling_rows_lifted":0,"excluded":false,"excluded_reason":[]}

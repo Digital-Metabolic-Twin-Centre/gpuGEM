@@ -154,6 +154,26 @@ result.feasibility  # dict: stoich_max_residual, stoich_rows_violated_1e6, ...
 
 ---
 
+## Known limitations
+
+- **Lifted, extreme-scale (`S84`/`S85`-class) models are not reliably solvable by every Gurobi
+  entry point.** `benchmarks/run_matlab_python_lifting_comparison.py` found that Gurobi solves the
+  lifted `S84`/`S85` systems to `Optimal` via COBRA Toolbox's `solveCobraLP` (MATLAB) but reports
+  `Infeasible` for the *structurally identical* system (confirmed: identical auxiliary-variable
+  and lifted-row counts) via a direct `gurobipy` call (Python). Checked and ruled out as causes:
+  a Gurobi solver-settings mismatch (`Method`, `TimeLimit`, `FeasibilityTol`/`OptimalityTol` all
+  confirmed identical), a Gurobi *version* mismatch (`pip install gurobipy` initially resolved a
+  different major version, `13.0.3`, than MATLAB's licensed `11.0.3`; re-run with the versions
+  pinned to match — `Infeasible` persisted), and a borderline numerical-tolerance flip (persisted
+  after relaxing `FeasibilityTol` 100x). This reproduces, under a second independent solver
+  pathway, the same `S84`/`S85` scale boundary already found for lifted cuOpt solves (see "Version
+  x lifting runtime comparison" above) — lifting's mathematical correctness is not in question
+  (structural fidelity is exact), but its practical solvability at this scale is
+  entry-point-dependent, for a reason not yet isolated. See
+  `specs/015-matlab-python-lifting-comparison/`.
+
+---
+
 ## Citation
 
 If you use gpuGEM in your research, please cite:

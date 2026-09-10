@@ -1,0 +1,19 @@
+{
+  "model": "Harvey",
+  "pipeline": "python",
+  "lift_big": 1000.0,
+  "solve_s": 3.84738875500625,
+  "status": "Optimal",
+  "objective": 1.0,
+  "fluxes_available": true,
+  "flux_summary": {
+    "l2_norm": 17319096.959655646,
+    "max_abs": 1000000.0,
+    "residual_inf": 2.9203874873928726e-09
+  },
+  "n_aux_vars": 68259,
+  "n_mass_balance_rows_lifted": 0,
+  "n_coupling_rows_lifted": 68259,
+  "excluded": false,
+  "excluded_reason": null
+}

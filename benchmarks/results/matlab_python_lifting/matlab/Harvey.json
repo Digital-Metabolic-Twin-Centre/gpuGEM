@@ -1,0 +1,1 @@
+{"model":"Harvey","pipeline":"matlab","lift_big":1000,"solve_s":45.067838,"status":"Optimal","objective":1,"fluxes_available":true,"flux_summary":{"l2_norm":1.754696059127681E+7,"max_abs":1.0E+6,"residual_inf":8.6727595771662891E-8},"n_aux_vars":68259,"n_mass_balance_rows_lifted":0,"n_coupling_rows_lifted":68259,"excluded":false,"excluded_reason":[]}

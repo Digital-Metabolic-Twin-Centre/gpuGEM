@@ -1,0 +1,19 @@
+{
+  "model": "e_coli_core",
+  "pipeline": "python",
+  "lift_big": 1000.0,
+  "solve_s": 0.0029264549957588315,
+  "status": "Optimal",
+  "objective": 0.8739215069684305,
+  "fluxes_available": true,
+  "flux_summary": {
+    "l2_norm": 1414.667968346882,
+    "max_abs": 1000.0,
+    "residual_inf": 1.4210854715202004e-13
+  },
+  "n_aux_vars": 0,
+  "n_mass_balance_rows_lifted": 0,
+  "n_coupling_rows_lifted": 0,
+  "excluded": false,
+  "excluded_reason": null
+}

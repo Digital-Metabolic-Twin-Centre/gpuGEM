@@ -612,3 +612,117 @@ runtime? For the four smaller models, no — lifted is consistently as slow as o
 than unlifted (more variables to solve, for a model that didn't need scale correction in any
 way that mattered). For the two microbiome models, the honest answer is "not meaningfully
 answerable yet" — neither reaches a trustworthy result to compare a runtime against.
+
+## MATLAB vs Python lifted-model comparison
+
+Runs the same lift-then-solve question this project has only ever answered in Python (above) once
+more, this time with COBRA Toolbox's own `reformulate.m` — in MATLAB, solved with Gurobi — right
+beside `gpugem`'s Python port, solved with Gurobi too, for the same six models as the comparison
+above. Both pipelines ran on this one local machine (MATLAB R2025a, Gurobi 11.0.3) so the
+runtimes are directly comparable; no cross-environment caveat applies. See
+`specs/015-matlab-python-lifting-comparison/`.
+
+The MATLAB side ran from a temporary, throwaway script that is not part of this repository (or
+COBRA Toolbox's) tracked codebase — only its per-model output, matching the Python side's own
+result schema, is committed, under `results/matlab_python_lifting/matlab/`.
+
+```bash
+python -m benchmarks.run_matlab_python_lifting_comparison    # Python side + comparison, all six models
+python -m benchmarks.make_matlab_python_lifting_figure       # writes matlab_python_lifting_comparison.png/.pdf
+```
+
+**Solver configuration, verified rather than assumed.** Because "same Gurobi setting" is easy to
+get wrong silently, each of the following was checked directly, not inferred from the absence of
+an error:
+
+- **Algorithm**: `Method=2` (barrier) on both sides — confirmed present in Gurobi's own permitted-
+  parameter list on the MATLAB side (`setGurobiParam.m`), no fallback/warning observed.
+- **Time limit**: confirmed *empirically*, not just by absence of a warning — forcing
+  `TimeLimit=0.0001` on the MATLAB side returned in 0.02s with `origStat='TIME_LIMIT'`, proving the
+  parameter reaches Gurobi rather than being silently dropped.
+- **Tolerances**: `FeasibilityTol`/`OptimalityTol` both `1e-6` on both sides — COBRA Toolbox's own
+  defaults (`getCobraSolverParams.m`) happen to equal Gurobi's factory defaults here, so this one
+  matches without either side overriding it.
+- **Gurobi *version*** — **the one real mismatch this check actually found**: `pip install
+  gurobipy` installs its own bundled engine, which resolved to **13.0.3**, while MATLAB links the
+  machine's licensed install, **11.0.3** — two different major Gurobi releases, not just two
+  client libraries for the same one. Fixed by pinning `gurobipy==11.0.3` and re-running every
+  model. The four smaller models' times barely moved (e.g. `Harvey` 4.15s → 3.85s) — version
+  mismatch was real but not the runtime story. `S84`/`S85` still concluded `Infeasible` under the
+  matched version too (so it isn't the correctness story either) — but resolved to that conclusion
+  far *faster* under the matched 11.0.3 (`S84` 376.8s → 223.8s; `S85` 360.8s → 64.0s) than under
+  the mismatched 13.0.3, itself a small, self-contained finding about version-dependent
+  infeasibility-detection behavior on this specific problem class. All numbers below are the
+  matched-version (11.0.3) run.
+- **Everything else** (presolve, scaling, threads): neither side sets these explicitly, so both
+  use Gurobi's own automatic defaults — confirmed by inspecting COBRA's default parameter struct
+  (`getCobraSolverParams.m`), which only touches `feasTol`/`optTol`/`timeLimit` unless a
+  `lifted`/`multiscale` flag is explicitly passed (neither was, here).
+
+**Result** (matched Gurobi 11.0.3 on both sides):
+
+| model | vars | MATLAB (reformulate.m + Gurobi) | Python (gpugem + Gurobi) | status | objective | flux |
+|---|---|---|---|---|---|---|
+| e_coli_core | 95 | 0.091s | 0.003s | ✓ both `Optimal` | ✓ exact | ✓ exact |
+| iML1515 | 2,712 | 0.096s | 0.037s | ✓ both `Optimal` | ✓ exact | ✗ differs |
+| Harvey | 81,094 | 45.1s | 3.85s | ✓ both `Optimal` | ✓ exact | ✗ differs |
+| Harvetta | 83,521 | 46.6s | 4.26s | ✓ both `Optimal` | ✓ exact | ✗ differs |
+| S84 | 685,998 | 1,006.2s | 223.8s | ✗ MATLAB `Optimal`, Python `Infeasible` | — | — |
+| S85 | 874,634 | 1,413.2s | 64.0s | ✗ MATLAB `Optimal`, Python `Infeasible` | — | — |
+
+**Structural lifting fidelity is exact for all six models, with zero exceptions** — MATLAB's
+`reformulate.m` and `gpugem`'s Python port add the *identical* number of auxiliary variables
+(0 / 0 / 68,259 / 70,576 / 68,471 / 68,501) for every model, down to the last unit. For `S85`
+specifically, the row-level breakdown (242 mass-balance rows, 68,259 coupling rows lifted) matches
+`specs/013-cobra-model-lifting/`'s own, independently-published count for this exact model
+exactly — this comparison's MATLAB reference and this project's prior Python-only validation agree
+with each other, not just with themselves. (`S84`/`S85`'s *console-printed* "reactions with large
+coefficients" counts from `reformulate.m`, 142/161, are **not** the row counts — that message
+reports the number of badly-scaled *columns*, not the metabolite rows actually lifted; the
+corrected row counts, 212/242, are recorded in `results/matlab_python_lifting/matlab/{S84,S85}.json`
+with a note explaining the correction. This was a labeling bug in this feature's own temporary
+script, caught and fixed during this comparison — not a `reformulate.m` or `gpugem.lifting` issue.)
+
+**Two genuine findings, both at the *solution* level, not the lifting-transform level:**
+
+1. **`e_coli_core` matches to ~13 significant figures; `iML1515`, `Harvey`, and `Harvetta` match
+   on objective exactly but not on the individual flux values.** This is alternate optima
+   (degenerate LP solutions), not a translation defect: two different, independently-optimal
+   solvers finding two different, equally-valid vertices of the same optimal face is expected for
+   genome-scale FBA models with many parallel/redundant reactions, and both pipelines' feasibility
+   residuals against the *original* model stay far inside this project's tolerance (`~1e-8` to
+   `~1e-9`) in every one of these three cases. The objective agreeing to machine precision while
+   individual fluxes differ is exactly what "same optimal value, different optimal vertex" looks
+   like — it is not what a translation bug looks like (which would show up as a differing
+   *objective*, not just a differing vertex on the same objective plane).
+2. **`S84` and `S85` — the same two models this project's cuOpt version comparison above already
+   found could not be trusted lifted — are also the two where MATLAB and Python's Gurobi disagree,
+   this time on solver status itself, not just accuracy.** MATLAB's `solveCobraLP` reports
+   `Optimal` for both; Python's direct `gurobipy` call reports `Infeasible` for both — reproduced
+   under the *version-matched* Gurobi 11.0.3 (not just the initial, mismatched 13.0.3 run above),
+   and again after raising Gurobi's `FeasibilityTol` 100x (`1e-4`) as a targeted check — the same
+   barrier run still concludes `Infeasible`, ruling out both a Gurobi-version artifact and a
+   borderline numerical tolerance flip as the explanation. Given the lifting structure is proven
+   identical (finding 1 above) and the *un*lifted model solves cleanly in Python (`Optimal`,
+   objective `1.0`, confirmed directly), the discrepancy is confined to how each Gurobi call —
+   COBRA's `solveCobraLP` wrapper versus a direct `gurobipy` model — handles this specific,
+   extremely long-chain lifted system at this scale, not to a difference in what system either side
+   is solving. This is the same `S84`/`S85` scale boundary this project's cuOpt comparison already
+   identified as where lifting's *practical* solvability — as opposed to its mathematical
+   correctness — breaks down, now reproduced under a second, independent solver pathway.
+
+**Answering the motivating question directly (spec SC-001/SC-002/SC-003)**: MATLAB's
+`reformulate.m` and `gpugem`'s Python port are a faithful, structurally identical translation of
+each other on every model tested, with zero exceptions — the strongest fidelity evidence this
+project has produced for the lifting feature to date, because it validates against the actual
+reference implementation rather than only against Python's own unlifted baseline. On runtime,
+Python (`gpugem` + Gurobi) is consistently faster than MATLAB (`reformulate.m` + Gurobi) — roughly
+2.6-31x across the four models both sides actually solve, under a solver configuration checked and
+version-matched, not just parameter-matched. Whether that gap reflects genuine algorithmic solve
+time or COBRA's `solveCobraLP` wrapper overhead (parameter parsing, struct construction, dual/basis
+extraction — all inside the timed region on the MATLAB side, unlike Python's thin, direct
+`gurobipy` calls) is not yet separated out; the `e_coli_core` case (0.091s vs 0.003s for a
+95-variable LP that is essentially instant in either language) makes fixed per-call overhead a
+plausible major contributor, not solve-time isolated by this comparison. Neither pipeline's
+`S84`/`S85` numbers should be read as a trustworthy runtime comparison, for the same reason four
+models up: one side (Python) doesn't reach a solution to time at all.

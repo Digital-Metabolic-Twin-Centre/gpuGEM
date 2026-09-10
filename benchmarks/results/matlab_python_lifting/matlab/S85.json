@@ -1,0 +1,20 @@
+{
+  "model": "S85",
+  "pipeline": "matlab",
+  "lift_big": 1000,
+  "solve_s": 1413.198837,
+  "status": "Optimal",
+  "objective": 1,
+  "fluxes_available": true,
+  "flux_summary": {
+    "l2_norm": 17675988.488544155,
+    "max_abs": 1000000.0,
+    "residual_inf": 9.3549423022020253e-07
+  },
+  "n_aux_vars": 68501,
+  "n_mass_balance_rows_lifted": 242,
+  "n_coupling_rows_lifted": 68259,
+  "excluded": false,
+  "excluded_reason": null,
+  "_note": "n_mass_balance_rows_lifted corrected from the temporary MATLAB script's original capture (161). reformulate.m's console message reports nlrgcol (reactions/columns with a large coefficient), not nlrgrow (metabolite rows actually lifted) -- a labeling bug in this feature's own throwaway script, not a translation discrepancy. Corrected value (242) is independently confirmed two ways: it equals n_aux_vars - n_coupling_rows_lifted (68501 - 68259), and it matches specs/013-cobra-model-lifting/'s own already-published, independently-derived count for S85 (242 mass-balance rows, 68,259 coupling rows, 68,501 auxiliary variables -- see benchmarks/README.md's 'Opt-in model lifting' section)."
+}

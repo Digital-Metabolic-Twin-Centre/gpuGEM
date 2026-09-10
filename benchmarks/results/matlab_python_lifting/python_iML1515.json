@@ -1,0 +1,19 @@
+{
+  "model": "iML1515",
+  "pipeline": "python",
+  "lift_big": 1000.0,
+  "solve_s": 0.03670554596465081,
+  "status": "Optimal",
+  "objective": 0.8769972144269724,
+  "fluxes_available": true,
+  "flux_summary": {
+    "l2_norm": 5478.977144252981,
+    "max_abs": 1000.0,
+    "residual_inf": 1.0942358130705543e-12
+  },
+  "n_aux_vars": 0,
+  "n_mass_balance_rows_lifted": 0,
+  "n_coupling_rows_lifted": 0,
+  "excluded": false,
+  "excluded_reason": null
+}

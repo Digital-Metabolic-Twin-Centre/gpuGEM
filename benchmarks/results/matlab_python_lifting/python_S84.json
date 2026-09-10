@@ -1,0 +1,15 @@
+{
+  "model": "S84",
+  "pipeline": "python",
+  "lift_big": 1000.0,
+  "solve_s": 223.84052299900213,
+  "status": "Infeasible",
+  "objective": null,
+  "fluxes_available": false,
+  "flux_summary": null,
+  "n_aux_vars": 68471,
+  "n_mass_balance_rows_lifted": 212,
+  "n_coupling_rows_lifted": 68259,
+  "excluded": false,
+  "excluded_reason": null
+}

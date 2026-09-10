@@ -1,0 +1,7 @@
+model,n_cols,matlab_solve_s,python_solve_s,matlab_status,python_status,status_agrees,objective_agrees,flux_agrees,n_aux_vars_matlab,n_aux_vars_python,aux_vars_match,verified_correct,excluded_models
+e_coli_core,95,0.091314,0.0029264549957588315,Optimal,Optimal,True,True,True,0,0,True,True,
+iML1515,2712,0.096316,0.03670554596465081,Optimal,Optimal,True,True,False,0,0,True,False,
+Harvey,81094,45.067838,3.84738875500625,Optimal,Optimal,True,True,False,68259,68259,True,False,
+Harvetta,83521,46.646022,4.257141122012399,Optimal,Optimal,True,True,False,70576,70576,True,False,
+S84,685998,1006.163735,223.84052299900213,Optimal,Infeasible,False,False,False,68471,68471,True,False,
+S85,874634,1413.198837,64.04469626798527,Optimal,Infeasible,False,False,False,68501,68501,True,False,

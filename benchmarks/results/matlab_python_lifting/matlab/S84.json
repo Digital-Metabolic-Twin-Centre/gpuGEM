@@ -1,0 +1,20 @@
+{
+  "model": "S84",
+  "pipeline": "matlab",
+  "lift_big": 1000,
+  "solve_s": 1006.163735,
+  "status": "Optimal",
+  "objective": 1,
+  "fluxes_available": true,
+  "flux_summary": {
+    "l2_norm": 17153357.237264954,
+    "max_abs": 1000000.0,
+    "residual_inf": 9.1047379486986782e-07
+  },
+  "n_aux_vars": 68471,
+  "n_mass_balance_rows_lifted": 212,
+  "n_coupling_rows_lifted": 68259,
+  "excluded": false,
+  "excluded_reason": null,
+  "_note": "n_mass_balance_rows_lifted corrected from the temporary MATLAB script's original capture (142). reformulate.m's console message reports nlrgcol (reactions/columns with a large coefficient), not nlrgrow (metabolite rows actually lifted) -- a labeling bug in this feature's own throwaway script, not a translation discrepancy. Corrected value (212) is independently confirmed two ways: it equals n_aux_vars - n_coupling_rows_lifted (68471 - 68259), and it matches gpugem.lift_mass_balance's own independently computed row count for this exact model (see python_S84.json)."
+}
