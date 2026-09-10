@@ -1,0 +1,114 @@
+{
+  "model": "S84",
+  "big": 1000.0,
+  "small_threshold": 0.001,
+  "unlifted_source": "/Users/faridzare/projects/gpuGEM/benchmarks/model_cache/mWBM_S84_male.mat",
+  "matlab_lifted_source": "/Users/faridzare/Downloads/OneDrive_1_6-30-2026/mWBM_S84_male_lifted.mat",
+  "matlab_base_matches_local_unlifted": false,
+  "python": {
+    "S_before": {
+      "shape": [
+        572304,
+        685998
+      ],
+      "nnz": 2816692,
+      "min_abs": 1e-06,
+      "max_abs": 199999.0,
+      "n_above_big": 451,
+      "n_below_small": 1448,
+      "log10_span": 11.301027824186143
+    },
+    "S_after": {
+      "shape": [
+        572516,
+        686210
+      ],
+      "nnz": 2817116,
+      "min_abs": 1e-06,
+      "max_abs": 5965.470035219622,
+      "n_above_big": 7,
+      "n_below_small": 1448,
+      "log10_span": 9.775644668569623
+    },
+    "n_mass_balance_rows_lifted": 212,
+    "C_before": {
+      "shape": [
+        986070,
+        685998
+      ],
+      "nnz": 1974326,
+      "min_abs": 1.0,
+      "max_abs": 20000.0,
+      "n_above_big": 106031,
+      "n_below_small": 0,
+      "log10_span": 4.301029995663981
+    },
+    "C_after": {
+      "shape": [
+        1054329,
+        754469
+      ],
+      "nnz": 2110844,
+      "min_abs": 1.0,
+      "max_abs": 20000.0,
+      "n_above_big": 37772,
+      "n_below_small": 0,
+      "log10_span": 4.301029995663981
+    },
+    "n_coupling_rows_lifted": 68259,
+    "n_aux_vars": 68471,
+    "coupling_rows_big_but_not_selected": 35341,
+    "coupling_left_behind_max_abs": 20000.0,
+    "coupling_left_behind_same_sign_pair": 32885,
+    "coupling_left_behind_not_two_nonzeros": 2456,
+    "C_after_over_big_in_original_rows": 37772,
+    "C_after_over_big_in_aux_rows": 0,
+    "S_after_over_big_in_original_rows": 0,
+    "S_after_over_big_in_aux_rows": 7
+  },
+  "matlab": {
+    "S_after": {
+      "shape": [
+        572304,
+        789569
+      ],
+      "nnz": 2816692,
+      "min_abs": 1e-06,
+      "max_abs": 199999.0,
+      "n_above_big": 451,
+      "n_below_small": 1448,
+      "log10_span": 11.301027824186143
+    },
+    "C_after": {
+      "shape": [
+        1089396,
+        789569
+      ],
+      "nnz": 2178792,
+      "min_abs": 1.0,
+      "max_abs": 400.0,
+      "n_above_big": 0,
+      "n_below_small": 0,
+      "log10_span": 2.6020599913279625
+    },
+    "n_aux_vars": 103571,
+    "E_nnz": 0,
+    "D_nnz": 207142,
+    "C_before": {
+      "shape": [
+        985825,
+        685998
+      ],
+      "nnz": 1971650,
+      "min_abs": 1.0,
+      "max_abs": 20000.0,
+      "n_above_big": 103571,
+      "n_below_small": 0,
+      "log10_span": 4.301029995663981
+    },
+    "coupling_rows_with_big_entry": 103571,
+    "coupling_rows_matching_reformulate_cuprow": 69980,
+    "n_coupling_rows_lifted": 103571,
+    "lifted_rows_that_are_same_sign_pairs": 33591
+  }
+}
