@@ -4,18 +4,18 @@ Compares the GPU LP solver (NVIDIA cuOpt, via gpuGEM's shipped size-selected
 defaults) against Gurobi standalone on the max-biomass FBA LP of ten models
 spanning four orders of magnitude:
 
-| model | scale | source | loader |
-|---|---|---|---|
-| e_coli_core | small | BiGG (cached) | cobra -> gpugem.loaders.from_cobra |
-| iML1515 | medium | BiGG (cached) | cobra -> gpugem.loaders.from_cobra |
-| Harvey | whole-body | Harvey_1_03c_reduced.mat | gpugem.loaders.from_mat |
-| Harvetta | whole-body | Harvetta_1_03d.mat (model_cache/) | gpugem.loaders.from_mat |
-| S84 | microbiome | mWBM_S84_male.mat | gpugem.loaders.from_mat |
-| S85 | microbiome | mWBM_S85_male.mat | gpugem.loaders.from_mat |
-| S23 | microbiome | mWBM_S23_male.mat (model_cache/) | gpugem.loaders.from_mat |
-| S15 | microbiome | mWBM_S15_male.mat (model_cache/) | gpugem.loaders.from_mat |
-| S9 | microbiome | mWBM_S9_male.mat (model_cache/) | gpugem.loaders.from_mat |
-| S83 | microbiome | mWBM_S83_male.mat (model_cache/) | gpugem.loaders.from_mat |
+| model | paper label | scale | source | loader |
+|---|---|---|---|---|
+| e_coli_core | E. coli core | small | BiGG (cached) | cobra -> gpugem.loaders.from_cobra |
+| iML1515 | iML1515 | medium | BiGG (cached) | cobra -> gpugem.loaders.from_cobra |
+| Harvey | Harvey | whole-body | Harvey_1_03c_reduced.mat | gpugem.loaders.from_mat |
+| Harvetta | Harvetta | whole-body | Harvetta_1_03d.mat (model_cache/) | gpugem.loaders.from_mat |
+| S84 | PMM1 | microbiome | mWBM_S84_male.mat | gpugem.loaders.from_mat |
+| S85 | PMM2 | microbiome | mWBM_S85_male.mat | gpugem.loaders.from_mat |
+| S23 | PMM3 | microbiome | mWBM_S23_male.mat (model_cache/) | gpugem.loaders.from_mat |
+| S15 | PMM4 | microbiome | mWBM_S15_male.mat (model_cache/) | gpugem.loaders.from_mat |
+| S9 | PMM5 | microbiome | mWBM_S9_male.mat (model_cache/) | gpugem.loaders.from_mat |
+| S83 | PMM6 | microbiome | mWBM_S83_male.mat (model_cache/) | gpugem.loaders.from_mat |
 
 Harvetta is the female whole-body counterpart to Harvey (male) — same reconstruction
 family, same `Whole_body_objective_rxn` objective reaction, a genuine coupling block,
@@ -27,6 +27,8 @@ S9/S15/S23/S83 are all larger than S85 (874,634 vars) — 1,007,742 to 1,179,186
 variables — and live under `benchmarks/model_cache/` alongside Harvetta, rather than
 the `MWBM_DIR` location S84/S85 use. The comparison figure orders all ten models
 strictly by variable count, not by the table order above.
+The `PMM1`-`PMM6` labels used in the paper are assigned in that same ascending
+variable-count order, so they run S84 < S85 < S23 < S15 < S9 < S83.
 
 **Model files under `benchmarks/model_cache/` are committed to this repository** —
 every `.mat`/`.xml` file the registry above references (≈ 299 MB total: Harvetta,
