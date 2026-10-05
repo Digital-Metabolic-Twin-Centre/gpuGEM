@@ -77,9 +77,10 @@ def _load_snapshot():
         return {}
 
 
-def run_one(name, time_limit, threads, log_dir):
+def run_one(name, time_limit, threads, log_dir, method="choose", crossover=True):
     import highspy
     from models import build_lp
+    from residual import block_residuals, objective_pinned_by_bounds
 
     t0 = time.time()
     lp, prov = build_lp(name)
@@ -92,7 +93,32 @@ def run_one(name, time_limit, threads, log_dir):
     h.setOptionValue("log_file", str(pathlib.Path(log_dir) / f"highs_{name}.log"))
     h.setOptionValue("log_to_console", False)
     if threads:
-        h.setOptionValue("threads", int(threads))
+        # HiGHS initialises a PROCESS-GLOBAL scheduler on first solve. Asking for a
+        # different thread count later is a hard kError, and because the old code
+        # only inspected the MODEL status that error surfaced as status='kNotset'
+        # with objective=None -- a model silently producing no data. Reset the
+        # scheduler so the requested count is honoured on every model in the loop.
+        if hasattr(highspy.Highs, "resetGlobalScheduler"):
+            try:
+                highspy.Highs.resetGlobalScheduler(True)
+            except Exception:
+                pass
+        st = h.setOptionValue("threads", int(threads))
+        if str(st).split(".")[-1] != "kOk":
+            raise RuntimeError(f"HiGHS rejected threads={threads}: {st}")
+    if method and method != "choose":
+        # 'simplex' | 'ipm' | 'pdlp' -- M15 asks for the interior-point baseline
+        # rather than HiGHS's default algorithm choice.
+        st = h.setOptionValue("solver", str(method))
+        if str(st).split(".")[-1] != "kOk":
+            raise RuntimeError(f"HiGHS rejected solver={method!r}: {st}")
+    if not crossover:
+        # gpuGEM (PDLP) returns a non-basic interior point, so interior point
+        # WITHOUT crossover is the like-for-like competitor; crossover only buys a
+        # basic solution, which the gpuGEM number does not provide either.
+        st = h.setOptionValue("run_crossover", "off")
+        if str(st).split(".")[-1] != "kOk":
+            raise RuntimeError(f"HiGHS rejected run_crossover=off: {st}")
 
     h.addVars(A.shape[1], clo, chi)
     h.changeColsCost(A.shape[1], np.arange(A.shape[1], dtype=np.int32), cost)
@@ -102,7 +128,7 @@ def run_one(name, time_limit, threads, log_dir):
         highspy.ObjSense.kMaximize if maximize else highspy.ObjSense.kMinimize)
 
     t0 = time.time()
-    h.run()
+    run_status = str(h.run()).split(".")[-1]
     t_solve = time.time() - t0
 
     status = str(h.getModelStatus()).split(".")[-1]
@@ -110,15 +136,49 @@ def run_one(name, time_limit, threads, log_dir):
     rec = dict(model=name, n_cols=int(prov["n_cols"]),
                n_total_rows=int(prov["n_total_rows"]), maximize=maximize,
                build_s=round(t_build, 3), solve_s=round(t_solve, 3),
-               status=status, time_limit_s=time_limit, threads=threads,
-               simplex_iterations=int(getattr(info, "simplex_iteration_count", -1)))
+               status=status, run_status=run_status,
+               method_requested=method,
+               solver_option=h.getOptionValue("solver")[1]
+               if hasattr(h, "getOptionValue") else None,
+               time_limit_s=time_limit, threads=threads,
+               simplex_iterations=int(getattr(info, "simplex_iteration_count", -1)),
+               ipm_iterations=int(getattr(info, "ipm_iteration_count", -1)),
+               crossover_iterations=int(getattr(info, "crossover_iteration_count", -1)),
+               pdlp_iterations=int(getattr(info, "pdlp_iteration_count", -1)))
+
+    # A HiGHS-level error is not a solver outcome -- do not let it be recorded as
+    # one. Raising here routes it to main()'s handler, which stores status='ERROR'
+    # plus the message, so it is visibly distinct from kTimeLimit or kInfeasible.
+    if run_status == "kError":
+        raise RuntimeError(
+            f"HiGHS returned kError for {name} (model status {status}); "
+            f"see {pathlib.Path(log_dir) / f'highs_{name}.log'}")
+
+    # Objective pinning is a property of the LP, not of this solver run, but it
+    # decides how objective agreement may be interpreted -- record it alongside.
+    rec["objective_pinned"] = objective_pinned_by_bounds(lp)
+
     if status == "kOptimal":
         x = np.asarray(h.getSolution().col_value, float)
         rec["objective"] = float(h.getObjectiveValue())
+        # Legacy column, retained unchanged so previously published numbers stay
+        # reproducible: max violation over the S and C rows stacked together.
         rec["residual_inf"] = residual_inf(A, rlo, rhi, x)
+        # Block-resolved feasibility: which rows the residual actually covers.
+        blocks = block_residuals(lp, x)
+        rec["residual_blocks"] = blocks
+        # Cross-check tying the new definition to the old one. If these disagree
+        # the two code paths have drifted and every residual in the paper is
+        # suspect, so fail rather than publish.
+        legacy, new = rec["residual_inf"], blocks["all_rows_max_viol"]
+        if not np.isclose(legacy, new, rtol=1e-9, atol=1e-12):
+            raise AssertionError(
+                f"{name}: stacked-row residual {legacy:.6e} disagrees with "
+                f"block-resolved all-row residual {new:.6e}")
     else:
         rec["objective"] = None
         rec["residual_inf"] = None
+        rec["residual_blocks"] = None
     return rec
 
 
@@ -128,6 +188,14 @@ def main():
     ap.add_argument("--models", nargs="+", required=True)
     ap.add_argument("--time-limit", type=float, default=14400.0)
     ap.add_argument("--threads", type=int, default=1)
+    ap.add_argument("--method", default="choose",
+                    choices=["choose", "simplex", "ipm", "pdlp"],
+                    help="HiGHS 'solver' option. 'choose' (default) reproduces the "
+                         "published baseline; 'ipm' gives the interior-point "
+                         "comparison against Gurobi's barrier.")
+    ap.add_argument("--no-crossover", action="store_true",
+                    help="Set run_crossover=off. With --method ipm this gives the "
+                         "like-for-like comparison against gpuGEM's non-basic point.")
     ap.add_argument("--out", default="highs_baseline.json")
     ap.add_argument("--log-dir", default=".")
     a = ap.parse_args()
@@ -140,7 +208,8 @@ def main():
     env = dict(platform=platform.platform(), processor=platform.processor(),
                python=platform.python_version(),
                highs_version=_highs_version(),
-               cpu_count=os.cpu_count(), threads_requested=a.threads)
+               cpu_count=os.cpu_count(), threads_requested=a.threads,
+               method_requested=a.method, crossover=not a.no_crossover)
 
     out_path = pathlib.Path(a.out)
     results = []
@@ -155,11 +224,13 @@ def main():
         if nm in done:
             print(f"[skip] {nm} already recorded", flush=True)
             continue
-        print(f"[run ] {nm} (cap {a.time_limit:.0f}s, {a.threads} thread(s))", flush=True)
+        print(f"[run ] {nm} (cap {a.time_limit:.0f}s, {a.threads} thread(s), "
+              f"method={a.method}, crossover={not a.no_crossover})", flush=True)
         _load_before = _load_snapshot()
         _t_wall0 = time.time()
         try:
-            rec = run_one(nm, a.time_limit, a.threads, a.log_dir)
+            rec = run_one(nm, a.time_limit, a.threads, a.log_dir, method=a.method,
+                          crossover=not a.no_crossover)
         except Exception as exc:                # OOM / loader failure recorded, not hidden
             rec = dict(model=nm, status="ERROR", error=f"{type(exc).__name__}: {exc}")
         rec["load_before"] = _load_before
