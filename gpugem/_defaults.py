@@ -2,11 +2,21 @@
 Default cuOpt solver settings derived from systematic benchmarking on whole-body
 metabolic models across two scale classes.
 
+cuOpt's precision enum (verified against cpp/include/.../constants.h):
+    -1 = Default, 0 = Single, 1 = Double, 2 = Mixed.
+Earlier revisions of this module named these modes wrongly -- pdlp_precision=1
+was described as "mixed FP32/FP64" when the enum defines it as Double. The
+measurements below are unchanged and were always correct; only the labels were
+wrong. gpuGEM therefore uses DOUBLE precision at both scales: explicitly below
+the threshold, and via cuOpt's Default above it (Default resolves to Double,
+confirmed bit-identical on e_coli_core and again at S85 scale -- identical
+iteration count and max residual with and without the explicit setting).
+
 Small models (≤ 100K reactions, e.g. Harvey whole-body model):
-    - Double precision (pdlp_precision=0) does not converge at tolerances
-      tighter than 1e-4 on these models; mixed precision is required.
-    - Single precision (pdlp_precision=2) hits the FP32 precision wall.
-    - tol=1e-8 + mixed precision → zero stoichiometric violations at max residual 1e-6.
+    - Single precision (pdlp_precision=0) does not converge at tolerances
+      tighter than 1e-4 on these models; double precision is required.
+    - Mixed precision (pdlp_precision=2) hits the FP32 precision wall.
+    - tol=1e-8 + double precision → zero stoichiometric violations at max residual 1e-6.
     - per_constraint_residual=1 (max-norm convergence) further reduces violations
       vs tightening tolerances alone.
     - PaPILO presolve adds postsolve reconstruction error on well-conditioned models;
@@ -41,13 +51,14 @@ def default_settings(n_vars: int, time_limit: float = 60.0) -> dict:
         Parameter names and values ready to pass to ``SolverSettings.set_parameter``.
     """
     if n_vars <= _SMALL_MODEL_THRESHOLD:
-        # Harvey-scale: mixed precision + tight tolerances + max-norm convergence.
-        # Double precision (pdlp_precision=0) does not converge on these models at
-        # tolerances tighter than 1e-4. PaPILO is not used — PSLP is correct on
-        # well-conditioned models and PaPILO postsolve adds reconstruction error.
+        # Harvey-scale: double precision + tight tolerances + max-norm convergence.
+        # Single precision (pdlp_precision=0) does not converge on these models at
+        # tolerances tighter than 1e-4, and Mixed (2) hits the FP32 wall. PaPILO is
+        # not used — PSLP is correct on well-conditioned models and PaPILO postsolve
+        # adds reconstruction error.
         return {
             "method": 1,                           # PDLP
-            "pdlp_precision": 1,                   # mixed FP32/FP64 — required; double diverges
+            "pdlp_precision": 1,                   # Double (cuOpt enum 1) — required
             "absolute_primal_tolerance": 1e-8,
             "relative_primal_tolerance": 1e-8,
             "absolute_dual_tolerance":   1e-8,
@@ -59,6 +70,8 @@ def default_settings(n_vars: int, time_limit: float = 60.0) -> dict:
         # Microbiome-scale: PaPILO presolve required + max-norm convergence.
         # Tight tolerances are NOT set — the accuracy floor is PaPILO's hardcoded
         # feastol=1e-5, independent of PDLP tolerance.
+        # pdlp_precision is deliberately left unset here: cuOpt's Default (-1)
+        # resolves to Double, so this is double precision too, not mixed.
         return {
             "method": 1,                           # PDLP
             "presolve": 1,                         # PaPILO — avoids PSLP false-infeasible bug

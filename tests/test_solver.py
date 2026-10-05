@@ -74,7 +74,7 @@ def test_default_settings_small_model():
     from gpugem._defaults import default_settings
     s = default_settings(n_vars=50_000)
     assert "presolve" not in s            # no PaPILO for small models
-    assert s["pdlp_precision"] == 1       # mixed precision required
+    assert s["pdlp_precision"] == 1       # Double (cuOpt enum: 0=Single, 1=Double, 2=Mixed)
     assert s["absolute_primal_tolerance"] == 1e-8
     assert s["per_constraint_residual"] == 1
 
