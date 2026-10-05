@@ -1,0 +1,194 @@
+{
+ "environment": {
+  "platform": "Linux-6.5.0-44-generic-x86_64-with-glibc2.39",
+  "python": "3.13.13",
+  "time_limit": 1800.0,
+  "configs": [
+   "shipped_default",
+   "residual_0",
+   "gurobi"
+  ]
+ },
+ "results": [
+  {
+   "model": "S84",
+   "configuration": "shipped_default",
+   "solver": "cuopt",
+   "status": "Optimal",
+   "solve_s": 34.7205,
+   "wall_s": 34.824,
+   "iterations": 57000,
+   "objective": 1.0,
+   "time_limit": 1800.0,
+   "n_cols": 685998,
+   "n_total_rows": 1558374,
+   "objective_pinned": {
+    "n_objective_vars": 1,
+    "objective_var_indices": [
+     80701
+    ],
+    "objective_var_lb": [
+     1.0
+    ],
+    "objective_var_ub": [
+     1.0
+    ],
+    "pinned": true,
+    "n_pinned_objective_vars": 1,
+    "implied_objective": 1.0,
+    "reason": "every objective variable has lb == ub: all feasible points are optimal"
+   },
+   "started_utc": "2026-09-25T17:38:04+00:00",
+   "settings": {
+    "method": 1,
+    "presolve": 1,
+    "per_constraint_residual": 1,
+    "time_limit": 1800.0
+   },
+   "feasibility": {
+    "stoich_max_residual": 4.7207380759468074e-05,
+    "stoich_rows_violated_1e6": 1288,
+    "coupling_max_residual": 6.868973894957886e-06,
+    "var_bounds_max_violation": 7.179821819223176e-06
+   },
+   "residual_blocks": {
+    "n_cols": 685998,
+    "tol": 0.0001,
+    "n_eq_rows": 572304,
+    "eq_max_abs": 4.7207380759468074e-05,
+    "eq_rows_violated": 0,
+    "n_coupling_rows": 986070,
+    "coupling_max_viol": 6.868973894957886e-06,
+    "coupling_rows_violated": 0,
+    "all_rows_max_viol": 4.7207380759468074e-05,
+    "bound_max_viol": 7.179821819223176e-06,
+    "bound_vars_violated": 0,
+    "blocks_checked": [
+     "equality",
+     "coupling",
+     "bounds"
+    ],
+    "blocks_absent": []
+   },
+   "residual_inf_eq_only": 4.7207380759468074e-05,
+   "fluxes_file": "fluxes_S84_shipped_default.npz"
+  },
+  {
+   "model": "S84",
+   "configuration": "residual_0",
+   "solver": "cuopt",
+   "status": "Optimal",
+   "solve_s": 11.3129,
+   "wall_s": 11.416,
+   "iterations": 13600,
+   "objective": 1.0,
+   "time_limit": 1800.0,
+   "n_cols": 685998,
+   "n_total_rows": 1558374,
+   "objective_pinned": {
+    "n_objective_vars": 1,
+    "objective_var_indices": [
+     80701
+    ],
+    "objective_var_lb": [
+     1.0
+    ],
+    "objective_var_ub": [
+     1.0
+    ],
+    "pinned": true,
+    "n_pinned_objective_vars": 1,
+    "implied_objective": 1.0,
+    "reason": "every objective variable has lb == ub: all feasible points are optimal"
+   },
+   "started_utc": "2026-09-25T17:38:16+00:00",
+   "settings": {
+    "method": 1,
+    "presolve": 1,
+    "per_constraint_residual": 0,
+    "time_limit": 1800.0
+   },
+   "feasibility": {
+    "stoich_max_residual": 2.573880495289296,
+    "stoich_rows_violated_1e6": 249173,
+    "coupling_max_residual": 0.007730522193388462,
+    "var_bounds_max_violation": 0.027003030684386677
+   },
+   "residual_blocks": {
+    "n_cols": 685998,
+    "tol": 0.0001,
+    "n_eq_rows": 572304,
+    "eq_max_abs": 2.573880495289296,
+    "eq_rows_violated": 47182,
+    "n_coupling_rows": 986070,
+    "coupling_max_viol": 0.007730522193388462,
+    "coupling_rows_violated": 251,
+    "all_rows_max_viol": 2.573880495289296,
+    "bound_max_viol": 0.027003030684386677,
+    "bound_vars_violated": 326,
+    "blocks_checked": [
+     "equality",
+     "coupling",
+     "bounds"
+    ],
+    "blocks_absent": []
+   },
+   "residual_inf_eq_only": 2.573880495289296,
+   "fluxes_file": "fluxes_S84_residual_0.npz"
+  },
+  {
+   "model": "S84",
+   "configuration": "gurobi",
+   "solver": "gurobi",
+   "status": "Optimal",
+   "solve_s": 44.74289376847446,
+   "wall_s": 47.826,
+   "iterations": 94,
+   "objective": 1.0,
+   "time_limit": 1800.0,
+   "n_cols": 685998,
+   "n_total_rows": 1558374,
+   "objective_pinned": {
+    "n_objective_vars": 1,
+    "objective_var_indices": [
+     80701
+    ],
+    "objective_var_lb": [
+     1.0
+    ],
+    "objective_var_ub": [
+     1.0
+    ],
+    "pinned": true,
+    "n_pinned_objective_vars": 1,
+    "implied_objective": 1.0,
+    "reason": "every objective variable has lb == ub: all feasible points are optimal"
+   },
+   "started_utc": "2026-09-25T17:39:04+00:00",
+   "method": 2,
+   "bar_iters": 94,
+   "simplex_iters": 152104,
+   "residual_blocks": {
+    "n_cols": 685998,
+    "tol": 0.0001,
+    "n_eq_rows": 572304,
+    "eq_max_abs": 9.104737948701074e-07,
+    "eq_rows_violated": 0,
+    "n_coupling_rows": 986070,
+    "coupling_max_viol": 9.943747426998002e-07,
+    "coupling_rows_violated": 0,
+    "all_rows_max_viol": 9.943747426998002e-07,
+    "bound_max_viol": 9.787286495991129e-07,
+    "bound_vars_violated": 0,
+    "blocks_checked": [
+     "equality",
+     "coupling",
+     "bounds"
+    ],
+    "blocks_absent": []
+   },
+   "residual_inf_eq_only": 9.104737948701074e-07,
+   "fluxes_file": "fluxes_S84_gurobi.npz"
+  }
+ ]
+}

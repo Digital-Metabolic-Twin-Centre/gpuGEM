@@ -1,0 +1,202 @@
+{
+ "environment": {
+  "platform": "Linux-6.5.0-44-generic-x86_64-with-glibc2.39",
+  "python": "3.13.13",
+  "time_limit": 1800.0,
+  "configs": [
+   "shipped_default",
+   "residual_0",
+   "gurobi"
+  ]
+ },
+ "results": [
+  {
+   "model": "Harvey",
+   "configuration": "shipped_default",
+   "solver": "cuopt",
+   "status": "Optimal",
+   "solve_s": 2.1403,
+   "wall_s": 2.153,
+   "iterations": 31600,
+   "objective": 1.0,
+   "time_limit": 1800.0,
+   "n_cols": 81094,
+   "n_total_rows": 160052,
+   "objective_pinned": {
+    "n_objective_vars": 1,
+    "objective_var_indices": [
+     80701
+    ],
+    "objective_var_lb": [
+     1.0
+    ],
+    "objective_var_ub": [
+     1.0
+    ],
+    "pinned": true,
+    "n_pinned_objective_vars": 1,
+    "implied_objective": 1.0,
+    "reason": "every objective variable has lb == ub: all feasible points are optimal"
+   },
+   "started_utc": "2026-09-25T17:36:36+00:00",
+   "settings": {
+    "method": 1,
+    "pdlp_precision": 1,
+    "absolute_primal_tolerance": 1e-08,
+    "relative_primal_tolerance": 1e-08,
+    "absolute_dual_tolerance": 1e-08,
+    "relative_dual_tolerance": 1e-08,
+    "per_constraint_residual": 1,
+    "time_limit": 1800.0
+   },
+   "feasibility": {
+    "stoich_max_residual": 5.5791078423794715e-09,
+    "stoich_rows_violated_1e6": 0,
+    "coupling_max_residual": 1.57142920897968e-08,
+    "var_bounds_max_violation": 8.8694658797496e-07
+   },
+   "residual_blocks": {
+    "n_cols": 81094,
+    "tol": 0.0001,
+    "n_eq_rows": 56452,
+    "eq_max_abs": 5.5791078423794715e-09,
+    "eq_rows_violated": 0,
+    "n_coupling_rows": 103600,
+    "coupling_max_viol": 1.57142920897968e-08,
+    "coupling_rows_violated": 0,
+    "all_rows_max_viol": 1.57142920897968e-08,
+    "bound_max_viol": 8.8694658797496e-07,
+    "bound_vars_violated": 0,
+    "blocks_checked": [
+     "equality",
+     "coupling",
+     "bounds"
+    ],
+    "blocks_absent": []
+   },
+   "residual_inf_eq_only": 5.5791078423794715e-09,
+   "fluxes_file": "fluxes_Harvey_shipped_default.npz"
+  },
+  {
+   "model": "Harvey",
+   "configuration": "residual_0",
+   "solver": "cuopt",
+   "status": "Optimal",
+   "solve_s": 1.4537,
+   "wall_s": 1.464,
+   "iterations": 19800,
+   "objective": 1.0,
+   "time_limit": 1800.0,
+   "n_cols": 81094,
+   "n_total_rows": 160052,
+   "objective_pinned": {
+    "n_objective_vars": 1,
+    "objective_var_indices": [
+     80701
+    ],
+    "objective_var_lb": [
+     1.0
+    ],
+    "objective_var_ub": [
+     1.0
+    ],
+    "pinned": true,
+    "n_pinned_objective_vars": 1,
+    "implied_objective": 1.0,
+    "reason": "every objective variable has lb == ub: all feasible points are optimal"
+   },
+   "started_utc": "2026-09-25T17:36:38+00:00",
+   "settings": {
+    "method": 1,
+    "pdlp_precision": 1,
+    "absolute_primal_tolerance": 1e-08,
+    "relative_primal_tolerance": 1e-08,
+    "absolute_dual_tolerance": 1e-08,
+    "relative_dual_tolerance": 1e-08,
+    "per_constraint_residual": 0,
+    "time_limit": 1800.0
+   },
+   "feasibility": {
+    "stoich_max_residual": 0.00031923918475594256,
+    "stoich_rows_violated_1e6": 591,
+    "coupling_max_residual": 1.57142920897968e-08,
+    "var_bounds_max_violation": 6.748910733808677e-07
+   },
+   "residual_blocks": {
+    "n_cols": 81094,
+    "tol": 0.0001,
+    "n_eq_rows": 56452,
+    "eq_max_abs": 0.00031923918475594256,
+    "eq_rows_violated": 7,
+    "n_coupling_rows": 103600,
+    "coupling_max_viol": 1.57142920897968e-08,
+    "coupling_rows_violated": 0,
+    "all_rows_max_viol": 0.00031923918475594256,
+    "bound_max_viol": 6.748910733808677e-07,
+    "bound_vars_violated": 0,
+    "blocks_checked": [
+     "equality",
+     "coupling",
+     "bounds"
+    ],
+    "blocks_absent": []
+   },
+   "residual_inf_eq_only": 0.00031923918475594256,
+   "fluxes_file": "fluxes_Harvey_residual_0.npz"
+  },
+  {
+   "model": "Harvey",
+   "configuration": "gurobi",
+   "solver": "gurobi",
+   "status": "Optimal",
+   "solve_s": 3.074590466916561,
+   "wall_s": 3.414,
+   "iterations": 55,
+   "objective": 1.0,
+   "time_limit": 1800.0,
+   "n_cols": 81094,
+   "n_total_rows": 160052,
+   "objective_pinned": {
+    "n_objective_vars": 1,
+    "objective_var_indices": [
+     80701
+    ],
+    "objective_var_lb": [
+     1.0
+    ],
+    "objective_var_ub": [
+     1.0
+    ],
+    "pinned": true,
+    "n_pinned_objective_vars": 1,
+    "implied_objective": 1.0,
+    "reason": "every objective variable has lb == ub: all feasible points are optimal"
+   },
+   "started_utc": "2026-09-25T17:36:41+00:00",
+   "method": 2,
+   "bar_iters": 55,
+   "simplex_iters": 26732,
+   "residual_blocks": {
+    "n_cols": 81094,
+    "tol": 0.0001,
+    "n_eq_rows": 56452,
+    "eq_max_abs": 3.3396645449101925e-09,
+    "eq_rows_violated": 0,
+    "n_coupling_rows": 103600,
+    "coupling_max_viol": 7.657145033590496e-07,
+    "coupling_rows_violated": 0,
+    "all_rows_max_viol": 7.657145033590496e-07,
+    "bound_max_viol": 5.714282451663166e-07,
+    "bound_vars_violated": 0,
+    "blocks_checked": [
+     "equality",
+     "coupling",
+     "bounds"
+    ],
+    "blocks_absent": []
+   },
+   "residual_inf_eq_only": 3.3396645449101925e-09,
+   "fluxes_file": "fluxes_Harvey_gurobi.npz"
+  }
+ ]
+}

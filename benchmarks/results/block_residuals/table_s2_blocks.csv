@@ -1,0 +1,39 @@
+model,solver,reported_in_table,configuration,status,solve_s,iterations,eq_max_abs,eq_rows_violated,coupling_max_viol,coupling_rows_violated,all_rows_max_viol,n_eq_rows,n_coupling_rows,source,binding_block,coupling_over_eq
+e_coli_core,Gurobi 13.0.2 barrier,True,gurobi,Optimal,0.006296878680586815,10,1.4210854715202004e-13,0,,,1.4210854715202004e-13,72,0,block_residuals.csv,mass-balance,
+e_coli_core,HiGHS 1.15.1 (choose),True,method=choose,Optimal,0.002,42,5.684341886080802e-14,0,,,5.684341886080802e-14,72,0,highs_method_blocks.csv,mass-balance,
+e_coli_core,HiGHS 1.15.1 (ipm),False,method=ipm,Optimal,0.002,13,5.684341886080802e-14,0,,,5.684341886080802e-14,72,0,highs_method_blocks.csv,mass-balance,
+e_coli_core,cuopt (residual_0),False,residual_0,Optimal,0.4216,8200,7.779511312921983e-09,0,,,7.779511312921983e-09,72,0,block_residuals.csv,mass-balance,
+e_coli_core,gpuGEM (cuOpt PDLP),True,shipped_default,Optimal,0.7627,8200,7.779511312921983e-09,0,,,7.779511312921983e-09,72,0,block_residuals.csv,mass-balance,
+iML1515,Gurobi 13.0.2 barrier,True,gurobi,Optimal,0.035092225298285484,26,1.1652900866465643e-12,0,,,1.1652900866465643e-12,1877,0,block_residuals.csv,mass-balance,
+iML1515,HiGHS 1.15.1 (choose),True,method=choose,Optimal,0.052,1008,2.5721647034515627e-12,0,,,2.5721647034515627e-12,1877,0,highs_method_blocks.csv,mass-balance,
+iML1515,HiGHS 1.15.1 (ipm),False,method=ipm,Optimal,0.06,34,1.2505552149377763e-12,0,,,1.2505552149377763e-12,1877,0,highs_method_blocks.csv,mass-balance,
+iML1515,cuopt (residual_0),False,residual_0,Optimal,5.456,124600,4.445610102266073e-09,0,,,4.445610102266073e-09,1877,0,block_residuals.csv,mass-balance,
+iML1515,gpuGEM (cuOpt PDLP),True,shipped_default,Optimal,5.2313,124400,2.9543798518716358e-09,0,,,2.9543798518716358e-09,1877,0,block_residuals.csv,mass-balance,
+Harvey,Gurobi 13.0.2 barrier,True,gurobi,Optimal,3.074590466916561,55,3.3396645449101925e-09,0,7.657145033590496e-07,0,7.657145033590496e-07,56452,103600,block_residuals.csv,coupling,229.28
+Harvey,HiGHS 1.15.1 (choose),True,method=choose,Optimal,33.444,39312,1.5645582607248798e-09,0,6.857135304016992e-08,0,6.857135304016992e-08,56452,103600,highs_method_blocks.csv,coupling,43.83
+Harvey,HiGHS 1.15.1 (ipm),False,method=ipm,Optimal,13.331,49,1.1916762646113632e-09,0,9.999996564147295e-08,0,9.999996564147295e-08,56452,103600,highs_method_blocks.csv,coupling,83.92
+Harvey,cuopt (residual_0),False,residual_0,Optimal,1.4537,19800,0.00031923918475594256,7,1.57142920897968e-08,0,0.00031923918475594256,56452,103600,block_residuals.csv,mass-balance,0.0
+Harvey,gpuGEM (cuOpt PDLP),True,shipped_default,Optimal,2.1403,31600,5.5791078423794715e-09,0,1.57142920897968e-08,0,1.57142920897968e-08,56452,103600,block_residuals.csv,coupling,2.82
+Harvetta,Gurobi 13.0.2 barrier,True,gurobi,Optimal,3.6365441735833883,71,2.4156179279088974e-09,0,3.878758434439078e-07,0,3.878758434439078e-07,58851,107351,block_residuals.csv,coupling,160.57
+Harvetta,HiGHS 1.15.1 (choose),True,method=choose,Optimal,27.795,34204,1.0154508345294744e-09,0,9.655173016653862e-08,0,9.655173016653862e-08,58851,107351,highs_method_blocks.csv,coupling,95.08
+Harvetta,HiGHS 1.15.1 (ipm),False,method=ipm,Optimal,14.31,52,2.037701563040173e-09,0,9.655173016653862e-08,0,9.655173016653862e-08,58851,107351,highs_method_blocks.csv,coupling,47.38
+Harvetta,cuopt (residual_0),False,residual_0,Optimal,1.523,20000,0.0004889464865851642,18,3.2709976949263364e-08,0,0.0004889464865851642,58851,107351,block_residuals.csv,mass-balance,0.0
+Harvetta,gpuGEM (cuOpt PDLP),True,shipped_default,Optimal,1.7776,24800,3.2092831958322026e-09,0,1.4137924608803587e-08,0,1.4137924608803587e-08,58851,107351,block_residuals.csv,coupling,4.41
+S84,Gurobi 13.0.2 barrier,True,gurobi,Optimal,44.74289376847446,94,9.104737948701074e-07,0,9.943747426998002e-07,0,9.943747426998002e-07,572304,986070,block_residuals.csv,coupling,1.09
+S84,cuopt (residual_0),False,residual_0,Optimal,11.3129,13600,2.573880495289296,47182,0.007730522193388462,251,2.573880495289296,572304,986070,block_residuals.csv,mass-balance,0.0
+S84,gpuGEM (cuOpt PDLP),True,shipped_default,Optimal,34.7205,57000,4.7207380759468074e-05,0,6.868973894957886e-06,0,4.7207380759468074e-05,572304,986070,block_residuals.csv,mass-balance,0.15
+S85,Gurobi 13.0.2 barrier,True,gurobi,Optimal,58.13853907957673,91,9.8540391428e-07,0,9.909202111635373e-07,0,9.909202111635373e-07,734457,1258572,block_residuals.csv,coupling,1.01
+S85,cuopt (residual_0),False,residual_0,Optimal,8.1779,3800,156.36261284442998,332363,5.058095155935994,83895,156.36261284442998,734457,1258572,block_residuals.csv,mass-balance,0.03
+S85,gpuGEM (cuOpt PDLP),True,shipped_default,Optimal,740.8484,984000,8.868415896295202e-05,0,3.7766942390937697e-06,0,8.868415896295202e-05,734457,1258572,block_residuals.csv,mass-balance,0.04
+S9,Gurobi 13.0.2 barrier,True,gurobi,Optimal,79.650625128299,85,9.602922006607395e-07,0,9.973804218407073e-07,0,9.973804218407073e-07,944232,1601145,block_residuals.csv,coupling,1.04
+S9,cuopt (residual_0),False,residual_0,Optimal,18.2077,3300,294.7316364839865,421776,7.956864723748489,57883,294.7316364839865,944232,1601145,block_residuals.csv,mass-balance,0.03
+S9,gpuGEM (cuOpt PDLP),True,shipped_default,Optimal,736.0488,928600,5.564041222375516e-05,0,1.2638245196761044e-06,0,5.564041222375516e-05,944232,1601145,block_residuals.csv,mass-balance,0.02
+S15,Gurobi 13.0.2 barrier,True,gurobi,Optimal,94.6066859010607,95,9.611478597999998e-07,0,9.923957735372135e-07,0,9.923957735372135e-07,918715,1562961,block_residuals.csv,coupling,1.03
+S15,cuopt (residual_0),False,residual_0,Optimal,21.4419,15000,8.191481930811046,46786,0.015389963219807514,392,8.191481930811046,918715,1562961,block_residuals.csv,mass-balance,0.0
+S15,gpuGEM (cuOpt PDLP),True,shipped_default,Optimal,401.79,493800,9.937060648768504e-05,0,5.517372428764933e-06,0,9.937060648768504e-05,918715,1562961,block_residuals.csv,mass-balance,0.06
+S23,Gurobi 13.0.2 barrier,True,gurobi,Optimal,84.60480486229062,98,9.761321824626468e-07,0,9.958363599777472e-07,0,9.958363599777472e-07,848878,1450223,block_residuals.csv,coupling,1.02
+S23,cuopt (residual_0),False,residual_0,Optimal,16.9122,14000,2.5775691636787608,52162,0.016343571721658942,642,2.5775691636787608,848878,1450223,block_residuals.csv,mass-balance,0.01
+S23,gpuGEM (cuOpt PDLP),True,shipped_default,Optimal,1000.9075,1291200,1.7357110871511587e-05,0,6.040211400354378e-07,0,1.7357110871511587e-05,848878,1450223,block_residuals.csv,mass-balance,0.03
+S83,Gurobi 13.0.2 barrier,True,gurobi,Optimal,114.61364646814764,115,9.901326588386526e-07,0,9.983262504002777e-07,0,9.983262504002777e-07,1003751,1699102,block_residuals.csv,coupling,1.01
+S83,cuopt (residual_0),False,residual_0,Optimal,19.5704,14600,4.322570931706556,34054,0.012506188670083438,166,4.322570931706556,1003751,1699102,block_residuals.csv,mass-balance,0.0
+S83,gpuGEM (cuOpt PDLP),True,shipped_default,Optimal,705.1948,935600,2.1417177295218574e-05,0,9.770386729779368e-06,0,2.1417177295218574e-05,1003751,1699102,block_residuals.csv,mass-balance,0.46

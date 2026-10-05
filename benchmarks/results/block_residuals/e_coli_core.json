@@ -1,0 +1,205 @@
+{
+ "environment": {
+  "platform": "Linux-6.5.0-44-generic-x86_64-with-glibc2.39",
+  "python": "3.13.13",
+  "time_limit": 1800.0,
+  "configs": [
+   "shipped_default",
+   "residual_0",
+   "gurobi"
+  ]
+ },
+ "results": [
+  {
+   "model": "e_coli_core",
+   "configuration": "shipped_default",
+   "solver": "cuopt",
+   "status": "Optimal",
+   "solve_s": 0.7627,
+   "wall_s": 1.794,
+   "iterations": 8200,
+   "objective": 0.8739215056938601,
+   "time_limit": 1800.0,
+   "n_cols": 95,
+   "n_total_rows": 72,
+   "objective_pinned": {
+    "n_objective_vars": 1,
+    "objective_var_indices": [
+     24
+    ],
+    "objective_var_lb": [
+     0.0
+    ],
+    "objective_var_ub": [
+     1000.0
+    ],
+    "pinned": false,
+    "n_pinned_objective_vars": 0,
+    "implied_objective": null,
+    "reason": "at least one objective variable is free to vary"
+   },
+   "started_utc": "2026-09-25T17:36:17+00:00",
+   "settings": {
+    "method": 1,
+    "pdlp_precision": 1,
+    "absolute_primal_tolerance": 1e-08,
+    "relative_primal_tolerance": 1e-08,
+    "absolute_dual_tolerance": 1e-08,
+    "relative_dual_tolerance": 1e-08,
+    "per_constraint_residual": 1,
+    "time_limit": 1800.0
+   },
+   "feasibility": {
+    "stoich_max_residual": 7.779511312921983e-09,
+    "stoich_rows_violated_1e6": 0,
+    "coupling_max_residual": 0.0,
+    "var_bounds_max_violation": 0.0
+   },
+   "residual_blocks": {
+    "n_cols": 95,
+    "tol": 0.0001,
+    "n_eq_rows": 72,
+    "eq_max_abs": 7.779511312921983e-09,
+    "eq_rows_violated": 0,
+    "n_coupling_rows": 0,
+    "coupling_max_viol": null,
+    "coupling_rows_violated": null,
+    "all_rows_max_viol": 7.779511312921983e-09,
+    "bound_max_viol": 0.0,
+    "bound_vars_violated": 0,
+    "blocks_checked": [
+     "equality",
+     "bounds"
+    ],
+    "blocks_absent": [
+     "coupling"
+    ]
+   },
+   "residual_inf_eq_only": 7.779511312921983e-09,
+   "fluxes_file": "fluxes_e_coli_core_shipped_default.npz"
+  },
+  {
+   "model": "e_coli_core",
+   "configuration": "residual_0",
+   "solver": "cuopt",
+   "status": "Optimal",
+   "solve_s": 0.4216,
+   "wall_s": 0.422,
+   "iterations": 8200,
+   "objective": 0.8739215056938601,
+   "time_limit": 1800.0,
+   "n_cols": 95,
+   "n_total_rows": 72,
+   "objective_pinned": {
+    "n_objective_vars": 1,
+    "objective_var_indices": [
+     24
+    ],
+    "objective_var_lb": [
+     0.0
+    ],
+    "objective_var_ub": [
+     1000.0
+    ],
+    "pinned": false,
+    "n_pinned_objective_vars": 0,
+    "implied_objective": null,
+    "reason": "at least one objective variable is free to vary"
+   },
+   "started_utc": "2026-09-25T17:36:18+00:00",
+   "settings": {
+    "method": 1,
+    "pdlp_precision": 1,
+    "absolute_primal_tolerance": 1e-08,
+    "relative_primal_tolerance": 1e-08,
+    "absolute_dual_tolerance": 1e-08,
+    "relative_dual_tolerance": 1e-08,
+    "per_constraint_residual": 0,
+    "time_limit": 1800.0
+   },
+   "feasibility": {
+    "stoich_max_residual": 7.779511312921983e-09,
+    "stoich_rows_violated_1e6": 0,
+    "coupling_max_residual": 0.0,
+    "var_bounds_max_violation": 0.0
+   },
+   "residual_blocks": {
+    "n_cols": 95,
+    "tol": 0.0001,
+    "n_eq_rows": 72,
+    "eq_max_abs": 7.779511312921983e-09,
+    "eq_rows_violated": 0,
+    "n_coupling_rows": 0,
+    "coupling_max_viol": null,
+    "coupling_rows_violated": null,
+    "all_rows_max_viol": 7.779511312921983e-09,
+    "bound_max_viol": 0.0,
+    "bound_vars_violated": 0,
+    "blocks_checked": [
+     "equality",
+     "bounds"
+    ],
+    "blocks_absent": [
+     "coupling"
+    ]
+   },
+   "residual_inf_eq_only": 7.779511312921983e-09,
+   "fluxes_file": "fluxes_e_coli_core_residual_0.npz"
+  },
+  {
+   "model": "e_coli_core",
+   "configuration": "gurobi",
+   "solver": "gurobi",
+   "status": "Optimal",
+   "solve_s": 0.006296878680586815,
+   "wall_s": 0.011,
+   "iterations": 10,
+   "objective": 0.8739215069684305,
+   "time_limit": 1800.0,
+   "n_cols": 95,
+   "n_total_rows": 72,
+   "objective_pinned": {
+    "n_objective_vars": 1,
+    "objective_var_indices": [
+     24
+    ],
+    "objective_var_lb": [
+     0.0
+    ],
+    "objective_var_ub": [
+     1000.0
+    ],
+    "pinned": false,
+    "n_pinned_objective_vars": 0,
+    "implied_objective": null,
+    "reason": "at least one objective variable is free to vary"
+   },
+   "started_utc": "2026-09-25T17:36:18+00:00",
+   "method": 2,
+   "bar_iters": 10,
+   "simplex_iters": 5,
+   "residual_blocks": {
+    "n_cols": 95,
+    "tol": 0.0001,
+    "n_eq_rows": 72,
+    "eq_max_abs": 1.4210854715202004e-13,
+    "eq_rows_violated": 0,
+    "n_coupling_rows": 0,
+    "coupling_max_viol": null,
+    "coupling_rows_violated": null,
+    "all_rows_max_viol": 1.4210854715202004e-13,
+    "bound_max_viol": 0.0,
+    "bound_vars_violated": 0,
+    "blocks_checked": [
+     "equality",
+     "bounds"
+    ],
+    "blocks_absent": [
+     "coupling"
+    ]
+   },
+   "residual_inf_eq_only": 1.4210854715202004e-13,
+   "fluxes_file": "fluxes_e_coli_core_gurobi.npz"
+  }
+ ]
+}

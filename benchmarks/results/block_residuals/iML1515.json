@@ -1,0 +1,205 @@
+{
+ "environment": {
+  "platform": "Linux-6.5.0-44-generic-x86_64-with-glibc2.39",
+  "python": "3.13.13",
+  "time_limit": 1800.0,
+  "configs": [
+   "shipped_default",
+   "residual_0",
+   "gurobi"
+  ]
+ },
+ "results": [
+  {
+   "model": "iML1515",
+   "configuration": "shipped_default",
+   "solver": "cuopt",
+   "status": "Optimal",
+   "solve_s": 5.2313,
+   "wall_s": 5.232,
+   "iterations": 124400,
+   "objective": 0.876997198833092,
+   "time_limit": 1800.0,
+   "n_cols": 2712,
+   "n_total_rows": 1877,
+   "objective_pinned": {
+    "n_objective_vars": 1,
+    "objective_var_indices": [
+     2668
+    ],
+    "objective_var_lb": [
+     0.0
+    ],
+    "objective_var_ub": [
+     1000.0
+    ],
+    "pinned": false,
+    "n_pinned_objective_vars": 0,
+    "implied_objective": null,
+    "reason": "at least one objective variable is free to vary"
+   },
+   "started_utc": "2026-09-25T17:36:26+00:00",
+   "settings": {
+    "method": 1,
+    "pdlp_precision": 1,
+    "absolute_primal_tolerance": 1e-08,
+    "relative_primal_tolerance": 1e-08,
+    "absolute_dual_tolerance": 1e-08,
+    "relative_dual_tolerance": 1e-08,
+    "per_constraint_residual": 1,
+    "time_limit": 1800.0
+   },
+   "feasibility": {
+    "stoich_max_residual": 2.9543798518716358e-09,
+    "stoich_rows_violated_1e6": 0,
+    "coupling_max_residual": 0.0,
+    "var_bounds_max_violation": 1.1914614260477574e-12
+   },
+   "residual_blocks": {
+    "n_cols": 2712,
+    "tol": 0.0001,
+    "n_eq_rows": 1877,
+    "eq_max_abs": 2.9543798518716358e-09,
+    "eq_rows_violated": 0,
+    "n_coupling_rows": 0,
+    "coupling_max_viol": null,
+    "coupling_rows_violated": null,
+    "all_rows_max_viol": 2.9543798518716358e-09,
+    "bound_max_viol": 1.1914614260477574e-12,
+    "bound_vars_violated": 0,
+    "blocks_checked": [
+     "equality",
+     "bounds"
+    ],
+    "blocks_absent": [
+     "coupling"
+    ]
+   },
+   "residual_inf_eq_only": 2.9543798518716358e-09,
+   "fluxes_file": "fluxes_iML1515_shipped_default.npz"
+  },
+  {
+   "model": "iML1515",
+   "configuration": "residual_0",
+   "solver": "cuopt",
+   "status": "Optimal",
+   "solve_s": 5.456,
+   "wall_s": 5.456,
+   "iterations": 124600,
+   "objective": 0.8769971989117845,
+   "time_limit": 1800.0,
+   "n_cols": 2712,
+   "n_total_rows": 1877,
+   "objective_pinned": {
+    "n_objective_vars": 1,
+    "objective_var_indices": [
+     2668
+    ],
+    "objective_var_lb": [
+     0.0
+    ],
+    "objective_var_ub": [
+     1000.0
+    ],
+    "pinned": false,
+    "n_pinned_objective_vars": 0,
+    "implied_objective": null,
+    "reason": "at least one objective variable is free to vary"
+   },
+   "started_utc": "2026-09-25T17:36:31+00:00",
+   "settings": {
+    "method": 1,
+    "pdlp_precision": 1,
+    "absolute_primal_tolerance": 1e-08,
+    "relative_primal_tolerance": 1e-08,
+    "absolute_dual_tolerance": 1e-08,
+    "relative_dual_tolerance": 1e-08,
+    "per_constraint_residual": 0,
+    "time_limit": 1800.0
+   },
+   "feasibility": {
+    "stoich_max_residual": 4.445610102266073e-09,
+    "stoich_rows_violated_1e6": 0,
+    "coupling_max_residual": 0.0,
+    "var_bounds_max_violation": 3.157417903520976e-13
+   },
+   "residual_blocks": {
+    "n_cols": 2712,
+    "tol": 0.0001,
+    "n_eq_rows": 1877,
+    "eq_max_abs": 4.445610102266073e-09,
+    "eq_rows_violated": 0,
+    "n_coupling_rows": 0,
+    "coupling_max_viol": null,
+    "coupling_rows_violated": null,
+    "all_rows_max_viol": 4.445610102266073e-09,
+    "bound_max_viol": 3.157417903520976e-13,
+    "bound_vars_violated": 0,
+    "blocks_checked": [
+     "equality",
+     "bounds"
+    ],
+    "blocks_absent": [
+     "coupling"
+    ]
+   },
+   "residual_inf_eq_only": 4.445610102266073e-09,
+   "fluxes_file": "fluxes_iML1515_residual_0.npz"
+  },
+  {
+   "model": "iML1515",
+   "configuration": "gurobi",
+   "solver": "gurobi",
+   "status": "Optimal",
+   "solve_s": 0.035092225298285484,
+   "wall_s": 0.044,
+   "iterations": 26,
+   "objective": 0.8769972144269654,
+   "time_limit": 1800.0,
+   "n_cols": 2712,
+   "n_total_rows": 1877,
+   "objective_pinned": {
+    "n_objective_vars": 1,
+    "objective_var_indices": [
+     2668
+    ],
+    "objective_var_lb": [
+     0.0
+    ],
+    "objective_var_ub": [
+     1000.0
+    ],
+    "pinned": false,
+    "n_pinned_objective_vars": 0,
+    "implied_objective": null,
+    "reason": "at least one objective variable is free to vary"
+   },
+   "started_utc": "2026-09-25T17:36:31+00:00",
+   "method": 2,
+   "bar_iters": 26,
+   "simplex_iters": 241,
+   "residual_blocks": {
+    "n_cols": 2712,
+    "tol": 0.0001,
+    "n_eq_rows": 1877,
+    "eq_max_abs": 1.1652900866465643e-12,
+    "eq_rows_violated": 0,
+    "n_coupling_rows": 0,
+    "coupling_max_viol": null,
+    "coupling_rows_violated": null,
+    "all_rows_max_viol": 1.1652900866465643e-12,
+    "bound_max_viol": 0.0,
+    "bound_vars_violated": 0,
+    "blocks_checked": [
+     "equality",
+     "bounds"
+    ],
+    "blocks_absent": [
+     "coupling"
+    ]
+   },
+   "residual_inf_eq_only": 1.1652900866465643e-12,
+   "fluxes_file": "fluxes_iML1515_gurobi.npz"
+  }
+ ]
+}
