@@ -18,6 +18,11 @@ import subprocess
 import sys
 from pathlib import Path
 
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from benchmarks._deps import require_or_exit  # noqa: E402
+require_or_exit("pandas")
+
 import pandas as pd
 
 HERE = Path(__file__).resolve().parent
@@ -53,6 +58,8 @@ def run_python_worker(model, lift_big, time_limit, force):
         [sys.executable, "-m", "benchmarks._matlab_python_lifting_worker",
          "--model", model, "--lift-big", str(lift_big), "--time-limit", str(time_limit)],
         capture_output=True, text=True, cwd=str(HERE.parent))
+    from benchmarks._deps import propagate_dependency_exit
+    propagate_dependency_exit(proc.returncode, proc.stderr)
     if proc.returncode != 0:
         raise RuntimeError(
             "python worker failed for %r (exit %d):\nstdout:\n%s\nstderr:\n%s" % (
@@ -176,4 +183,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    from benchmarks._deps import run_main
+    run_main(main)

@@ -53,6 +53,7 @@ sys.path.insert(0, str(HERE.parent))
 from benchmarks import models as M
 from benchmarks import residual as R
 from benchmarks import solve as SV
+from gpugem._deps import DependencyError
 
 RESULTS = HERE / "results" / "block_residuals"
 RESULTS.mkdir(parents=True, exist_ok=True)
@@ -142,6 +143,8 @@ def main():
     ap.add_argument("--time-limit", type=float, default=900.0)
     ap.add_argument("--force", action="store_true", help="re-solve even if recorded")
     a = ap.parse_args()
+    from benchmarks._deps import require_or_exit
+    require_or_exit("cuopt", "gurobipy")
 
     models = list(M.ALL_MODELS) if a.all else (a.models or [])
     if not models:
@@ -167,6 +170,8 @@ def main():
             print(f"[run ] {model} / {config} (cap {a.time_limit:.0f}s)", flush=True)
             try:
                 rec, v = run_one(model, config, lp, prov, a.time_limit)
+            except DependencyError:
+                raise   # a missing/unlicensed dependency aborts the run; it is not a per-model result
             except Exception as exc:
                 # Recorded, not hidden: a missing licence or an OOM must be
                 # visibly distinct from a solved-but-inaccurate run.
@@ -237,4 +242,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    from benchmarks._deps import run_main
+    run_main(main)

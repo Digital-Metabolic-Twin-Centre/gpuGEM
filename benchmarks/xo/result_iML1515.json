@@ -1,0 +1,51 @@
+{
+ "model": "iML1515",
+ "n_cols": 2712,
+ "n_total_rows": 1877,
+ "maximize": true,
+ "build_s": 2.733,
+ "solve_s": 0.062,
+ "status": "kUnknown",
+ "run_status": "kWarning",
+ "method_requested": "ipm",
+ "solver_option": "ipm",
+ "time_limit_s": 600.0,
+ "threads": 4,
+ "simplex_iterations": 0,
+ "ipm_iterations": 34,
+ "crossover_iterations": 0,
+ "pdlp_iterations": 0,
+ "objective_pinned": {
+  "n_objective_vars": 1,
+  "objective_var_indices": [
+   2668
+  ],
+  "objective_var_lb": [
+   0.0
+  ],
+  "objective_var_ub": [
+   1000.0
+  ],
+  "pinned": false,
+  "n_pinned_objective_vars": 0,
+  "implied_objective": null,
+  "reason": "at least one objective variable is free to vary"
+ },
+ "objective": null,
+ "residual_inf": null,
+ "residual_blocks": null,
+ "load_before": {
+  "load1": 4.75,
+  "load5": 2.74,
+  "load15": 1.55,
+  "cpu_count": 12
+ },
+ "load_after": {
+  "load1": 4.75,
+  "load5": 2.74,
+  "load15": 1.55,
+  "cpu_count": 12
+ },
+ "wall_s": 2.795,
+ "started_utc": "2026-09-27T14:42:03+00:00"
+}

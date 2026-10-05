@@ -199,9 +199,11 @@ def main():
     ap.add_argument("--out", default="highs_baseline.json")
     ap.add_argument("--log-dir", default=".")
     a = ap.parse_args()
-
     sys.path.insert(0, a.repo)
     sys.path.insert(0, os.path.join(a.repo, "benchmarks"))
+    from benchmarks._deps import require_or_exit   # needs --repo on sys.path (set just above)
+    from gpugem._deps import DependencyError
+    require_or_exit("highspy")
     pathlib.Path(a.log_dir).mkdir(parents=True, exist_ok=True)
 
     import highspy
@@ -231,6 +233,8 @@ def main():
         try:
             rec = run_one(nm, a.time_limit, a.threads, a.log_dir, method=a.method,
                           crossover=not a.no_crossover)
+        except DependencyError:
+            raise                               # missing dependency: abort, do not record per model
         except Exception as exc:                # OOM / loader failure recorded, not hidden
             rec = dict(model=nm, status="ERROR", error=f"{type(exc).__name__}: {exc}")
         rec["load_before"] = _load_before

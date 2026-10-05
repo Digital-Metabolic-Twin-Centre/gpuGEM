@@ -73,13 +73,23 @@ def _mat_rxns(path, model_key):
 
 def _load_cobra(name):
     """Load a BiGG model, caching the SBML locally (plain .xml) for reproducibility."""
-    import cobra
+    from gpugem._deps import DependencyError, require
+
+    cobra = require("cobra")
 
     cache = CACHE / (name + ".xml")
     if cache.exists():
         return cobra.io.read_sbml_model(str(cache)), cache, False
 
-    model = cobra.io.load_model(name)
+    try:
+        model = cobra.io.load_model(name)
+    except OSError as exc:   # requests/urllib connection failures are OSError subclasses
+        raise DependencyError(
+            "BiGG model server", "network",
+            "download %s.xml from http://bigg.ucsd.edu/models/%s on a machine with internet access "
+            "and place it at %s" % (name, name, cache),
+            purpose="fetching the %r model (it is not in the local cache)" % name,
+            detail="%s: %s" % (type(exc).__name__, exc)) from exc
     cobra.io.write_sbml_model(model, str(cache))
     return model, cache, True
 

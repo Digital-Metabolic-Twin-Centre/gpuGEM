@@ -205,6 +205,8 @@ def main():
                      help="recorded verbatim in the result; defaults to the "
                           "running interpreter's installed cuopt.__version__")
     args = ap.parse_args()
+    from benchmarks._deps import require_or_exit
+    require_or_exit("cuopt")
 
     is_preprocessing = args.candidate_id in {c["id"] for c in C.PREPROCESSING_CANDIDATES}
 
@@ -270,4 +272,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    from benchmarks._deps import run_main
+    run_main(main)

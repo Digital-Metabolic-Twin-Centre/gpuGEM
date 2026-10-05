@@ -1,0 +1,51 @@
+{
+ "model": "Harvey",
+ "n_cols": 81094,
+ "n_total_rows": 160052,
+ "maximize": true,
+ "build_s": 2.251,
+ "solve_s": 11.884,
+ "status": "kUnknown",
+ "run_status": "kWarning",
+ "method_requested": "ipm",
+ "solver_option": "ipm",
+ "time_limit_s": 600.0,
+ "threads": 4,
+ "simplex_iterations": 0,
+ "ipm_iterations": 45,
+ "crossover_iterations": 0,
+ "pdlp_iterations": 0,
+ "objective_pinned": {
+  "n_objective_vars": 1,
+  "objective_var_indices": [
+   80701
+  ],
+  "objective_var_lb": [
+   1.0
+  ],
+  "objective_var_ub": [
+   1.0
+  ],
+  "pinned": true,
+  "n_pinned_objective_vars": 1,
+  "implied_objective": 1.0,
+  "reason": "every objective variable has lb == ub: all feasible points are optimal"
+ },
+ "objective": null,
+ "residual_inf": null,
+ "residual_blocks": null,
+ "load_before": {
+  "load1": 4.75,
+  "load5": 2.74,
+  "load15": 1.55,
+  "cpu_count": 12
+ },
+ "load_after": {
+  "load1": 5.24,
+  "load5": 2.95,
+  "load15": 1.64,
+  "cpu_count": 12
+ },
+ "wall_s": 14.165,
+ "started_utc": "2026-09-27T14:42:17+00:00"
+}

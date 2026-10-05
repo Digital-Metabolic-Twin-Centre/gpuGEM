@@ -32,26 +32,7 @@ FIGURES.mkdir(exist_ok=True)
 
 
 def _versions():
-    info = {"gpu_name": None, "gurobi_version": None, "cuopt_version": None,
-            "python": platform.python_version()}
-    try:
-        import gurobipy
-        info["gurobi_version"] = ".".join(str(x) for x in gurobipy.gurobi.version())
-    except Exception:
-        pass
-    try:
-        import cuopt
-        info["cuopt_version"] = getattr(cuopt, "__version__", None)
-    except Exception:
-        pass
-    try:
-        import subprocess
-        out = subprocess.run(["nvidia-smi", "--query-gpu=name", "--format=csv,noheader"],
-                             capture_output=True, text=True, timeout=20)
-        info["gpu_name"] = out.stdout.strip().splitlines()[0] if out.stdout.strip() else None
-    except Exception:
-        pass
-    return info
+    return environment_info(gpu=True)
 
 
 def _run_solver(fn, lp, reps, time_limit, S_eq, b_eq, res_tol):
@@ -187,6 +168,8 @@ def main():
     ap.add_argument("--obj-tol", type=float, default=1e-6)
     ap.add_argument("--force", action="store_true")
     args = ap.parse_args()
+    from benchmarks._deps import require_or_exit
+    require_or_exit("cuopt", "gurobipy")
 
     versions = _versions()
     names = M.ALL_MODELS if args.all else ([args.model] if args.model else [])
@@ -211,4 +194,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    from benchmarks._deps import run_main
+    run_main(main)

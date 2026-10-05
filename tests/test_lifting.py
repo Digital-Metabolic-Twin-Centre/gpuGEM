@@ -224,6 +224,8 @@ def _e_coli_core_lp():
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
     from benchmarks import models as M
 
+    pytest.importorskip(
+        "cobra", reason='optional dependency missing: pip install "gpugem[cobra]"')
     lp, _ = M.build_lp("e_coli_core")
     return lp
 
@@ -258,7 +260,8 @@ def test_solve_cobra_and_fbasolver_inherit_lift_with_zero_code_changes():
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
     from benchmarks import models as M
 
-    import cobra
+    cobra = pytest.importorskip(
+        "cobra", reason='optional dependency missing: pip install "gpugem[cobra]"')
     import gpugem
 
     cache = M.CACHE / "e_coli_core.xml"

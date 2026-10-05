@@ -19,6 +19,11 @@ import sys
 import time
 from pathlib import Path
 
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from benchmarks._deps import require_or_exit  # noqa: E402
+require_or_exit("pandas")
+
 import pandas as pd
 
 HERE = Path(__file__).resolve().parent
@@ -66,6 +71,20 @@ def missing_combinations(model):
     return missing
 
 
+def _run_provisioning(cmd, remedy, dependency):
+    """Run a venv/pip provisioning step; failure becomes a guided DependencyError."""
+    from gpugem._deps import DependencyError
+    try:
+        proc = subprocess.run(cmd, capture_output=True, text=True, check=False)
+    except OSError as exc:
+        raise DependencyError(dependency, "broken", remedy, problem="could not be provisioned",
+                              detail="%s: %s" % (type(exc).__name__, exc)) from exc
+    if proc.returncode != 0:
+        tail = (proc.stderr.strip().splitlines() or ["no output"])[-1]
+        raise DependencyError(dependency, "broken", remedy, problem="could not be provisioned",
+                              detail="exit %d: %s" % (proc.returncode, tail))
+
+
 def ensure_venv(venv_path=DEFAULT_VENV):
     python_exe = venv_path / "bin" / "python"
     needs_create = not python_exe.exists()
@@ -78,12 +97,13 @@ def ensure_venv(venv_path=DEFAULT_VENV):
             needs_create = True
     if needs_create:
         print("provisioning isolated venv at %s (research.md R4)..." % venv_path, flush=True)
-        subprocess.run([sys.executable, "-m", "venv", str(venv_path)], check=True)
-        subprocess.run(
-            [str(python_exe), "-m", "pip", "install", "--quiet",
-             NEW_VERSION_PIN, "numpy", "scipy"],
-            check=True,
-        )
+        _run_provisioning([sys.executable, "-m", "venv", str(venv_path)],
+                          "create the isolated venv (is the `venv` module installed? "
+                          "on Debian/Ubuntu: sudo apt install python3-venv)", "venv")
+        _run_provisioning([str(python_exe), "-m", "pip", "install", "--quiet",
+                           NEW_VERSION_PIN, "numpy", "scipy"],
+                          "install %s into the venv (check network access / proxy; or create "
+                          "the venv yourself and pass --venv)" % NEW_VERSION_PIN, "cuopt")
     # This feature also needs cobra for the two BiGG-format in-scope models
     # (e_coli_core, iML1515) -- specs/012-cuopt-native-tuning/'s original
     # provisioning only needed numpy/scipy since it was S85-only (.mat
@@ -92,8 +112,8 @@ def ensure_venv(venv_path=DEFAULT_VENV):
                           capture_output=True, text=True, check=False)
     if out.returncode != 0:
         print("installing cobra into the isolated venv...", flush=True)
-        subprocess.run([str(python_exe), "-m", "pip", "install", "--quiet", "cobra"],
-                        check=True)
+        _run_provisioning([str(python_exe), "-m", "pip", "install", "--quiet", "cobra"],
+                          "install cobra into the venv (check network access / proxy)", "cobra")
     return str(python_exe)
 
 
@@ -111,6 +131,8 @@ def _launch_worker(python_exe, model, lift, time_limit):
 
 def solve_combination(model, version_tag, lift, python_exe, time_limit):
     returncode, stdout, stderr, timed_out = _launch_worker(python_exe, model, lift, time_limit)
+    from benchmarks._deps import propagate_dependency_exit
+    propagate_dependency_exit(returncode, stderr)
     if returncode == 0:
         lines = [ln for ln in stdout.splitlines() if ln.strip()]
         if lines:
@@ -180,4 +202,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    from benchmarks._deps import run_main
+    run_main(main)

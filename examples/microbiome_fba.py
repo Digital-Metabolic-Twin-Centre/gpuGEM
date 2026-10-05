@@ -5,7 +5,15 @@ Models (mWBM_S84_male_lifted.mat etc.) are available on request from the
 Virtual Metabolic Human project.  Replace ``MODEL_PATH`` accordingly.
 """
 
+import sys
+
 import gpugem
+from gpugem._deps import DependencyError, require
+
+try:
+    require("cuopt")   # fail before loading the model if the GPU solver is unusable
+except DependencyError as err:
+    sys.exit(str(err))
 
 MODEL_PATH = "mWBM_S84_male_lifted.mat"
 

@@ -64,6 +64,8 @@ def run_variant(variant, time_limit, gurobi_objective, obj_tol, res_tol):
     subprocess_timeout = time_limit + 60.0
     returncode, stdout, stderr, timed_out = _run_variant_subprocess(
         variant, time_limit, subprocess_timeout)
+    from benchmarks._deps import propagate_dependency_exit
+    propagate_dependency_exit(returncode, stderr)
 
     worker_result = None
     if returncode == 0:
@@ -136,6 +138,8 @@ def main():
     ap.add_argument("--obj-tol", type=float, default=1e-6)
     ap.add_argument("--force", action="store_true")
     args = ap.parse_args()
+    from benchmarks._deps import require_or_exit
+    require_or_exit("cuopt", "gurobipy")
 
     V.validate_variants()
     gurobi_objective = _solve_gurobi_reference(args.time_limit)
@@ -181,4 +185,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    from benchmarks._deps import run_main
+    run_main(main)

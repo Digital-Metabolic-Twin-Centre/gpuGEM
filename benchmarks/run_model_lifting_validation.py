@@ -177,10 +177,13 @@ def main():
     ap.add_argument("--lift-big", type=float, default=1000.0)
     ap.add_argument("--time-limit", type=float, default=900.0)
     args = ap.parse_args()
+    from benchmarks._deps import require_or_exit
+    require_or_exit("cuopt")
 
     out = run_model(args.model, lift_big=args.lift_big, time_limit=args.time_limit)
     sys.exit(0 if out["comparison"]["verified_correct"] else 1)
 
 
 if __name__ == "__main__":
-    main()
+    from benchmarks._deps import run_main
+    run_main(main)

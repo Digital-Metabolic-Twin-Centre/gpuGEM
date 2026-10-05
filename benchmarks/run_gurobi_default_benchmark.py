@@ -122,6 +122,8 @@ def main():
     ap.add_argument("--all", action="store_true")
     ap.add_argument("--force", action="store_true")
     args = ap.parse_args()
+    from benchmarks._deps import require_or_exit
+    require_or_exit("gurobipy")
 
     names = M.ALL_MODELS if args.all else ([args.model] if args.model else [])
     if not names:
@@ -135,4 +137,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    from benchmarks._deps import run_main
+    run_main(main)

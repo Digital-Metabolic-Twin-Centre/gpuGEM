@@ -67,6 +67,8 @@ def run_candidate(candidate_id, python_exe, time_limit, gurobi, cuopt_version=No
     subprocess_timeout = time_limit * (2 if _needs_two_phases(candidate_id) else 1) + 60.0
     returncode, stdout, stderr, timed_out = _launch_worker(
         python_exe, candidate_id, time_limit, cuopt_version, subprocess_timeout)
+    from benchmarks._deps import propagate_dependency_exit
+    propagate_dependency_exit(returncode, stderr)
 
     worker_result = None
     if returncode == 0:
@@ -166,9 +168,19 @@ def run_upgrade_venv(venv_path, time_limit, force):
 
     gurobi = _gurobi_reference()
     ids = C.select_upgrade_candidates(RESULTS)
-    cuopt_version = subprocess.run(
+    probe = subprocess.run(
         [python_exe, "-c", "import cuopt; print(cuopt.__version__)"],
-        capture_output=True, text=True, check=True).stdout.strip()
+        capture_output=True, text=True, check=False)
+    if probe.returncode != 0:
+        from benchmarks._deps import exit_with
+        from gpugem._deps import DependencyError
+        exit_with(DependencyError(
+            "cuopt", "broken",
+            'install it into that environment: %s -m pip install "cuopt-cu12>=26.6.0"' % python_exe,
+            purpose="running the tuning candidates in the upgrade environment",
+            problem="cannot be imported by %s" % python_exe,
+            detail=(probe.stderr.strip().splitlines() or ["no output"])[-1]))
+    cuopt_version = probe.stdout.strip()
     _run_ids(ids, python_exe, time_limit, gurobi, force, cuopt_version=cuopt_version)
 
 

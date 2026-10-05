@@ -44,6 +44,8 @@ def main():
     ap.add_argument("--lift-big", type=float, default=1000.0)
     ap.add_argument("--time-limit", type=float, default=900.0)
     args = ap.parse_args()
+    from benchmarks._deps import require_or_exit
+    require_or_exit("cuopt")
 
     lp, _prov = M.build_lp(args.model)
     S = sp.csr_matrix(lp["S"])
@@ -58,12 +60,8 @@ def main():
 
     residual_inf = R.feasibility_residual(S, b, res.fluxes)
 
-    cuopt_version = None
-    try:
-        import cuopt
-        cuopt_version = getattr(cuopt, "__version__", None)
-    except Exception:
-        pass
+    from benchmarks._deps import optional_version
+    cuopt_version, _cuopt_reason = optional_version("cuopt")   # cuopt was required above
 
     result = {
         "model": args.model,
@@ -79,4 +77,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    from benchmarks._deps import run_main
+    run_main(main)

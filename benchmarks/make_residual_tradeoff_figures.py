@@ -8,6 +8,11 @@ from __future__ import annotations
 from pathlib import Path
 
 import numpy as np
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from benchmarks._deps import require_or_exit  # noqa: E402
+require_or_exit("pandas", "matplotlib")
+
 import pandas as pd
 import matplotlib
 matplotlib.use("Agg")
@@ -115,4 +120,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    from benchmarks._deps import run_main
+    run_main(main)

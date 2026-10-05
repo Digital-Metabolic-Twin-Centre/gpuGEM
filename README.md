@@ -40,6 +40,42 @@ COBRApy support (optional):
 pip install "gpugem[cobra]"
 ```
 
+### Dependencies
+
+| Package / tool | Role | Needed for | Install |
+|---|---|---|---|
+| `numpy`, `scipy` | required | every function | `pip install "numpy>=1.24"`, `pip install "scipy>=1.10"` |
+| `cuopt` | required | the GPU solver; checked when you solve, not at `import gpugem` | `pip install "cuopt-cu12>=26.6.0"` (other CUDA versions: see the [cuOpt install guide](https://docs.nvidia.com/cuopt/user-guide/latest/introduction.html)) |
+| `cobra` | optional | `solve_cobra`, `loaders.from_cobra` | `pip install "gpugem[cobra]"` |
+| `gurobipy` | benchmarks | the Gurobi baseline (needs a licence) | `pip install gurobipy` |
+| `highspy` | benchmarks | the HiGHS CPU baseline | `pip install highspy` |
+| `pandas`, `matplotlib` | benchmarks | result tables and figures | `pip install pandas`, `pip install matplotlib` |
+| `pytest` | development | the test suite | `pip install -e ".[dev]"` |
+| `nvidia-smi` | tool | GPU name in benchmark metadata; GPU diagnosis | install the NVIDIA driver (https://www.nvidia.com/drivers); nvidia-smi ships with it |
+
+### Troubleshooting
+
+A missing or unusable dependency raises `gpugem.DependencyError` (benchmark and example scripts
+print the same message; benchmark scripts exit with status 3). The message always says what is wrong, why gpuGEM
+needs it, and how to fix it. The original exception is kept as `__cause__`. `err.kind` is one of:
+
+| `kind` | Meaning | What to do |
+|---|---|---|
+| `not_installed` | the package is absent | run the `pip install` command in the message |
+| `broken` | installed but fails to import, or a model file cannot be read | reinstall; check that Python, the CUDA runtime and the driver match the build. For `.mat` files, re-save with `save(file, 'model', '-v7')` |
+| `version` | installed version below the minimum | run the `pip install --upgrade` command in the message |
+| `no_gpu` | no usable NVIDIA GPU or driver is detected | run `nvidia-smi`; install or update the driver; in a container, start it with GPU access |
+| `license` | Gurobi is installed but has no valid licence for the model | obtain a licence and set `GRB_LICENSE_FILE`; check with `grbprobe` |
+| `tool_missing` | an executable is not on `PATH` | install it or add it to `PATH` |
+| `network` | a model download failed | download the file manually into `benchmarks/model_cache/` |
+
+```python
+try:
+    result = gpugem.solve_cobra(model)
+except gpugem.DependencyError as err:
+    print(err.kind, err.dependency, err.remedy)
+```
+
 ---
 
 ## Quick start
@@ -171,6 +207,18 @@ result.feasibility  # dict: stoich_max_residual, stoich_rows_violated_1e6, ...
   (structural fidelity is exact), but its practical solvability at this scale is
   entry-point-dependent, for a reason not yet isolated. See
   `specs/015-matlab-python-lifting-comparison/`.
+
+- **GPU/driver-absent detection is a heuristic and is unverified against real cuOpt.** gpuGEM
+  reports `DependencyError(kind="no_gpu")` only when cuOpt raises *and* there is positive evidence
+  of a GPU problem (`nvidia-smi` fails or lists no GPU, or it is absent and no `/dev/nvidia*`
+  device exists). The exact exception cuOpt raises on a machine with no GPU, and whether it is raised
+  at import or at first solve, has not been observed (the development machine has no cuOpt); until
+  it is, such a failure may surface as `kind="broken"` or as cuOpt's own exception. The Gurobi
+  licence error numbers (10009, 10010) used for `kind="license"` are likewise unverified here.
+  See `specs/016-missing-dependency-errors/` (tasks T016).
+- **The dependency inventory is static.** `tests/test_dependency_inventory.py` finds imports and
+  `subprocess` / `shutil.which` calls with literal names; a module or executable whose name is built
+  at run time is not seen (the test prints those it cannot analyse).
 
 ---
 

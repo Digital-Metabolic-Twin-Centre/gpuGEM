@@ -43,19 +43,7 @@ def _median(xs):
 
 
 def _versions():
-    info = {"gpu_name": None, "gurobi_version": None, "cuopt_version": None,
-            "python": platform.python_version()}
-    try:
-        import gurobipy
-        info["gurobi_version"] = ".".join(str(x) for x in gurobipy.gurobi.version())
-    except Exception:
-        pass
-    try:
-        import cuopt
-        info["cuopt_version"] = getattr(cuopt, "__version__", None)
-    except Exception:
-        pass
-    return info
+    return environment_info(gpu=False)
 
 
 def _with_heartbeat(label, heartbeat_s, fn, *args, **kwargs):
@@ -192,6 +180,8 @@ def main():
     ap.add_argument("--force", action="store_true")
     ap.add_argument("--heartbeat-s", type=float, default=30.0)
     args = ap.parse_args()
+    from benchmarks._deps import require_or_exit
+    require_or_exit("cuopt", "gurobipy")
 
     names = M.ALL_MODELS if args.all else ([args.model] if args.model else [])
     if not names:
@@ -205,4 +195,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    from benchmarks._deps import run_main
+    run_main(main)

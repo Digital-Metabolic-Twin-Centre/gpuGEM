@@ -11,6 +11,8 @@ from typing import Dict, Union
 import numpy as np
 import scipy.sparse as sp
 
+from gpugem._deps import DependencyError, require
+
 _INF = 1e30
 
 
@@ -28,7 +30,7 @@ def from_cobra(model) -> Dict:
     dict with keys ``S, b, lb, ub, c, maximize``.
     Pass as ``gpugem.solve(**gpugem.loaders.from_cobra(model))``.
     """
-    import cobra  # noqa: F401 — checked at call time
+    cobra = require("cobra")
 
     S = sp.csr_matrix(cobra.util.create_stoichiometric_matrix(model), dtype=np.float64)
 
@@ -93,7 +95,27 @@ def from_mat(
     """
     import scipy.io as sio
 
-    raw = sio.loadmat(str(mat_path), struct_as_record=False, squeeze_me=True)
+    try:
+        raw = sio.loadmat(str(mat_path), struct_as_record=False, squeeze_me=True)
+    except FileNotFoundError:
+        raise
+    except NotImplementedError as exc:
+        # scipy raises this for MATLAB v7.3 (HDF5) files, which it cannot read
+        raise DependencyError(
+            str(mat_path), "broken",
+            "re-save the model in MATLAB with save(file, 'model', '-v7') (MATLAB v7.3/HDF5 "
+            "files cannot be read by scipy.io.loadmat)",
+            purpose="reading the model file",
+            problem="is a MATLAB v7.3 file that this reader cannot open",
+            detail="%s: %s" % (type(exc).__name__, exc)) from exc
+    except (ValueError, OSError, EOFError) as exc:
+        raise DependencyError(
+            str(mat_path), "broken",
+            "check that the file is a complete, uncorrupted MATLAB .mat file (re-download or "
+            "re-export it)",
+            purpose="reading the model file",
+            problem="could not be read as a MATLAB .mat file",
+            detail="%s: %s" % (type(exc).__name__, exc)) from exc
 
     # --- resolve nested-struct vs flat-top-level layout ---
     struct = raw.get(model_key, None)

@@ -8,9 +8,7 @@ mechanism -- gpugem/_defaults.py is never touched (spec FR-007).
 """
 from __future__ import annotations
 
-from cuopt.linear_programming.solver_settings.solver_settings import (
-    get_solver_parameter_names,
-)
+from gpugem._deps import require
 
 # id, cuopt_kwargs (empty for baseline -- see research.md R5), rationale, is_baseline
 SOLVER_MODE_VARIANTS = [
@@ -67,6 +65,10 @@ def validate_variants():
     if len(baselines) != 1:
         raise ValueError("expected exactly one is_baseline=True entry, found %d" % len(baselines))
 
+    require("cuopt")   # guided DependencyError instead of a bare ImportError when it is absent
+    from cuopt.linear_programming.solver_settings.solver_settings import (
+        get_solver_parameter_names,
+    )
     real_names = set(get_solver_parameter_names())
     for v in SOLVER_MODE_VARIANTS:
         bad = [k for k in v["cuopt_kwargs"] if k not in real_names]

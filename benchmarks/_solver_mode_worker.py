@@ -36,6 +36,8 @@ def main():
     ap.add_argument("variant_id", choices=[v["id"] for v in V.SOLVER_MODE_VARIANTS])
     ap.add_argument("--time-limit", type=float, default=900.0)
     args = ap.parse_args()
+    from benchmarks._deps import require_or_exit
+    require_or_exit("cuopt")
 
     variant = V.get_variant(args.variant_id)
     lp, prov = O.build_lp_for_objective("whole_body")
@@ -72,4 +74,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    from benchmarks._deps import run_main
+    run_main(main)

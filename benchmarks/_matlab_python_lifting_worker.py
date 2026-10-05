@@ -32,6 +32,7 @@ sys.path.insert(0, str(HERE.parent))
 from benchmarks import models as M
 from benchmarks import residual as R
 from benchmarks import solve as SV
+from gpugem._deps import DependencyError
 
 IN_SCOPE_MODELS = ["e_coli_core", "iML1515", "Harvey", "Harvetta", "S84", "S85"]
 
@@ -99,6 +100,8 @@ def run_model(model, lift_big=1000.0, time_limit=900.0):
     try:
         lp, _prov = M.build_lp(model)
         result, mapping, lift_solve_s, S_orig, b_orig = lift_and_solve(lp, lift_big, time_limit)
+    except DependencyError:
+        raise   # missing dependency: abort the worker with guidance instead of a PipelineRun
     except Exception as exc:  # noqa: BLE001 -- must still emit a PipelineRun (FR-009)
         return {
             "model": model, "pipeline": "python", "lift_big": lift_big,
@@ -137,10 +140,13 @@ def main():
     ap.add_argument("--lift-big", type=float, default=1000.0)
     ap.add_argument("--time-limit", type=float, default=900.0)
     args = ap.parse_args()
+    from benchmarks._deps import require_or_exit
+    require_or_exit("gurobipy")
 
     out = run_model(args.model, lift_big=args.lift_big, time_limit=args.time_limit)
     print(json.dumps(out))
 
 
 if __name__ == "__main__":
-    main()
+    from benchmarks._deps import run_main
+    run_main(main)

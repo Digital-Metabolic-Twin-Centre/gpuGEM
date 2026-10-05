@@ -11,6 +11,7 @@ import numpy as np
 import scipy.sparse as sp
 
 from gpugem._defaults import default_settings
+from gpugem._deps import diagnose_solver_failure, require
 from gpugem.result import FBAResult
 
 # cuOpt termination status codes
@@ -115,7 +116,12 @@ def solve(
         result = gpugem.solve(S, b, lb, ub, c, maximize=True,
                               pdlp_solver_mode=0, time_limit=300)
     """
-    from cuopt.linear_programming import DataModel, Solve, SolverSettings
+    require("cuopt")
+    try:
+        from cuopt.linear_programming import DataModel, Solve, SolverSettings
+    except Exception as exc:  # cuopt is present but its LP module cannot load
+        diagnose_solver_failure(exc)
+        raise
 
     INF = 1e30
 
@@ -221,7 +227,11 @@ def solve(
 
     # Solve
     t0 = time.perf_counter()
-    sol = Solve(dm, settings)
+    try:
+        sol = Solve(dm, settings)
+    except Exception as exc:
+        diagnose_solver_failure(exc)   # raises DependencyError(no_gpu) only on positive evidence
+        raise
     wall_time = time.perf_counter() - t0
 
     status_code = int(sol.get_termination_status())
