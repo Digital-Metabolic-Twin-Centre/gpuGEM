@@ -1,5 +1,9 @@
 <!--
-Sync Impact Report
+Sync Impact Report (1.3.1, 2026-10-05): PATCH - Quality Standards: Python floor 3.10 -> 3.11 to match
+the paper's stated requirements; pyproject.toml, README badge and CLAUDE.md updated in the same change.
+No principle changed.
+
+Sync Impact Report (1.3.0)
 - Version change: 1.2.0 → 1.3.0
 - Added sections:
   - VII. Evidence-Gated Algorithmic Change — an algorithmic change may only be proposed on
@@ -192,7 +196,7 @@ actually produce.
 
 - Code style and line length are enforced via `ruff` (`line-length = 100`, configured in
   `pyproject.toml`); `ruff` MUST pass before merge.
-- Python compatibility floor is 3.10, matching `requires-python` in `pyproject.toml`; new code
+- Python compatibility floor is 3.11, matching `requires-python` in `pyproject.toml`; new code
   MUST NOT use syntax or stdlib features beyond that floor.
 - Optional dependencies (`cobra`, `dev`) MUST stay optional — the core `solve`/`FBASolver` path
   MUST work with only `numpy`, `scipy`, and `cuopt-cu12` installed.
@@ -227,4 +231,4 @@ guidance; PATCH: wording/clarification only), and updating `Last Amended`. Any p
 file; unresolved violations MUST be justified in the plan's Complexity Tracking section or the
 plan MUST be revised.
 
-**Version**: 1.3.0 | **Ratified**: 2026-07-06 | **Last Amended**: 2026-09-10
+**Version**: 1.3.1 | **Ratified**: 2026-07-06 | **Last Amended**: 2026-10-05

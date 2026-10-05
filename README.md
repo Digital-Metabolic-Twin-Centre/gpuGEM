@@ -2,7 +2,7 @@
 
 # gpuGEM
 
-[![Python](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/)
+[![Python](https://img.shields.io/badge/python-3.11%2B-blue)](https://www.python.org/)
 [![CUDA](https://img.shields.io/badge/CUDA-12%2B-green)](https://developer.nvidia.com/cuda-toolkit)
 [![cuOpt](https://img.shields.io/badge/NVIDIA%20cuOpt-26.6%2B-76B900)](https://developer.nvidia.com/cuopt)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
@@ -30,7 +30,7 @@ GPU first-order LP solvers (PDLP) offer substantial speedups on genome-scale FBA
 ## Installation
 
 ```bash
-pip install cuopt-cu12          # NVIDIA cuOpt (requires CUDA 12)
+pip install cuopt-cu12          # NVIDIA cuOpt (requires CUDA 12; Python 3.11 or later)
 pip install gpugem
 ```
 
