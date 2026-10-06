@@ -1,0 +1,3 @@
+# Regenerated figures: rebuild with make_all.sh rather than tracking them.
+output/
+__pycache__/
