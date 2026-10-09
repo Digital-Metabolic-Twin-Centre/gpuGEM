@@ -201,6 +201,10 @@ land on. `CUGEM_QP_BARCONVTOL` makes this tolerance configurable, and
 
 (largest CPU-vs-GPU gap in `FluxReductionPercentage`, over shared genes)
 
+![Cross-solver reproducibility](docs/qp_reproducibility.png)
+
+Per-case numbers: `results/reproducibility_summary.csv`.
+
 Tightening the tolerance resolves the CYP17A1 case completely and it is
 worthwhile for its own sake -- at `1e-6`, CYP17A1 itself ranks first on both
 backends, which the published run missed. It does not resolve the other two,
