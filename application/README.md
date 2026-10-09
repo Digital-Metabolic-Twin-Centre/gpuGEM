@@ -162,6 +162,20 @@ it returns primal and dual iterates, but no basis, no reduced costs, and no
 warm-start interface. gpuGEM accelerates the per-query LP in the pipeline
 above; this precomputation is CPU work that you run once.
 
+## Performance
+
+Per-query wall-clock on the reference machine, same model and data on both
+backends. Only the LP is offloaded to the GPU; the minimum-norm QP runs on
+Gurobi either way, so it becomes the bottleneck once the LP is accelerated.
+
+![Stage timing](docs/stage_timing.png)
+
+| Case | LP speed-up | End-to-end speed-up |
+|---|---|---|
+| PAH deficiency | 3.6x | 2.0x |
+| Kynureninase deficiency | 6.8x | 2.1x |
+| CYP17A1 deficiency | 7.9x | 2.7x |
+
 ## Reproducibility of the published rankings
 
 `tests/verify_against_reference.py` re-runs the three cases reported in the
