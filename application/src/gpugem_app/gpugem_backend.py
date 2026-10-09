@@ -21,8 +21,8 @@ from __future__ import annotations
 import numpy as np
 import scipy.sparse as sp
 
-from cugem_app.biomarkers import DemandSpec, EXCHANGE_OBJ, EXCHANGE_UB, ExchangeSpec
-from cugem_app.data import WBModel
+from gpugem_app.biomarkers import DemandSpec, EXCHANGE_OBJ, EXCHANGE_UB, ExchangeSpec
+from gpugem_app.data import WBModel
 
 #: Time limit handed to gpuGEM, matching the published runs.
 LP_TIME_LIMIT = 120.0

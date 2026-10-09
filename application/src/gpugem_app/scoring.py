@@ -17,7 +17,7 @@ import numpy as np
 import pandas as pd
 import scipy.sparse as sp
 
-from cugem_app.data import FLUX_TOL, DiseaseEntry, PrecomputedData, WBModel
+from gpugem_app.data import FLUX_TOL, DiseaseEntry, PrecomputedData, WBModel
 
 #: Fluxes with magnitude at or below this are treated as exactly zero.
 ZERO_TOL = 1e-6

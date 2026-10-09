@@ -21,10 +21,10 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from cugem_app import biomarkers as bm  # noqa: E402
-from cugem_app import data as dat  # noqa: E402
-from cugem_app import gpugem_backend as gg  # noqa: E402
-from cugem_app import scoring  # noqa: E402
+from gpugem_app import biomarkers as bm  # noqa: E402
+from gpugem_app import data as dat  # noqa: E402
+from gpugem_app import gpugem_backend as gg  # noqa: E402
+from gpugem_app import scoring  # noqa: E402
 
 QUERIES = [
     "C02470[bc],incr;kynate[bc],incr",

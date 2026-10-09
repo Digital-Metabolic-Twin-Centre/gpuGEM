@@ -31,8 +31,8 @@ except ImportError as exc:  # pragma: no cover - exercised only without Gurobi
         "a Gurobi licence is available."
     ) from exc
 
-from cugem_app.biomarkers import DemandSpec, EXCHANGE_OBJ, EXCHANGE_UB, ExchangeSpec
-from cugem_app.data import FLUX_TOL, WBModel
+from gpugem_app.biomarkers import DemandSpec, EXCHANGE_OBJ, EXCHANGE_UB, ExchangeSpec
+from gpugem_app.data import FLUX_TOL, WBModel
 
 #: Gurobi parameters for the LP step. Dual simplex is the published baseline.
 LP_METHOD = 1
@@ -47,8 +47,8 @@ QP_SCALE_FLAG = -1
 # a unique point on the optimal face; at 1e-4 it stops short of doing so, and
 # the result still depends on which LP vertex the solver landed on.  1e-6 is the
 # setting the manuscript reports and is the default here so the published
-# rankings reproduce.  Override with CUGEM_QP_BARCONVTOL.
-QP_BAR_CONV_TOL = float(os.environ.get("CUGEM_QP_BARCONVTOL", "1e-6"))
+# rankings reproduce.  Override with GPUGEM_QP_BARCONVTOL.
+QP_BAR_CONV_TOL = float(os.environ.get("GPUGEM_QP_BARCONVTOL", "1e-6"))
 QP_TIME_LIMIT = 120.0
 
 

@@ -22,8 +22,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from cugem_app import data as dat  # noqa: E402
-from cugem_app.knockouts import (  # noqa: E402
+from gpugem_app import data as dat  # noqa: E402
+from gpugem_app.knockouts import (  # noqa: E402
     DEFAULT_NAME_CACHE,
     DEFAULT_SIGNATURE_FILE,
     query_signatures,

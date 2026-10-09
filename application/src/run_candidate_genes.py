@@ -30,8 +30,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from cugem_app import data as dat  # noqa: E402
-from cugem_app.pipeline import run_query  # noqa: E402
+from gpugem_app import data as dat  # noqa: E402
+from gpugem_app.pipeline import run_query  # noqa: E402
 
 
 def build_parser() -> argparse.ArgumentParser:

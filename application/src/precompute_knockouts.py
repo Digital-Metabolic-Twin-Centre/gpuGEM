@@ -7,7 +7,7 @@ solves, rather than one per gene-metabolite pair) and writes a table that
 query_knockouts.py then reads with no solving at all.
 
 Expect this to take a while: it is hundreds of whole-body LPs. It needs Gurobi
-but not a GPU, for the reason given in cugem_app/knockouts.py.
+but not a GPU, for the reason given in gpugem_app/knockouts.py.
 
 Examples
 --------
@@ -25,8 +25,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from cugem_app import data as dat  # noqa: E402
-from cugem_app.knockouts import (  # noqa: E402
+from gpugem_app import data as dat  # noqa: E402
+from gpugem_app.knockouts import (  # noqa: E402
     DEFAULT_SIGNATURE_FILE,
     precompute_signatures,
 )

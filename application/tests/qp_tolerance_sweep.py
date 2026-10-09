@@ -29,7 +29,7 @@ import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from cugem_app import data as dat  # noqa: E402
+from gpugem_app import data as dat  # noqa: E402
 
 CASES = {
     "pah": "phe_L[bc],increased;tyr_L[bc],decreased",
@@ -42,9 +42,9 @@ KEY = ["Disease", "Gene"]
 def run_at_tolerance(biomarkers: str, backend: str, tol: float,
                      data_dir: Path, label: str):
     """Re-import the backend so the module-level tolerance is picked up."""
-    os.environ["CUGEM_QP_BARCONVTOL"] = repr(tol)
-    import cugem_app.gurobi_backend as gb
-    import cugem_app.pipeline as pl
+    os.environ["GPUGEM_QP_BARCONVTOL"] = repr(tol)
+    import gpugem_app.gurobi_backend as gb
+    import gpugem_app.pipeline as pl
     importlib.reload(gb)
     importlib.reload(pl)
     assert gb.QP_BAR_CONV_TOL == tol, (gb.QP_BAR_CONV_TOL, tol)

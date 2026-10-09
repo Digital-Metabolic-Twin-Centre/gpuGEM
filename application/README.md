@@ -73,7 +73,7 @@ python run_candidate_genes.py "C02470[bc],incr;kynate[bc],incr" \
 Or from Python:
 
 ```python
-from cugem_app import run_query
+from gpugem_app import run_query
 
 result = run_query("phe_L[bc],increased;tyr_L[bc],decreased", backend="gpugem")
 print(result.summary())          # stage timings and solver settings
@@ -103,7 +103,7 @@ partially recognised profile still runs. A query with no usable token raises.
 
 A CSV ranked by `FluxReductionPercentage` descending, ties broken by
 `sumFluxWT`. The columns are documented in the docstring of
-`cugem_app.scoring.score_genes`. The ones that matter:
+`gpugem_app.scoring.score_genes`. The ones that matter:
 
 | Column | Meaning |
 |---|---|
@@ -218,7 +218,7 @@ when the LP optimum is degenerate, but the research code this was ported from
 runs it at `BarConvTol = 1e-4`, which is too loose to actually reach the
 minimum-norm point. The answer then still depends on which LP vertex the solver
 happened to land on. **This repository defaults to `1e-6`**, the setting the
-manuscript reports; `CUGEM_QP_BARCONVTOL` overrides it, and
+manuscript reports; `GPUGEM_QP_BARCONVTOL` overrides it, and
 `tests/qp_tolerance_sweep.py` measures the effect:
 
 | Case | 1e-4 (published) | 1e-6 | 1e-8 |
@@ -337,7 +337,7 @@ application/
     run_candidate_genes.py   rank genes for one patient (the main entry point)
     precompute_knockouts.py  build the knockout signature table (run once)
     query_knockouts.py       rank from that table, no solver needed
-    cugem_app/
+    gpugem_app/
       data.py                model and disease-list loading
       biomarkers.py          biomarker string -> model modifications
       gpugem_backend.py      the GPU LP, via gpugem.solve

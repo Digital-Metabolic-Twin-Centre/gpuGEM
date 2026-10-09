@@ -7,9 +7,18 @@ resolve is a common cause of desk rejection. Work through this in order.
 
 - [ ] **Make the repository public.** It returned 404 to anonymous access as of
       2026-09-10. Verify by opening the URL in a logged-out browser.
-- [ ] **Fill in the four ORCIDs** in `CITATION.cff` and `.zenodo.json`. Both
-      currently have placeholders. Zenodo uses these to link the deposit to
-      author profiles, and it cannot be corrected cleanly after minting.
+- [ ] *(Recommended, not required)* **Add the four ORCIDs** to `CITATION.cff`
+      and `.zenodo.json`; both currently have placeholders. ORCIDs are optional
+      Zenodo metadata, and the deposit will mint a DOI without them. They are
+      worth adding because they link the record to author profiles, but they do
+      not block the release: on Zenodo the *files* of a published record are
+      immutable, while the *metadata* stays editable with the DOI unchanged, so
+      ORCIDs can be filled in afterwards without cutting a new version.
+
+      The journal is a separate matter and is not handled in these files.
+      Oxford University Press requires the submitting/corresponding author to
+      supply an ORCID iD at submission, and encourages but does not require it
+      for co-authors. That is entered in the submission system, not here.
 - [ ] **Decide what the archive carries.** `git archive HEAD` is currently
       **384 MB**, dominated by six whole-body model files in
       `benchmarks/model_cache/` (44-77 MB each). Either accept that, or add a
@@ -51,7 +60,7 @@ The name `gpugem` was unregistered as of this writing, so it is available.
 4. [ ] Confirm `pip install gpugem` works from a clean environment.
 
 Note that the wheel ships `gpugem` only. The candidate-gene application
-(`cugem_app`) and its 8.4 MB of model data are **not** on PyPI; they come from
+(`gpugem_app`) and its 8.4 MB of model data are **not** on PyPI; they come from
 the repository or the Zenodo archive. The Availability statement must say so, or
 a reviewer who runs `pip install gpugem` will look for the application and not
 find it.

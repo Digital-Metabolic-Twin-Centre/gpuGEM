@@ -1,7 +1,7 @@
 """
 Gene-knockout signatures: precomputation and query.
 
-This is the second half of the application. Where :mod:`cugem_app.pipeline`
+This is the second half of the application. Where :mod:`gpugem_app.pipeline`
 answers "given this patient, which genes lose the most flux?" one query at a
 time, this module precomputes a reusable table so that ranking becomes a
 numpy lookup with no solve at all.
@@ -39,7 +39,7 @@ cuOpt's PDLP is a first-order method that returns primal and dual iterates but
 no basis and no reduced costs, and it has no warm-start interface. The
 aggregation above is therefore a Gurobi-only algorithm by construction, not an
 accident of how it was written. gpuGEM accelerates the per-query LP in
-:mod:`cugem_app.pipeline`; this precomputation is CPU work, run once.
+:mod:`gpugem_app.pipeline`; this precomputation is CPU work, run once.
 
 Run the precomputation once::
 

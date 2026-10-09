@@ -34,8 +34,8 @@ import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from cugem_app import data as dat          # noqa: E402
-from cugem_app.pipeline import run_query   # noqa: E402
+from gpugem_app import data as dat          # noqa: E402
+from gpugem_app.pipeline import run_query   # noqa: E402
 
 CASES = [
     ("pah", "phe_L[bc],increased;tyr_L[bc],decreased", "pah_results.csv", "PAH"),
@@ -117,10 +117,10 @@ def main(argv: list[str] | None = None) -> int:
                    help="Also run the gpugem backend and cross-check it.")
     args = p.parse_args(argv)
     if args.barconvtol:
-        os.environ['CUGEM_QP_BARCONVTOL'] = repr(args.barconvtol)
-        import cugem_app.gurobi_backend as _gb
+        os.environ['GPUGEM_QP_BARCONVTOL'] = repr(args.barconvtol)
+        import gpugem_app.gurobi_backend as _gb
         importlib.reload(_gb)
-        import cugem_app.pipeline as _pl
+        import gpugem_app.pipeline as _pl
         importlib.reload(_pl)
         globals()['run_query'] = _pl.run_query
         assert _gb.QP_BAR_CONV_TOL == args.barconvtol

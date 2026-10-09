@@ -27,9 +27,9 @@ from typing import Literal, Optional
 import numpy as np
 import pandas as pd
 
-from cugem_app import biomarkers as bm
-from cugem_app import data as dat
-from cugem_app import scoring
+from gpugem_app import biomarkers as bm
+from gpugem_app import data as dat
+from gpugem_app import scoring
 
 Backend = Literal["gpugem", "gurobi"]
 
@@ -86,7 +86,7 @@ def run_query(
     ----------
     biomarker_str:
         Semicolon-separated ``metabolite,direction`` tokens, for example
-        ``"C02470[bc],incr;kynate[bc],incr"``. See :mod:`cugem_app.biomarkers`.
+        ``"C02470[bc],incr;kynate[bc],incr"``. See :mod:`gpugem_app.biomarkers`.
     backend:
         ``'gpugem'`` solves the LP on the GPU through ``gpugem.solve``;
         ``'gurobi'`` solves it with dual simplex on the CPU. The QP stage uses
@@ -101,7 +101,7 @@ def run_query(
     if backend not in ("gpugem", "gurobi"):
         raise ValueError(f"backend must be 'gpugem' or 'gurobi', got {backend!r}")
 
-    from cugem_app import gurobi_backend as gb  # imported here so the error is late
+    from gpugem_app import gurobi_backend as gb  # imported here so the error is late
 
     timings: dict[str, float] = {}
     t_start = time.perf_counter()
@@ -134,7 +134,7 @@ def run_query(
         solver_info: dict = {}
         t0 = time.perf_counter()
         if backend == "gpugem":
-            from cugem_app import gpugem_backend as gg
+            from gpugem_app import gpugem_backend as gg
 
             res = gg.solve_lp(wbm, demands, exchanges)
             if res.objective is None:

@@ -29,7 +29,7 @@ SOLVER_MODE_VARIANTS = [
                      "'more thorough, better on hard problems, slower per step but fewer "
                      "steps needed' than the default Stable3. Explicitly flagged as "
                      "untested on these microbiome whole-body models in prior "
-                     "investigation notes (cuGEM's CUOPT_SETTINGS_REFERENCE.md).",
+                     "investigation notes (gpuGEM's CUOPT_SETTINGS_REFERENCE.md).",
     },
     {
         "id": "concurrent",
