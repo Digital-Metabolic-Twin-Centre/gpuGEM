@@ -188,10 +188,21 @@ formulas reproduce the published `FluxReductionPercentage` and `CompositeScore`
 columns exactly. The model, the wild-type reference solution and the
 gene-to-reaction mapping are therefore all correct.
 
-**Reproduces as a ranking.** The known causal gene ranks first in every run, on
-both backends: PAH for phenylketonuria, KYNU for kynureninase deficiency. The
-top-10 gene sets agree between the CPU and GPU backends on 7 to 10 of 10 genes,
-and the top-20 on 14 to 20 of 20.
+**Reproduces as a ranking.** The known causal gene ranks first under both LP
+engines: PAH for phenylketonuria, KYNU for kynureninase deficiency. Over the
+full shared candidate list the two rankings are strongly concordant, with
+Spearman's rho of 0.95, 0.94 and 0.92 for the three cases. The top-10 gene sets
+agree on 7 to 9 of 10 genes and the top-20 on 15 to 18 of 20.
+
+> **Unit of ranking.** The pipeline emits one row per *disease-gene pair*, so a
+> gene causal for several inborn errors appears several times (PAH occupies the
+> first three rows of the phenylketonuria query). Comparing rankings row by row
+> therefore does not answer a question posed about genes. All gene-level figures
+> above are computed after reducing to one row per gene, keeping its
+> best-scoring disease entry. `tests/compare_rankings.py` does this reduction
+> and regenerates the manuscript's Supplementary Table S10. One exact duplicate
+> row is also present in the raw output of every case (identical disease, gene
+> and scores) and is dropped first.
 
 **Does not reproduce gene by gene, in the tail.** The patient-side flux
 (`sumFluxD`) of individual low-ranked genes is not determined by the method as
