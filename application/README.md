@@ -162,6 +162,57 @@ it returns primal and dual iterates, but no basis, no reduced costs, and no
 warm-start interface. gpuGEM accelerates the per-query LP in the pipeline
 above; this precomputation is CPU work that you run once.
 
+## Reproducibility of the published rankings
+
+`tests/verify_against_reference.py` re-runs the three cases reported in the
+paper on both backends and compares them against the published tables. What it
+establishes:
+
+**Reproduces exactly.** The wild-type flux column (`sumFluxWT`) agrees with the
+published tables on 100% of shared rows in all three cases, and the scoring
+formulas reproduce the published `FluxReductionPercentage` and `CompositeScore`
+columns exactly. The model, the wild-type reference solution and the
+gene-to-reaction mapping are therefore all correct.
+
+**Reproduces as a ranking.** The known causal gene ranks first in every run, on
+both backends: PAH for phenylketonuria, KYNU for kynureninase deficiency. The
+top-10 gene sets agree between the CPU and GPU backends on 7 to 10 of 10 genes,
+and the top-20 on 14 to 20 of 20.
+
+**Does not reproduce gene by gene, in the tail.** The patient-side flux
+(`sumFluxD`) of individual low-ranked genes is not determined by the method as
+published. Running the identical model and data through two different LP
+solvers gives `FluxReductionPercentage` values that differ by up to 65
+percentage points for some genes, while the median gene agrees to within 0.03
+points.
+
+The cause is the minimum-norm QP. It exists to make the patient flux unique
+when the LP optimum is degenerate, but the research code runs it at
+`BarConvTol = 1e-4`, which is too loose to actually reach the minimum-norm
+point. The answer then still depends on which LP vertex the solver happened to
+land on. `CUGEM_QP_BARCONVTOL` makes this tolerance configurable, and
+`tests/qp_tolerance_sweep.py` measures the effect:
+
+| Case | 1e-4 (published) | 1e-6 | 1e-8 |
+|---|---|---|---|
+| CYP17A1 deficiency | 65.5 pts | 0.21 pts | 0.0005 pts |
+| Kynureninase deficiency | 55.3 pts | 7.0 pts | 7.3 pts |
+| PAH deficiency | 38.9 pts | 58.0 pts | 25.1 pts |
+
+(largest CPU-vs-GPU gap in `FluxReductionPercentage`, over shared genes)
+
+Tightening the tolerance resolves the CYP17A1 case completely and it is
+worthwhile for its own sake -- at `1e-6`, CYP17A1 itself ranks first on both
+backends, which the published run missed. It does not resolve the other two,
+so the loose tolerance is not the only source of degeneracy. Treat the top of
+the ranking as the method's output and individual tail fluxes as
+solver-dependent.
+
+A second behavioural difference: the published runs scored only genes with a
+causal reaction mapping. The non-causal fallback mapping is therefore off by
+default here; `--noncausal-fallback` turns it on, and roughly doubles the
+number of scored genes.
+
 ## Solver requirements
 
 **Gurobi is required, for both backends.** The minimum-norm QP in stage 3 has
