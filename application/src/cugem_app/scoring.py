@@ -54,6 +54,7 @@ def score_genes(
     *,
     objective_value: float = np.nan,
     patient_label: str = "patient",
+    use_noncausal_fallback: bool = False,
 ) -> pd.DataFrame:
     """
     Rank candidate genes for one patient.
@@ -95,7 +96,8 @@ def score_genes(
 
         gene_rows = _gene_reactions(precomp.rxnGenMatrix, col, rg_to_wbm, valid_rows)
         causal = True
-        if len(gene_rows) == 0 and precomp.rxnGenMatrixNonCausal is not None:
+        if (len(gene_rows) == 0 and use_noncausal_fallback
+                and precomp.rxnGenMatrixNonCausal is not None):
             gene_rows = _gene_reactions(
                 precomp.rxnGenMatrixNonCausal, col, rg_to_wbm, valid_rows
             )

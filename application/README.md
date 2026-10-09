@@ -118,6 +118,50 @@ per tissue, and a full knockout gives exactly 100% for every gene it hits, so
 the tie-break on `sumFluxWT` does real work at the top of the table.
 `AvgFluxWT` is reported alongside for that reason.
 
+## Knockout signatures: the other way to ask the question
+
+The pipeline above answers one patient at a time, and each answer costs a
+genome-scale LP. If you expect to run many queries, the alternative is to
+precompute once what every candidate gene's knockout does to every blood
+metabolite, after which ranking is a table lookup with no solve at all.
+
+```bash
+# once, hundreds of LPs, needs Gurobi but no GPU
+python src/precompute_knockouts.py --workers 2
+
+# thereafter, milliseconds, needs no solver
+python src/query_knockouts.py "phe_L[bc],increased;tyr_L[bc],decreased" --label PAH
+python src/query_knockouts.py --search phenylalanine   # look up metabolite ids
+```
+
+What makes the precomputation affordable is the aggregation. Asking the
+question pair by pair means 449 candidate genes x 979 blood metabolites, about
+440,000 LPs. Instead, one LP per gene maximises the *sum* of all 979 blood
+demand fluxes simultaneously, and every metabolite is classified from that
+single solution: 449 solves rather than 440,000.
+
+Each metabolite is then scored `-1`, `0` or `+1` by comparing its wild-type and
+knockout state. The rule is three-way rather than a simple ratio because a zero
+flux in an LP solution is ambiguous. It can mean the metabolite cannot be
+produced at all, or that it can be but this particular optimal vertex happened
+not to produce it. The reduced cost distinguishes the two, so a metabolite that
+is merely degenerate in the wild type is not mistaken for one that the knockout
+blocked.
+
+Ranking compares those signatures against the directions you asked for;
+`MatchScore` is the fraction of your biomarkers whose direction the knockout
+reproduces. Genes whose knockout makes the model infeasible are essential, so
+they register as losing every metabolite and would otherwise top any query
+containing a decrease. They are excluded by default; `--include-essential`
+keeps them.
+
+**This stage has no GPU path, by construction.** It depends on reduced costs
+and on dual-simplex warm starts between consecutive knockouts. Reduced costs
+are a property of a basic solution, and cuOpt's PDLP is a first-order method:
+it returns primal and dual iterates, but no basis, no reduced costs, and no
+warm-start interface. gpuGEM accelerates the per-query LP in the pipeline
+above; this precomputation is CPU work that you run once.
+
 ## Solver requirements
 
 **Gurobi is required, for both backends.** The minimum-norm QP in stage 3 has
@@ -193,7 +237,9 @@ application/
   data/        Harvey model, wild-type flux, reaction-gene matrices,
                disease list, PROVENANCE.md, SHA256SUMS
   src/
-    run_candidate_genes.py   command-line entry point
+    run_candidate_genes.py   rank genes for one patient (the main entry point)
+    precompute_knockouts.py  build the knockout signature table (run once)
+    query_knockouts.py       rank from that table, no solver needed
     cugem_app/
       data.py                model and disease-list loading
       biomarkers.py          biomarker string -> model modifications
@@ -201,7 +247,10 @@ application/
       gurobi_backend.py      the CPU LP and the minimum-norm QP
       scoring.py             gene ranking
       pipeline.py            the four stages, with the backend switch
-  tests/       smoke_test.py
+      knockouts.py           knockout signature precomputation and query
+  tests/
+    smoke_test.py                 offline checks, no GPU or licence needed
+    verify_against_reference.py   reproduce the three published rankings
   results/     reference results from the published runs
   figures/     timing comparison figure
 ```

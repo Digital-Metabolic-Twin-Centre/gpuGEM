@@ -66,6 +66,12 @@ def build_parser() -> argparse.ArgumentParser:
         help="Also write stage timings and solver settings to this JSON file.",
     )
     p.add_argument("--verbose", action="store_true", help="Show solver output.")
+    p.add_argument(
+        "--noncausal-fallback", action="store_true",
+        help="Also score genes that have no causal reaction mapping, using the "
+             "non-causal matrix. Off by default: the published runs did not use "
+             "it, and enabling it adds rows that are not in the paper's tables.",
+    )
     return p
 
 
@@ -79,6 +85,7 @@ def main(argv: list[str] | None = None) -> int:
         wt_method=args.wt_method,
         label=args.label,
         verbose=args.verbose,
+        use_noncausal_fallback=args.noncausal_fallback,
     )
 
     print()

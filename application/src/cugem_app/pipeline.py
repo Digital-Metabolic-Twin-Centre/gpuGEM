@@ -77,6 +77,7 @@ def run_query(
     wt_method: str = "QP",
     label: str = "patient",
     verbose: bool = False,
+    use_noncausal_fallback: bool = False,
 ) -> QueryResult:
     """
     Rank candidate disease genes for one patient's biomarker pattern.
@@ -168,6 +169,7 @@ def run_query(
     ranking = scoring.score_genes(
         wbm, precomp, disease_list, flux,
         objective_value=f_star, patient_label=label,
+        use_noncausal_fallback=use_noncausal_fallback,
     )
     timings["scoring"] = time.perf_counter() - t0
     timings["total"] = time.perf_counter() - t_start

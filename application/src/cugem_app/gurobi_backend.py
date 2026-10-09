@@ -16,6 +16,7 @@ Web Licence Service configuration).
 
 from __future__ import annotations
 
+import os
 import numpy as np
 import scipy.sparse as sp
 
@@ -42,7 +43,7 @@ BUILD_SCALE_FLAG = 2
 QP_WEIGHT = 1e-6
 QP_METHOD = -1          # automatic; selects barrier for this QP
 QP_SCALE_FLAG = -1
-QP_BAR_CONV_TOL = 1e-4
+QP_BAR_CONV_TOL = float(os.environ.get("CUGEM_QP_BARCONVTOL", "1e-4"))
 QP_TIME_LIMIT = 120.0
 
 
