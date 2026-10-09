@@ -1,0 +1,40 @@
+cff-version: 1.2.0
+title: "gpuGEM: GPU-based solving of linear optimisation problems over genome-scale metabolic models"
+message: "If you use this software, please cite it using the metadata in this file."
+type: software
+version: 0.1.0
+license: MIT
+repository-code: "https://github.com/Digital-Metabolic-Twin-Centre/gpuGEM"
+abstract: >-
+  gpuGEM solves the linear programmes arising in constraint-based modelling of
+  genome-scale metabolic networks on NVIDIA GPUs, wrapping the cuOpt PDLP
+  first-order solver behind a COBRA-compatible interface. It includes an
+  application that prioritises candidate inherited-metabolic-disease genes from
+  a patient's blood biomarker pattern using the Harvey whole-body model.
+keywords:
+  - flux balance analysis
+  - genome-scale metabolic model
+  - linear programming
+  - GPU
+  - PDLP
+  - cuOpt
+  - COBRA
+  - systems biology
+  - inherited metabolic disease
+authors:
+  - family-names: Zare
+    given-names: Farid
+    affiliation: "School of Medicine, University of Galway, Galway, Ireland"
+    # orcid: "https://orcid.org/0000-0000-0000-0000"   # TODO: fill in before deposit
+  - family-names: Hulshof
+    given-names: Timothy
+    affiliation: "School of Medicine, University of Galway, Galway, Ireland"
+    # orcid: "https://orcid.org/0000-0000-0000-0000"   # TODO: fill in before deposit
+  - family-names: Thiele
+    given-names: Ines
+    affiliation: "School of Medicine, University of Galway, Galway, Ireland"
+    # orcid: "https://orcid.org/0000-0000-0000-0000"   # TODO: fill in before deposit
+  - family-names: Fleming
+    given-names: Ronan M. T.
+    affiliation: "School of Medicine, University of Galway, Galway, Ireland"
+    # orcid: "https://orcid.org/0000-0000-0000-0000"   # TODO: fill in before deposit

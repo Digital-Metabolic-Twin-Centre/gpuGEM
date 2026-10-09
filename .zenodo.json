@@ -1,0 +1,50 @@
+{
+  "title": "gpuGEM: GPU-based solving of linear optimisation problems over genome-scale metabolic models",
+  "upload_type": "software",
+  "license": "MIT",
+  "version": "0.1.0",
+  "language": "eng",
+  "description": "<p>gpuGEM solves the linear programmes arising in constraint-based modelling of genome-scale metabolic networks on NVIDIA GPUs, wrapping the cuOpt PDLP first-order solver behind a COBRA-compatible interface.</p><p>The repository includes <code>application/</code>, a self-contained causal-gene prioritisation workflow: given a patient's blood biomarker pattern it ranks inherited-metabolic-disease genes by the flux reduction each one induces in the Harvey whole-body metabolic model (81,094 reactions, 56,452 metabolites). The model data, the pipeline and the reference results are all deposited, so the published application results can be reproduced from this archive alone.</p><p>This deposit accompanies the gpuGEM manuscript. See README.md for installation and application/README.md for the application.</p>",
+  "keywords": [
+    "flux balance analysis",
+    "genome-scale metabolic model",
+    "linear programming",
+    "GPU",
+    "PDLP",
+    "cuOpt",
+    "COBRA",
+    "systems biology",
+    "inherited metabolic disease",
+    "whole-body metabolic model"
+  ],
+  "creators": [
+    {
+      "name": "Zare, Farid",
+      "affiliation": "School of Medicine, University of Galway, Galway, Ireland"
+    },
+    {
+      "name": "Hulshof, Timothy",
+      "affiliation": "School of Medicine, University of Galway, Galway, Ireland"
+    },
+    {
+      "name": "Thiele, Ines",
+      "affiliation": "School of Medicine, University of Galway, Galway, Ireland"
+    },
+    {
+      "name": "Fleming, Ronan M. T.",
+      "affiliation": "School of Medicine, University of Galway, Galway, Ireland"
+    }
+  ],
+  "grants": [
+    { "id": "10.13039/501100000781::101125633" },
+    { "id": "10.13039/501100000780::101080997" }
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/Digital-Metabolic-Twin-Centre/gpuGEM",
+      "relation": "isSupplementTo",
+      "scheme": "url"
+    }
+  ],
+  "notes": "Funded by the European Research Council (ERC) under the European Union's Horizon Europe research and innovation programme (grant agreement #101125633) to IT, by Science Foundation Ireland under Grant number 12/RC/2273P2, and by the Horizon Europe grant Recon4IMD (#101080997)."
+}
