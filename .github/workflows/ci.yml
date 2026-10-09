@@ -1,0 +1,62 @@
+name: CI
+
+# GitHub's hosted runners have no NVIDIA GPU and no Gurobi licence, so the
+# cuOpt and Gurobi tests cannot execute here. conftest.py reports those as
+# skips rather than failures, so a green run on this workflow means "everything
+# that can be checked without a GPU is correct" -- it is NOT a claim that the
+# GPU solving path was exercised. That path is covered by the benchmark runs on
+# the group's GPU host.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      # Restricted to the rules that catch genuine defects -- syntax errors,
+      # undefined names, duplicate arguments, bad comparisons. The repository
+      # does not currently satisfy ruff's full style rule set (mostly printf
+      # formatting and import order in the benchmark scripts), and gating CI on
+      # style would make the badge red without telling a reader anything about
+      # correctness. This selection caught a real NameError in three benchmark
+      # entry points, which is the job worth automating.
+      - name: Lint (correctness rules)
+        run: ruff check --select E9,F63,F7,F82 .
+
+      - name: Test
+        run: pytest -q -rs
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build and check the distribution
+        run: |
+          python -m pip install --upgrade pip build twine
+          python -m build
+          twine check dist/*

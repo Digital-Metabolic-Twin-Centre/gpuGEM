@@ -2,6 +2,7 @@
 
 # gpuGEM
 
+[![CI](https://github.com/Digital-Metabolic-Twin-Centre/gpuGEM/actions/workflows/ci.yml/badge.svg)](https://github.com/Digital-Metabolic-Twin-Centre/gpuGEM/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/python-3.11%2B-blue)](https://www.python.org/)
 [![CUDA](https://img.shields.io/badge/CUDA-12%2B-green)](https://developer.nvidia.com/cuda-toolkit)
 [![cuOpt](https://img.shields.io/badge/NVIDIA%20cuOpt-26.6%2B-76B900)](https://developer.nvidia.com/cuopt)
@@ -40,7 +41,12 @@ proper: the `cuopt-cu12` entry there is a source stub with no wheels, and the
 real wheels live on NVIDIA's index. Keeping it optional means `pip install
 gpugem` succeeds everywhere, and building or inspecting a model needs no GPU.
 cuOpt requires CUDA 12 and Python 3.11 or later; it is checked when you solve,
-not at `import gpugem`.
+not at `import gpugem`. If you prefer to install it on its own, the command
+gpuGEM's error messages point you to is:
+
+```bash
+pip install "cuopt-cu12>=26.6.0" --extra-index-url https://pypi.nvidia.com
+```
 
 Other extras:
 
@@ -230,6 +236,44 @@ result.feasibility  # dict: stoich_max_residual, stoich_rows_violated_1e6, ...
 - **The dependency inventory is static.** `tests/test_dependency_inventory.py` finds imports and
   `subprocess` / `shutil.which` calls with literal names; a module or executable whose name is built
   at run time is not seen (the test prints those it cannot analyse).
+
+---
+
+## Running the tests
+
+```bash
+pip install -e ".[dev]"
+pytest -q -rs
+```
+
+No GPU is required to run the suite. On a CPU-only machine the tests that need
+cuOpt or a Gurobi licence are reported as **skipped** rather than failed, so a
+clean run looks like:
+
+```
+188 passed, 12 skipped
+```
+
+If you see failures rather than skips, that is a genuine problem and we would
+like to hear about it. The 12 skips become real tests on a machine with an
+NVIDIA GPU (CUDA 12) and `pip install "gpugem[gpu]"`.
+
+CI runs this suite on Python 3.11 and 3.12 on every push. Because GitHub's
+hosted runners have no GPU, a green badge means "everything checkable without a
+GPU is correct"; it does not assert that the GPU solving path was exercised.
+That path is covered by the benchmark runs reported in the paper.
+
+---
+
+## Support and maintenance
+
+gpuGEM is maintained by the Digital Metabolic Twin Centre at the University of
+Galway. We commit to keeping the software available and to responding to issues
+for at least two years following publication. Please report problems through
+the [issue tracker](https://github.com/Digital-Metabolic-Twin-Centre/gpuGEM/issues).
+
+Every released version is archived on Zenodo with a permanent DOI, so the exact
+code behind a published result stays retrievable even if this repository moves.
 
 ---
 

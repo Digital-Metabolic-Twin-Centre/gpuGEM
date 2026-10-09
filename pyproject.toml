@@ -58,6 +58,12 @@ include = ["gpugem*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+# The test suite imports `benchmarks.*`, which is a repository directory rather
+# than an installed package (it is development/figure code, deliberately not
+# shipped in the wheel). Without this, a fresh clone fails to COLLECT 12 of the
+# 17 test files with "No module named 'benchmarks'", even though nothing is
+# actually wrong with the installation.
+pythonpath = ["."]
 
 [tool.ruff]
 line-length = 100

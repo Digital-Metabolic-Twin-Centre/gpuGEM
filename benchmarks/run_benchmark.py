@@ -24,6 +24,7 @@ sys.path.insert(0, str(HERE.parent))
 from benchmarks import models as M
 from benchmarks import solve as SV
 from benchmarks import residual as R
+from benchmarks._deps import environment_info
 
 RESULTS = HERE / "results"
 FIGURES = HERE / "figures"

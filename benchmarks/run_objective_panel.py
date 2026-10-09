@@ -33,6 +33,7 @@ from benchmarks import models as M
 from benchmarks import objective_panel as OP
 from benchmarks import residual as R
 from benchmarks import solve as SV
+from benchmarks._deps import environment_info
 
 RESULTS = HERE / "results" / "objective_panel"
 RESULTS.mkdir(parents=True, exist_ok=True)

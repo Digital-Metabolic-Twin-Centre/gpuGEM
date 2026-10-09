@@ -28,6 +28,7 @@ from benchmarks import s85_objectives as O
 from benchmarks import solve as SV
 from benchmarks import residual as R
 from benchmarks import aggregate_sweep as AG
+from benchmarks._deps import environment_info
 
 RESULTS = O.RESULTS_DIR
 RESULTS.mkdir(parents=True, exist_ok=True)
