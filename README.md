@@ -30,14 +30,24 @@ GPU first-order LP solvers (PDLP) offer substantial speedups on genome-scale FBA
 ## Installation
 
 ```bash
-pip install cuopt-cu12          # NVIDIA cuOpt (requires CUDA 12; Python 3.11 or later)
-pip install gpugem
+pip install gpugem                                                   # core
+pip install "gpugem[gpu]" --extra-index-url https://pypi.nvidia.com  # + the GPU solver
 ```
 
-COBRApy support (optional):
+The second line is what you need to actually *solve*. cuOpt is an optional
+extra rather than a hard dependency because it is not installable from PyPI
+proper: the `cuopt-cu12` entry there is a source stub with no wheels, and the
+real wheels live on NVIDIA's index. Keeping it optional means `pip install
+gpugem` succeeds everywhere, and building or inspecting a model needs no GPU.
+cuOpt requires CUDA 12 and Python 3.11 or later; it is checked when you solve,
+not at `import gpugem`.
+
+Other extras:
 
 ```bash
-pip install "gpugem[cobra]"
+pip install "gpugem[cobra]"        # COBRApy models
+pip install "gpugem[gurobi]"       # the Gurobi CPU baseline (needs a licence)
+pip install "gpugem[application]"  # the candidate-gene application, see application/
 ```
 
 ### Dependencies
@@ -45,9 +55,10 @@ pip install "gpugem[cobra]"
 | Package / tool | Role | Needed for | Install |
 |---|---|---|---|
 | `numpy`, `scipy` | required | every function | `pip install "numpy>=1.24"`, `pip install "scipy>=1.10"` |
-| `cuopt` | required | the GPU solver; checked when you solve, not at `import gpugem` | `pip install "cuopt-cu12>=26.6.0"` (other CUDA versions: see the [cuOpt install guide](https://docs.nvidia.com/cuopt/user-guide/latest/introduction.html)) |
+| `cuopt` | required to solve | the GPU solver; checked when you solve, not at `import gpugem` | `pip install "gpugem[gpu]" --extra-index-url https://pypi.nvidia.com` (other CUDA versions: see the [cuOpt install guide](https://docs.nvidia.com/cuopt/user-guide/latest/introduction.html)) |
 | `cobra` | optional | `solve_cobra`, `loaders.from_cobra` | `pip install "gpugem[cobra]"` |
-| `gurobipy` | benchmarks | the Gurobi baseline (needs a licence) | `pip install gurobipy` |
+| `gurobipy` | benchmarks, application | the Gurobi baseline (needs a licence); also the minimum-norm QP in `application/` | `pip install "gpugem[gurobi]"` |
+| `pandas` | application | result tables in `application/` | `pip install "gpugem[application]"` |
 | `highspy` | benchmarks | the HiGHS CPU baseline | `pip install highspy` |
 | `pandas`, `matplotlib` | benchmarks | result tables and figures | `pip install pandas`, `pip install matplotlib` |
 | `pytest` | development | the test suite | `pip install -e ".[dev]"` |

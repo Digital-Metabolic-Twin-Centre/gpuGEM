@@ -43,12 +43,18 @@ CPU rankings directly comparable.
 From the repository root:
 
 ```bash
-pip install -e .                 # gpuGEM itself
-pip install gurobipy             # required: see Solver requirements
+pip install -e ".[application]"   # gpuGEM + pandas + gurobipy
 ```
 
-gpuGEM's GPU path additionally needs `cuopt-cu12` on a CUDA 12 machine with an
-NVIDIA GPU. The `gurobi` backend and every offline check run without a GPU.
+That covers the `gurobi` backend and every offline check, none of which need a
+GPU. For the `gpugem` backend add the GPU solver, which lives on NVIDIA's index
+rather than PyPI:
+
+```bash
+pip install -e ".[application,gpu]" --extra-index-url https://pypi.nvidia.com
+```
+
+cuOpt requires CUDA 12, Python 3.11 or later, and an NVIDIA GPU.
 
 ## Run
 

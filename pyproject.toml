@@ -1,13 +1,14 @@
 [build-system]
 requires = ["setuptools>=68", "wheel"]
-build-backend = "setuptools.backends.legacy:build"
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "gpugem"
 version = "0.1.0"
 description = "GPU-accelerated Flux Balance Analysis for genome-scale metabolic models"
 readme = "README.md"
-license = { text = "MIT" }
+license = "MIT"
+license-files = ["LICENSE"]
 requires-python = ">=3.11"
 authors = [
     { name = "Digital Metabolic Twin Centre" },
@@ -20,7 +21,6 @@ classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Science/Research",
     "Topic :: Scientific/Engineering :: Bio-Informatics",
-    "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
@@ -28,12 +28,24 @@ classifiers = [
 dependencies = [
     "numpy>=1.24",
     "scipy>=1.10",
-    "cuopt-cu12>=26.6.0",
 ]
 
+# cuOpt is deliberately NOT a hard dependency, for two reasons.
+#
+# 1. It cannot be installed from PyPI. The 'cuopt-cu12' entry there is a source
+#    stub with no wheels; installing it requires NVIDIA's index:
+#        pip install gpugem[gpu] --extra-index-url https://pypi.nvidia.com
+#    Listing it as a hard dependency makes a plain 'pip install gpugem' fail for
+#    everyone, including users who only want to inspect or build a model.
+# 2. gpugem/__init__.py already defers the cuOpt check until a solve is actually
+#    requested, and gpugem/_deps.py raises a DependencyError naming the remedy.
+#    The packaging now matches that design.
 [project.optional-dependencies]
-cobra = ["cobra>=0.29"]
-dev   = ["pytest>=7", "pytest-cov", "ruff"]
+gpu         = ["cuopt-cu12>=26.6.0"]
+gurobi      = ["gurobipy>=11"]
+application = ["pandas>=2.0", "gurobipy>=11"]
+cobra       = ["cobra>=0.29"]
+dev         = ["pytest>=7", "pytest-cov", "ruff"]
 
 [project.urls]
 Homepage   = "https://github.com/Digital-Metabolic-Twin-Centre/gpuGEM"
