@@ -1,4 +1,4 @@
 case,query,n_cpu,n_gpu,n_shared,spearman_rho,spearman_p,top10_overlap,top20_overlap,deepest_identical_set,deepest_identical_order,causal_gene,causal_rank_gurobi,causal_rank_gpugem
-pah,PAH deficiency,152,140,140,0.951,1.8308711561129444e-72,9,18,9,3,PAH,1.0,1.0
-kynurenic,Kynureninase deficiency,124,125,118,0.941,1.42141352113793e-56,9,18,5,5,KYNU,1.0,1.0
-cyp17,CYP17A1 deficiency,131,107,79,0.923,9.046547541806923e-34,7,15,0,0,CYP17A1,,
+pah,PAH deficiency,151,135,127,0.97,3.096020611674364e-78,9,18,2,2,PAH,1,1
+kynurenic,Kynureninase deficiency,131,132,130,0.98,6.931528607899582e-92,9,19,3,3,KYNU,1,1
+cyp17,CYP17A1 deficiency,74,74,73,0.982,2.2033323702017467e-53,10,19,36,12,CYP17A1,1,1

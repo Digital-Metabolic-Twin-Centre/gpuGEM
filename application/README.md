@@ -189,10 +189,12 @@ columns exactly. The model, the wild-type reference solution and the
 gene-to-reaction mapping are therefore all correct.
 
 **Reproduces as a ranking.** The known causal gene ranks first under both LP
-engines: PAH for phenylketonuria, KYNU for kynureninase deficiency. Over the
-full shared candidate list the two rankings are strongly concordant, with
-Spearman's rho of 0.95, 0.94 and 0.92 for the three cases. The top-10 gene sets
-agree on 7 to 9 of 10 genes and the top-20 on 15 to 18 of 20.
+engines in all three cases: PAH for phenylketonuria, KYNU for kynureninase
+deficiency and CYP17A1 for 17-alpha-hydroxylase deficiency. Over the full
+shared candidate list the two rankings are strongly concordant, with Spearman's
+rho of 0.970, 0.980 and 0.982. The top-10 gene sets agree on 9, 9 and 10 of 10
+genes and the top-20 on 18, 19 and 19 of 20. These are the figures the
+manuscript reports, at the default `BarConvTol = 1e-6`.
 
 > **Unit of ranking.** The pipeline emits one row per *disease-gene pair*, so a
 > gene causal for several inborn errors appears several times (PAH occupies the
@@ -212,10 +214,11 @@ percentage points for some genes, while the median gene agrees to within 0.03
 points.
 
 The cause is the minimum-norm QP. It exists to make the patient flux unique
-when the LP optimum is degenerate, but the research code runs it at
-`BarConvTol = 1e-4`, which is too loose to actually reach the minimum-norm
-point. The answer then still depends on which LP vertex the solver happened to
-land on. `CUGEM_QP_BARCONVTOL` makes this tolerance configurable, and
+when the LP optimum is degenerate, but the research code this was ported from
+runs it at `BarConvTol = 1e-4`, which is too loose to actually reach the
+minimum-norm point. The answer then still depends on which LP vertex the solver
+happened to land on. **This repository defaults to `1e-6`**, the setting the
+manuscript reports; `CUGEM_QP_BARCONVTOL` overrides it, and
 `tests/qp_tolerance_sweep.py` measures the effect:
 
 | Case | 1e-4 (published) | 1e-6 | 1e-8 |
@@ -230,12 +233,26 @@ land on. `CUGEM_QP_BARCONVTOL` makes this tolerance configurable, and
 
 Per-case numbers: `results/reproducibility_summary.csv`.
 
-Tightening the tolerance resolves the CYP17A1 case completely and it is
-worthwhile for its own sake -- at `1e-6`, CYP17A1 itself ranks first on both
-backends, which the published run missed. It does not resolve the other two,
-so the loose tolerance is not the only source of degeneracy. Treat the top of
-the ranking as the method's output and individual tail fluxes as
-solver-dependent.
+Tightening to `1e-6` resolves the CYP17A1 case completely: CYP17A1 itself ranks
+first on both backends, which the published run at `1e-4` missed. It does not
+remove the tail disagreement in the other two, so the loose tolerance is not
+the only source of degeneracy. Treat the top of the ranking as the method's
+output and individual tail fluxes as solver-dependent.
+
+**Do not tighten further.** At `1e-8` the two engines stop agreeing on which
+genes are candidates at all. For kynureninase deficiency the GPU backend
+returns 59 genes against Gurobi's 127, only 20 of them shared, and KYNU falls
+from rank 1 to rank 4 while ACMSD takes the top slot; both LPs still report
+`Optimal`, so the loss is downstream in the QP and scoring stage. Sensitivity
+is non-monotone and query-dependent -- PAH is cleanest at `1e-8`, CYP17A1 at
+`1e-6`, kynureninase breaks at `1e-8` -- and `1e-6` is the only setting at
+which all three queries return the causal gene first on both backends.
+
+> **Reading the sweep table.** The gap columns are computed over rows both
+> engines returned, so they improve automatically when the shared set shrinks.
+> CYP17A1's largest gap at `1e-8` is 0.0005 points over 63 shared rows, against
+> 0.21 points over 81 at `1e-6`: the smaller number is the worse run. Read the
+> row counts before the gaps.
 
 A second behavioural difference: the published runs scored only genes with a
 causal reaction mapping. The non-causal fallback mapping is therefore off by
@@ -331,6 +348,8 @@ application/
   tests/
     smoke_test.py                 offline checks, no GPU or licence needed
     verify_against_reference.py   reproduce the three published rankings
+    compare_rankings.py           gene-level ranking comparison (Table S10)
+    qp_tolerance_sweep.py         QP barrier tolerance sensitivity
   results/     reference results from the published runs
   figures/     timing comparison figure
 ```

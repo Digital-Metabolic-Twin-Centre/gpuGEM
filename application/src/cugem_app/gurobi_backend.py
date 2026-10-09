@@ -43,7 +43,12 @@ BUILD_SCALE_FLAG = 2
 QP_WEIGHT = 1e-6
 QP_METHOD = -1          # automatic; selects barrier for this QP
 QP_SCALE_FLAG = -1
-QP_BAR_CONV_TOL = float(os.environ.get("CUGEM_QP_BARCONVTOL", "1e-4"))
+# Barrier convergence tolerance for the minimum-norm QP.  The QP exists to pick
+# a unique point on the optimal face; at 1e-4 it stops short of doing so, and
+# the result still depends on which LP vertex the solver landed on.  1e-6 is the
+# setting the manuscript reports and is the default here so the published
+# rankings reproduce.  Override with CUGEM_QP_BARCONVTOL.
+QP_BAR_CONV_TOL = float(os.environ.get("CUGEM_QP_BARCONVTOL", "1e-6"))
 QP_TIME_LIMIT = 120.0
 
 
