@@ -5,8 +5,8 @@ resolve is a common cause of desk rejection. Work through this in order.
 
 ## Before tagging
 
-- [ ] **Make the repository public.** It returned 404 to anonymous access as of
-      2026-09-10. Verify by opening the URL in a logged-out browser.
+- [x] **Make the repository public.** Done: the URL returns HTTP 200 to an anonymous
+      request (checked 2026-10-12; it returned 404 on 2026-09-10).
 - [ ] *(Recommended, not required)* **Add the four ORCIDs** to `CITATION.cff`
       and `.zenodo.json`; both currently have placeholders. ORCIDs are optional
       Zenodo metadata, and the deposit will mint a DOI without them. They are
@@ -50,7 +50,7 @@ DOI for an existing release, and the usual remedy is to cut a throwaway v0.1.1.
 
 ## PyPI
 
-The name `gpugem` was unregistered as of this writing, so it is available.
+The name `gpugem` was unregistered as of 2026-10-12 (`pypi.org/pypi/gpugem/json` returned 404), so it is available.
 
 1. [ ] Upload to TestPyPI first and install from it in a clean virtualenv:
        `twine upload -r testpypi dist/*`
