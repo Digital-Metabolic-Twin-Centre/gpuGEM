@@ -21,8 +21,9 @@ from pathlib import Path
 
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from benchmarks._deps import require_or_exit  # noqa: E402
-require_or_exit("pandas")
+if __name__ == "__main__":   # guard only when run as a script; importing (tests) must not exit
+    from benchmarks._deps import require_or_exit
+    require_or_exit("pandas")
 
 import pandas as pd
 

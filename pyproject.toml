@@ -61,7 +61,9 @@ gpu         = ["cuopt-cu12>=26.6.0"]
 gurobi      = ["gurobipy>=11"]
 application = ["pandas>=2.0", "gurobipy>=11"]
 cobra       = ["cobra>=0.29"]
-dev         = ["pytest>=7", "pytest-cov", "ruff"]
+# pandas and matplotlib are here because tests/ imports benchmarks.* (tables, figures); without
+# them a clean `pip install -e ".[dev]"` cannot even collect the suite.
+dev         = ["pytest>=7", "pytest-cov", "ruff", "pandas>=2.0", "matplotlib"]
 
 [project.urls]
 Homepage   = "https://github.com/Digital-Metabolic-Twin-Centre/gpuGEM"
