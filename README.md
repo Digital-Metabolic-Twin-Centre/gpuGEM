@@ -36,10 +36,18 @@ pip install "gpugem[gpu]" --extra-index-url https://pypi.nvidia.com  # + the GPU
 ```
 
 The second line is what you need to actually *solve*. cuOpt is an optional
-extra rather than a hard dependency because it is not installable from PyPI
-proper: the `cuopt-cu12` entry there is a source stub with no wheels, and the
-real wheels live on NVIDIA's index. Keeping it optional means `pip install
-gpugem` succeeds everywhere, and building or inspecting a model needs no GPU.
+extra rather than a hard dependency because of its size: it pulls in about
+1.4 GB, most of it `libcudf-cu12` (716 MB) and `libcuopt-cu12` (592 MB), and
+none of it is usable without an NVIDIA GPU. Keeping it optional means `pip
+install gpugem` succeeds everywhere, and building or inspecting a model needs
+no GPU.
+
+`pip install "cuopt-cu12>=26.6.0"` on its own does work without the extra
+index, because the PyPI entry is a stub that fetches the real wheels from
+NVIDIA at install time. Naming the index explicitly, as above, is the more
+robust form: it skips the stub, and behind a proxy that blocks
+`pypi.nvidia.com` it fails with a clear message instead of a confusing build
+error.
 cuOpt requires CUDA 12 and Python 3.11 or later; it is checked when you solve,
 not at `import gpugem`. If you prefer to install it on its own, the command
 gpuGEM's error messages point you to is:

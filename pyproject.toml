@@ -1,5 +1,11 @@
 [build-system]
-requires = ["setuptools>=68", "wheel"]
+# setuptools >= 77 is required, not merely preferred: the PEP 639 fields below
+# (`license = "MIT"` as an SPDX expression, plus `license-files`) are only
+# understood from that version. Older setuptools either fails the build or
+# silently emits the deprecated `License:` field instead of
+# `License-Expression:`, so a user building from the sdist would get metadata
+# that does not match what we publish.
+requires = ["setuptools>=77", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -32,11 +38,21 @@ dependencies = [
 
 # cuOpt is deliberately NOT a hard dependency, for two reasons.
 #
-# 1. It cannot be installed from PyPI. The 'cuopt-cu12' entry there is a source
-#    stub with no wheels; installing it requires NVIDIA's index:
+# 1. It is a very large, GPU-only install. The 'cuopt-cu12' entry on PyPI is a
+#    wheel_stub that transparently resolves the real wheels from NVIDIA's index
+#    at install time, so
+#        pip install "cuopt-cu12>=26.6.0"
+#    does work on an unrestricted network (verified: it resolves
+#    cuopt-cu12 26.8.0). What it pulls in is ~1.4 GB, dominated by
+#    libcudf-cu12 (716 MB) and libcuopt-cu12 (592 MB), and none of it is
+#    usable without an NVIDIA GPU. Making that a hard dependency would impose
+#    a 1.4 GB GPU-only download on everyone, including users who only want to
+#    inspect or build a model, or who are reviewing the code on a laptop.
+#
+#    Behind a proxy or firewall that does not allow pypi.nvidia.com, the stub
+#    fails with a confusing build error rather than a clean "not found". Naming
+#    the index explicitly is the more robust form and skips the stub entirely:
 #        pip install gpugem[gpu] --extra-index-url https://pypi.nvidia.com
-#    Listing it as a hard dependency makes a plain 'pip install gpugem' fail for
-#    everyone, including users who only want to inspect or build a model.
 # 2. gpugem/__init__.py already defers the cuOpt check until a solve is actually
 #    requested, and gpugem/_deps.py raises a DependencyError naming the remedy.
 #    The packaging now matches that design.
