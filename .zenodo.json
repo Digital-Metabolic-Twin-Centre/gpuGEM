@@ -20,19 +20,19 @@
   "creators": [
     {
       "name": "Zare, Farid",
-      "affiliation": "School of Medicine, University of Galway, Galway, Ireland"
+      "affiliation": "School of Medicine, University of Galway, University Rd, Galway, Ireland; Digital Metabolic Twin Centre, University of Galway, Galway, Ireland; Institute for Clinical Trials, University of Galway, Galway, Ireland"
     },
     {
       "name": "Hulshof, Timothy",
-      "affiliation": "School of Medicine, University of Galway, Galway, Ireland"
+      "affiliation": "School of Medicine, University of Galway, University Rd, Galway, Ireland; Digital Metabolic Twin Centre, University of Galway, Galway, Ireland"
     },
     {
       "name": "Thiele, Ines",
-      "affiliation": "School of Medicine, University of Galway, Galway, Ireland"
+      "affiliation": "School of Medicine, University of Galway, University Rd, Galway, Ireland; Digital Metabolic Twin Centre, University of Galway, Galway, Ireland; School of Microbiology, University of Galway, Galway, Ireland; Ryan Institute, University of Galway, Galway, Ireland; APC Microbiome Ireland, Cork, Ireland"
     },
     {
       "name": "Fleming, Ronan M. T.",
-      "affiliation": "School of Medicine, University of Galway, Galway, Ireland"
+      "affiliation": "School of Medicine, University of Galway, University Rd, Galway, Ireland; Digital Metabolic Twin Centre, University of Galway, Galway, Ireland; Institute for Clinical Trials, University of Galway, Galway, Ireland"
     }
   ],
   "related_identifiers": [
@@ -41,5 +41,5 @@
       "relation": "isSupplementTo"
     }
   ],
-  "notes": "This study was funded by grants from the European Research Council (ERC) under the European Union's Horizon Europe research and innovation programme (grant agreement #101125633) to IT, the Science Foundation Ireland under Grant number 12/RC/2273P2, and the Horizon Europe grant Recon4IMD (#101080997). This work was further supported by the Swiss State Secretariat for Education, Research and Innovation, SERI (grant 23.00232), and UK Research and Innovation, UKRI (grants 10083717 and 10080153)."
+  "notes": "Farid Zare and Timothy Hulshof contributed equally to this work (joint first authors). This study was funded by grants from the European Research Council (ERC) under the European Union's Horizon Europe research and innovation programme (grant agreement #101125633) to IT, the Science Foundation Ireland under Grant number 12/RC/2273P2, and the Horizon Europe grant Recon4IMD (#101080997). This work was further supported by the Swiss State Secretariat for Education, Research and Innovation, SERI (grant 23.00232), and UK Research and Innovation, UKRI (grants 10083717 and 10080153)."
 }

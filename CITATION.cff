@@ -21,20 +21,22 @@ keywords:
   - COBRA
   - systems biology
   - inherited metabolic disease
+# Farid Zare and Timothy Hulshof contributed equally to this work (joint first authors).
+# CITATION.cff has no field for equal contribution; the author order records it.
 authors:
   - family-names: Zare
     given-names: Farid
-    affiliation: "School of Medicine, University of Galway, Galway, Ireland"
+    affiliation: "School of Medicine, University of Galway, University Rd, Galway, Ireland; Digital Metabolic Twin Centre, University of Galway, Galway, Ireland; Institute for Clinical Trials, University of Galway, Galway, Ireland"
     # orcid: "https://orcid.org/0000-0000-0000-0000"   # TODO: fill in before deposit
   - family-names: Hulshof
     given-names: Timothy
-    affiliation: "School of Medicine, University of Galway, Galway, Ireland"
+    affiliation: "School of Medicine, University of Galway, University Rd, Galway, Ireland; Digital Metabolic Twin Centre, University of Galway, Galway, Ireland"
     # orcid: "https://orcid.org/0000-0000-0000-0000"   # TODO: fill in before deposit
   - family-names: Thiele
     given-names: Ines
-    affiliation: "School of Medicine, University of Galway, Galway, Ireland"
+    affiliation: "School of Medicine, University of Galway, University Rd, Galway, Ireland; Digital Metabolic Twin Centre, University of Galway, Galway, Ireland; School of Microbiology, University of Galway, Galway, Ireland; Ryan Institute, University of Galway, Galway, Ireland; APC Microbiome Ireland, Cork, Ireland"
     # orcid: "https://orcid.org/0000-0000-0000-0000"   # TODO: fill in before deposit
   - family-names: Fleming
     given-names: Ronan M. T.
-    affiliation: "School of Medicine, University of Galway, Galway, Ireland"
+    affiliation: "School of Medicine, University of Galway, University Rd, Galway, Ireland; Digital Metabolic Twin Centre, University of Galway, Galway, Ireland; Institute for Clinical Trials, University of Galway, Galway, Ireland"
     # orcid: "https://orcid.org/0000-0000-0000-0000"   # TODO: fill in before deposit
