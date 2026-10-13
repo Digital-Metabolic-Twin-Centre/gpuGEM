@@ -225,14 +225,15 @@ result.feasibility  # dict: stoich_max_residual, stoich_rows_violated_1e6, ...
   entry-point-dependent, for a reason not yet isolated. See
   `specs/015-matlab-python-lifting-comparison/`.
 
-- **GPU/driver-absent detection is a heuristic and is unverified against real cuOpt.** gpuGEM
-  reports `DependencyError(kind="no_gpu")` only when cuOpt raises *and* there is positive evidence
-  of a GPU problem (`nvidia-smi` fails or lists no GPU, or it is absent and no `/dev/nvidia*`
-  device exists). The exact exception cuOpt raises on a machine with no GPU, and whether it is raised
-  at import or at first solve, has not been observed (the development machine has no cuOpt); until
-  it is, such a failure may surface as `kind="broken"` or as cuOpt's own exception. The Gurobi
-  licence error numbers (10009, 10010) used for `kind="license"` are likewise unverified here.
-  See `specs/016-missing-dependency-errors/` (tasks T016).
+- **GPU/driver-absent detection is a heuristic, checked on one kind of machine.** gpuGEM reports
+  `DependencyError(kind="no_gpu")` only when cuOpt raises *and* there is positive evidence of a GPU
+  problem (`nvidia-smi` fails or lists no GPU, or it is absent and no `/dev/nvidia*` device exists).
+  Observed with cuOpt 26.8.0 on a machine with no NVIDIA driver and no `nvidia-smi`: `import cuopt`
+  succeeds and the first solve raises `RuntimeError: CUDA error ... cudaErrorInsufficientDriver`,
+  which gpuGEM reports as `no_gpu`. A machine with a working `nvidia-smi` but a broken CUDA setup
+  has not been tested, and its failure may surface as cuOpt's own exception. The Gurobi licence
+  error numbers (10009, 10010) used for `kind="license"` are unverified.
+  See `specs/016-missing-dependency-errors/`.
 - **The dependency inventory is static.** `tests/test_dependency_inventory.py` finds imports and
   `subprocess` / `shutil.which` calls with literal names; a module or executable whose name is built
   at run time is not seen (the test prints those it cannot analyse).
