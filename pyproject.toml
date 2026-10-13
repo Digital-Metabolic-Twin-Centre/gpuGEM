@@ -10,7 +10,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "gpugem"
-version = "0.1.1"
+version = "0.1.2"
 description = "GPU-accelerated Flux Balance Analysis for genome-scale metabolic models"
 readme = "README.md"
 license = "MIT"
