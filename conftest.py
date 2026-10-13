@@ -43,4 +43,4 @@ def pytest_runtest_call(item):
         reason = _skip_reason(exc)
         if reason is None:
             raise
-        pytest.skip(f"optional backend not installed: {reason}")
+        pytest.skip(f"backend unavailable (not installed, or no usable GPU/licence): {reason}")

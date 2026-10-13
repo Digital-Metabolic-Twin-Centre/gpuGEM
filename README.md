@@ -31,37 +31,29 @@ GPU first-order LP solvers (PDLP) offer substantial speedups on genome-scale FBA
 ## Installation
 
 ```bash
-pip install gpugem                                                   # core
-pip install "gpugem[gpu]" --extra-index-url https://pypi.nvidia.com  # + the GPU solver
+pip install gpugem
 ```
 
-The second line is what you need to actually *solve*. cuOpt is an optional
-extra rather than a hard dependency because of its size: it pulls in about
-1.4 GB, most of it `libcudf-cu12` (716 MB) and `libcuopt-cu12` (592 MB), and
-none of it is usable without an NVIDIA GPU. Keeping it optional means `pip
-install gpugem` succeeds everywhere, and building or inspecting a model needs
-no GPU.
-
-`pip install "cuopt-cu12>=26.6.0"` on its own does work without the extra
-index, because the PyPI entry is a stub that fetches the real wheels from
-NVIDIA at install time. Naming the index explicitly, as above, is the more
-robust form: it skips the stub, and behind a proxy that blocks
-`pypi.nvidia.com` it fails with a clear message instead of a confusing build
-error.
-cuOpt requires CUDA 12 and Python 3.11 or later; it is checked when you solve,
-not at `import gpugem`. If you prefer to install it on its own, the command
-gpuGEM's error messages point you to is:
+This installs the full tool: numpy, scipy, NVIDIA cuOpt (the GPU solver) and COBRApy. gpuGEM is a
+GPU solver, so solving needs an NVIDIA GPU with CUDA 12 and Python 3.11 or later. cuOpt is a large
+download (about 1.4 GB, mostly `libcudf-cu12` and `libcuopt-cu12`). The `cuopt-cu12` entry on PyPI
+is a stub that fetches the real wheels from NVIDIA's index. Behind a proxy that blocks
+`pypi.nvidia.com` it can fail with a confusing build error; if that happens, name the index
+explicitly:
 
 ```bash
-pip install "cuopt-cu12>=26.6.0" --extra-index-url https://pypi.nvidia.com
+pip install gpugem --extra-index-url https://pypi.nvidia.com
 ```
 
-Other extras:
+`import gpugem` works without a usable GPU; the GPU is checked when you call `solve`, which raises a
+`DependencyError` explaining what is missing.
+
+Optional extras:
 
 ```bash
-pip install "gpugem[cobra]"        # COBRApy models
 pip install "gpugem[gurobi]"       # the Gurobi CPU baseline (needs a licence)
 pip install "gpugem[application]"  # the candidate-gene application, see application/
+pip install "gpugem[dev]"          # tests and linting
 ```
 
 ### Dependencies
@@ -69,8 +61,8 @@ pip install "gpugem[application]"  # the candidate-gene application, see applica
 | Package / tool | Role | Needed for | Install |
 |---|---|---|---|
 | `numpy`, `scipy` | required | every function | `pip install "numpy>=1.24"`, `pip install "scipy>=1.10"` |
-| `cuopt` | required to solve | the GPU solver; checked when you solve, not at `import gpugem` | `pip install "gpugem[gpu]" --extra-index-url https://pypi.nvidia.com` (other CUDA versions: see the [cuOpt install guide](https://docs.nvidia.com/cuopt/user-guide/latest/introduction.html)) |
-| `cobra` | optional | `solve_cobra`, `loaders.from_cobra` | `pip install "gpugem[cobra]"` |
+| `cuopt` | required | the GPU solver; checked when you solve, not at `import gpugem` | `pip install "cuopt-cu12>=26.6.0" --extra-index-url https://pypi.nvidia.com` (other CUDA versions: see the [cuOpt install guide](https://docs.nvidia.com/cuopt/user-guide/latest/introduction.html)) |
+| `cobra` | required | `solve_cobra`, `loaders.from_cobra` | `pip install "cobra>=0.29"` |
 | `gurobipy` | benchmarks, application | the Gurobi baseline (needs a licence); also the minimum-norm QP in `application/` | `pip install "gpugem[gurobi]"` |
 | `pandas` | application | result tables in `application/` | `pip install "gpugem[application]"` |
 | `highspy` | benchmarks | the HiGHS CPU baseline | `pip install highspy` |
@@ -259,12 +251,12 @@ cuOpt or a Gurobi licence are reported as **skipped** rather than failed, so a
 clean run looks like:
 
 ```
-188 passed, 12 skipped
+190 passed, 10 skipped
 ```
 
 If you see failures rather than skips, that is a genuine problem and we would
-like to hear about it. The 12 skips become real tests on a machine with an
-NVIDIA GPU (CUDA 12) and `pip install "gpugem[gpu]"`.
+like to hear about it. The 10 skips become real tests on a machine with an
+NVIDIA GPU (CUDA 12) and `pip install gpugem`.
 
 CI runs this suite on Python 3.11 and 3.12 on every push. Because GitHub's
 hosted runners have no GPU, a green badge means "everything checkable without a

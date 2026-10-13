@@ -64,7 +64,7 @@ is a valid outcome; a green check that could not have gone red is not. New limit
 ## Practical
 
 - Tests: `python -m pytest tests/ -q`. Lint: `ruff check` (`line-length = 100`). Python floor 3.11.
-- `numpy`/`scipy`/`cuopt-cu12` are the only hard deps; `cobra` stays optional.
+- `numpy`/`scipy`/`cuopt-cu12`/`cobra` are the hard deps (`pip install gpugem` is the full tool); only `gurobi`, `application` and `dev` are extras.
 - Benchmarks read models from `benchmarks/model_cache/`; results are JSON under
   `benchmarks/results/<feature>/`. GPU-dependent tests will fail on a machine without cuOpt —
   report that as unrun, not as passed.

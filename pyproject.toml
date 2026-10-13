@@ -34,33 +34,18 @@ classifiers = [
 dependencies = [
     "numpy>=1.24",
     "scipy>=1.10",
+    # gpuGEM is a GPU solver: `pip install gpugem` is the full, working tool, so cuOpt and
+    # COBRApy are required rather than optional. cuOpt is a large download (~1.4 GB, mostly
+    # libcudf-cu12 and libcuopt-cu12) and needs an NVIDIA GPU with CUDA 12 to solve. The
+    # 'cuopt-cu12' entry on PyPI is a stub that fetches the real wheels from NVIDIA's index.
+    # `import gpugem` itself still works without a usable GPU; only `solve` needs one.
+    "cuopt-cu12>=26.6.0",
+    "cobra>=0.29",
 ]
 
-# cuOpt is deliberately NOT a hard dependency, for two reasons.
-#
-# 1. It is a very large, GPU-only install. The 'cuopt-cu12' entry on PyPI is a
-#    wheel_stub that transparently resolves the real wheels from NVIDIA's index
-#    at install time, so
-#        pip install "cuopt-cu12>=26.6.0"
-#    does work on an unrestricted network (verified: it resolves
-#    cuopt-cu12 26.8.0). What it pulls in is ~1.4 GB, dominated by
-#    libcudf-cu12 (716 MB) and libcuopt-cu12 (592 MB), and none of it is
-#    usable without an NVIDIA GPU. Making that a hard dependency would impose
-#    a 1.4 GB GPU-only download on everyone, including users who only want to
-#    inspect or build a model, or who are reviewing the code on a laptop.
-#
-#    Behind a proxy or firewall that does not allow pypi.nvidia.com, the stub
-#    fails with a confusing build error rather than a clean "not found". Naming
-#    the index explicitly is the more robust form and skips the stub entirely:
-#        pip install gpugem[gpu] --extra-index-url https://pypi.nvidia.com
-# 2. gpugem/__init__.py already defers the cuOpt check until a solve is actually
-#    requested, and gpugem/_deps.py raises a DependencyError naming the remedy.
-#    The packaging now matches that design.
 [project.optional-dependencies]
-gpu         = ["cuopt-cu12>=26.6.0"]
 gurobi      = ["gurobipy>=11"]
 application = ["pandas>=2.0", "gurobipy>=11"]
-cobra       = ["cobra>=0.29"]
 # pandas and matplotlib are here because tests/ imports benchmarks.* (tables, figures); without
 # them a clean `pip install -e ".[dev]"` cannot even collect the suite.
 dev         = ["pytest>=7", "pytest-cov", "ruff", "pandas>=2.0", "matplotlib"]

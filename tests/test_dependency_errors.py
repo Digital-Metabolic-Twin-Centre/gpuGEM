@@ -301,7 +301,7 @@ def test_from_cobra_without_cobra_is_guided(monkeypatch):
     with pytest.raises(DependencyError) as err:
         gpugem.loaders.from_cobra(None)
     text = _assert_guided(err, "cobra", "not_installed")
-    assert "gpugem[cobra]" in text
+    assert 'pip install "cobra>=' in text
 
 
 def test_solve_cobra_without_cobra_is_guided(monkeypatch):

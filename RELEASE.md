@@ -27,7 +27,7 @@ resolve is a common cause of desk rejection. Work through this in order.
       rerun the large-model benchmarks from the archive alone, which weakens the
       reproducibility claim in `.zenodo.json`. The whole-body models are
       third-party (VMH); check their redistribution terms either way.
-- [ ] `pytest -q` passes: expect **188 passed, 12 skipped** on a CPU-only
+- [ ] `pytest -q` passes: expect **190 passed, 10 skipped** on a CPU-only
       machine. Failures rather than skips mean something is wrong.
 - [ ] `python -m build && twine check dist/*` passes.
 

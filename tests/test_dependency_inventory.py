@@ -70,14 +70,9 @@ def _top_names(tree):
 def test_min_versions_match_pyproject():
     text = (ROOT / "pyproject.toml").read_text()
     deps = re.search(r"^dependencies\s*=\s*\[(.*?)\]", text, re.S | re.M).group(1)
-    # cuopt-cu12 is an optional extra, not a hard dependency: it has no PyPI
-    # wheels, so making it required would break `pip install gpugem` for
-    # everyone. Its pin still has to agree with _deps.MIN_VERSIONS, so read the
-    # `gpu` and `cobra` extras alongside the hard dependencies.
-    extras = "".join(
-        re.search(rf"^{name}\s*=\s*\[(.*?)\]", text, re.S | re.M).group(1)
-        for name in ("gpu", "cobra")
-    )
+    # numpy, scipy, cuopt-cu12 and cobra are all hard dependencies: `pip install gpugem` is the
+    # full tool. Each pin must agree with _deps.MIN_VERSIONS.
+    extras = ""
     declared = {}
     for spec in re.findall(r'"([^"]+)"', deps + extras):
         m = re.match(r"([A-Za-z0-9_.-]+)>=([\w.]+)", spec)

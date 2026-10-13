@@ -115,13 +115,13 @@ _SPECS = [
         'pip install "scipy>=%s"' % MIN_VERSIONS["scipy"], ("scipy",), MIN_VERSIONS["scipy"]),
     DependencySpec(
         "cuopt", "required", "the GPU linear-programming solver that gpuGEM wraps",
-        'pip install "cuopt-cu12>=%s"  (other CUDA versions: see %s)'
-        % (MIN_VERSIONS["cuopt"], _CUOPT_DOCS),
+        'pip install "cuopt-cu12>=%s" --extra-index-url https://pypi.nvidia.com  '
+        '(other CUDA versions: see %s)' % (MIN_VERSIONS["cuopt"], _CUOPT_DOCS),
         ("cuopt-cu12", "cuopt-cu13", "cuopt"), MIN_VERSIONS["cuopt"]),
     DependencySpec(
-        "cobra", "optional", "reading COBRApy models (gpugem.solve_cobra, loaders.from_cobra)",
-        'pip install "gpugem[cobra]"  (or: pip install "cobra>=%s")' % MIN_VERSIONS["cobra"],
-        ("cobra",), MIN_VERSIONS["cobra"], extra="cobra"),
+        "cobra", "required", "reading COBRApy models (gpugem.solve_cobra, loaders.from_cobra)",
+        'pip install "cobra>=%s"' % MIN_VERSIONS["cobra"],
+        ("cobra",), MIN_VERSIONS["cobra"]),
     DependencySpec(
         "gurobipy", "benchmark", "the Gurobi baseline in the benchmarks (needs a Gurobi licence)",
         "pip install gurobipy  (a licence is required to solve large models: "

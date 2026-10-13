@@ -1,4 +1,10 @@
 <!--
+Sync Impact Report (1.4.0, 2026-10-13): MINOR - Quality Standards: COBRApy promoted from optional to a hard
+dependency and cuOpt (already named) made a hard dependency in pyproject.toml, so `pip install gpugem`
+is the full tool. Rationale: gpuGEM is a GPU solver; a light install that cannot solve was judged
+less useful than one default full install. No CPU-only path is offered. README, CLAUDE.md,
+gpugem/_deps.py registry and tests updated in the same change.
+
 Sync Impact Report (1.3.1, 2026-10-05): PATCH - Quality Standards: Python floor 3.10 -> 3.11 to match
 the paper's stated requirements; pyproject.toml, README badge and CLAUDE.md updated in the same change.
 No principle changed.
@@ -198,8 +204,9 @@ actually produce.
   `pyproject.toml`); `ruff` MUST pass before merge.
 - Python compatibility floor is 3.11, matching `requires-python` in `pyproject.toml`; new code
   MUST NOT use syntax or stdlib features beyond that floor.
-- Optional dependencies (`cobra`, `dev`) MUST stay optional — the core `solve`/`FBASolver` path
-  MUST work with only `numpy`, `scipy`, and `cuopt-cu12` installed.
+- `pip install gpugem` MUST install the full working tool: `numpy`, `scipy`, `cuopt-cu12` and
+  `cobra` are hard dependencies. Only `gurobi`, `application` and `dev` are optional extras, and
+  there is deliberately no CPU-only install path.
 
 ## Development Workflow
 
@@ -231,4 +238,4 @@ guidance; PATCH: wording/clarification only), and updating `Last Amended`. Any p
 file; unresolved violations MUST be justified in the plan's Complexity Tracking section or the
 plan MUST be revised.
 
-**Version**: 1.3.1 | **Ratified**: 2026-07-06 | **Last Amended**: 2026-10-05
+**Version**: 1.4.0 | **Ratified**: 2026-07-06 | **Last Amended**: 2026-10-13
