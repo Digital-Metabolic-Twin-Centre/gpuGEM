@@ -1,8 +1,9 @@
 """
 Example: GPU-accelerated FBA on a personalised microbiome whole-body model.
 
-Models (mWBM_S84_male_lifted.mat etc.) are available on request from the
-Virtual Metabolic Human project.  Replace ``MODEL_PATH`` accordingly.
+The personalised microbiome whole-body models (mWBM_S84_male.mat etc.) are in
+``benchmarks/model_cache/`` of the repository and in its Zenodo archive; see
+``benchmarks/model_cache/PROVENANCE.md``.  Replace ``MODEL_PATH`` accordingly.
 """
 
 import sys

@@ -180,6 +180,16 @@ result = gpugem.solve(**arrays, pdlp_solver_mode=0, time_limit=300)
 result = gpugem.solve(**arrays, presolve=0)
 ```
 
+### Time limit for large models
+
+`time_limit` is the wall-clock budget in seconds and defaults to **60**. That is enough for
+genome-scale models such as iML1515 (about 4 s) and the Harvey whole-body model (a few
+seconds), but not for the million-variable personalised microbiome models, which took
+roughly 25 to 880 s on an NVIDIA RTX A4500. For those, pass a larger limit, for example
+`time_limit=900`. If the limit is reached, `result.status` is `"TimeLimit"` and the solution
+has not converged (its residual can be far above the 1e-4 criterion), so check
+`result.status` and `result.feasibility["stoich_max_residual"]` before using the fluxes.
+
 ---
 
 ## Stateful solver (repeated solves)
@@ -252,7 +262,7 @@ cuOpt or a Gurobi licence are reported as **skipped** rather than failed, so a
 clean run looks like:
 
 ```
-190 passed, 10 skipped
+206 passed, 10 skipped
 ```
 
 If you see failures rather than skips, that is a genuine problem and we would
