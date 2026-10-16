@@ -25,9 +25,11 @@ resolve is a common cause of desk rejection. Work through this in order.
       `.gitattributes` with `benchmarks/model_cache/ export-ignore` to keep them
       out of release tarballs. Note that excluding them means a reviewer cannot
       rerun the large-model benchmarks from the archive alone, which weakens the
-      reproducibility claim in `.zenodo.json`. The whole-body models are
-      third-party (VMH); check their redistribution terms either way.
-- [ ] `pytest -q` passes: expect **190 passed, 10 skipped** on a CPU-only
+      reproducibility claim in `.zenodo.json`. Harvey and Harvetta are
+      published VMH models and the BiGG models carry BiGG's terms; PMM1 to PMM6 are
+      internal to the Digital Metabolic Twin Centre. See
+      `benchmarks/model_cache/PROVENANCE.md`. A licence for PMM1 to PMM6 is still to be chosen.
+- [ ] `pytest -q` passes: expect **206 passed, 10 skipped** on a CPU-only
       machine. Failures rather than skips mean something is wrong.
 - [ ] `python -m build && twine check dist/*` passes.
 
@@ -52,12 +54,44 @@ DOI for an existing release, and the usual remedy is to cut a throwaway v0.1.1.
 
 The name `gpugem` was unregistered as of 2026-10-12 (`pypi.org/pypi/gpugem/json` returned 404), so it is available.
 
-1. [ ] Upload to TestPyPI first and install from it in a clean virtualenv:
-       `twine upload -r testpypi dist/*`
-2. [ ] `pip install -i https://test.pypi.org/simple/ gpugem` then
-       `python -c "import gpugem"` — this must work with no GPU present.
-3. [ ] `twine upload dist/*`
-4. [ ] Confirm `pip install gpugem` works from a clean environment.
+1. [x] Uploaded v0.1.2 to TestPyPI (2026-10-14) and installed from it in a clean virtualenv:
+       `twine upload -r testpypi <dir>/*`
+2. [x] `pip install -i https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ gpugem`
+       then `python -c "import gpugem"` -- works with no GPU present. On an RTX A4500 the TestPyPI
+       build passed the test suite and solved 7 models (see
+       `specs/016-missing-dependency-errors/gpu-verification.md`).
+3. [x] Uploaded to PyPI (2026-10-14): <https://pypi.org/project/gpugem/0.1.2/>. The two files'
+       SHA-256 digests on PyPI match the tested files.
+4. [x] `pip install gpugem` confirmed from a clean environment on a CPU-only machine (import works,
+       `solve` raises `DependencyError` kind `no_gpu`) and on the GPU machine (smoke test, e_coli_core,
+       iML1515 all Optimal, objectives within 2e-8 of the Gurobi reference).
+
+### Automated publishing (from the next release)
+
+`.github/workflows/publish.yml` uploads to PyPI when a GitHub release is **published**.
+It checks that the tag matches the version in `pyproject.toml`, `gpugem/__init__.py`,
+`CITATION.cff` and `.zenodo.json`, runs lint and the tests, builds and checks the files,
+and then **waits for a reviewer to approve** before uploading. Pre-releases never publish.
+There is no API token: PyPI trusts the workflow itself (Trusted Publishing).
+
+One-time setup (nothing publishes until both are done):
+
+1. [ ] PyPI: open <https://pypi.org/manage/project/gpugem/settings/publishing/> and add a
+       GitHub trusted publisher: owner `Digital-Metabolic-Twin-Centre`, repository `gpuGEM`,
+       workflow `publish.yml`, environment `pypi`.
+2. [ ] GitHub: repo Settings -> Environments -> New environment `pypi` -> tick
+       "Required reviewers" and add the reviewers.
+
+Per release:
+
+1. Bump the version in all four files (the workflow refuses a mismatch), commit and push.
+2. Wait for CI to pass, then create the tag and publish the GitHub release (this also
+   triggers Zenodo).
+3. In the Actions tab, open the "Publish to PyPI" run, check the files and checksums in
+   its summary, and click "Review deployments" -> "Approve and deploy".
+
+A version can be uploaded to PyPI once only. If the upload fails after approval, fix the
+problem and release a new version number.
 
 Note that the wheel ships `gpugem` only. The candidate-gene application
 (`gpugem_app`) and its 8.4 MB of model data are **not** on PyPI; they come from
