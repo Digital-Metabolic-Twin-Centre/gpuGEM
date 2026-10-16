@@ -14,7 +14,7 @@ from gpugem.scaling import CoefficientScalingMapping, remap_fluxes, scale_model 
 from gpugem.lifting import LiftingMapping, lift_coupling, lift_mass_balance, map_back  # noqa: E402
 from gpugem import loaders  # noqa: E402
 
-__version__ = "0.1.2"
+__version__ = "0.1.3"
 __all__ = [
     "DependencyError",
     "FBASolver",
