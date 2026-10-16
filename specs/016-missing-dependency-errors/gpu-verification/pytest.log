@@ -1,0 +1,71 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-9.1.1, pluggy-1.6.0
+rootdir: /home/farid/gpugem-gputest/src
+configfile: pyproject.toml
+testpaths: tests
+plugins: anyio-4.15.1
+collected 200 items
+
+tests/test_block_residuals.py .............                              [  6%]
+tests/test_cuopt_tuning.py .....................                         [ 17%]
+tests/test_dependency_errors.py .......................................  [ 36%]
+tests/test_dependency_inventory.py ........F.....                        [ 43%]
+tests/test_gurobi_default_benchmark.py ss........                        [ 48%]
+tests/test_lifting.py .............                                      [ 55%]
+tests/test_matlab_python_lifting_comparison.py ..........                [ 60%]
+tests/test_model_lifting_validation.py .....                             [ 62%]
+tests/test_objective_panel.py ..............                             [ 69%]
+tests/test_ordinal_ramp.py ....                                          [ 71%]
+tests/test_residual_tradeoff.py ......                                   [ 74%]
+tests/test_s85_objectives.py ..........                                  [ 79%]
+tests/test_scaling.py ..                                                 [ 80%]
+tests/test_solver.py ........                                            [ 84%]
+tests/test_solver_mode_variants.py ...........                           [ 90%]
+tests/test_version_lifting_comparison.py ........                        [ 94%]
+tests/test_violation_histogram.py ............                           [100%]
+
+=================================== FAILURES ===================================
+______________ test_import_time_checked_dependencies_are_checked _______________
+
+    def test_import_time_checked_dependencies_are_checked():
+>       init = (ROOT / "gpugem" / "__init__.py").read_text()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_dependency_inventory.py:250: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/farid/gpugem-gputest/src/gpugem/__init__.py')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/farid/gpugem-gputest/src/gpugem/__init__.py'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+=============================== warnings summary ===============================
+tests/test_s85_objectives.py::test_all_reactions_resolve_in_s85_model
+  /home/farid/gpugem-gputest/src/benchmarks/models.py:66: DeprecationWarning: The default value for `spmatrix` is changing to `False` in v1.20.
+          That means the default return type will be a sparse array.
+          Unless you use * instead of @, ** for matrix power, or you depend
+          on 2D shapes from e.g. `A.sum(axis=0)` it may not matter to you.
+          See the spmatrix to sparray migration guide for details.
+          https://docs.scipy.org/doc/scipy/reference/sparse.migration_to_sparray.html
+          
+    raw = sio.loadmat(str(path), struct_as_record=False, squeeze_me=True)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+SKIPPED [2] conftest.py:46: backend unavailable (not installed, or no usable GPU/licence): gurobipy
+============= 1 failed, 197 passed, 2 skipped, 1 warning in 58.15s =============

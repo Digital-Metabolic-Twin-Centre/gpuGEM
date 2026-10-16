@@ -1,0 +1,2 @@
+{"model": "e_coli_core", "n_rows": 72, "n_cols": 95, "status": "Optimal", "objective": 0.8739215056938601, "gurobi_ref": 0.8739215069684305, "obj_rel_diff": 1.274570449183443e-09, "obj_tol": 1e-06, "residual_inf": 7.779511312921983e-09, "res_tol": 0.0001, "solve_s": 0.458, "PASS": true}
+{"model": "iML1515", "n_rows": 1877, "n_cols": 2712, "status": "Optimal", "objective": 0.876997198833092, "gurobi_ref": 0.8769972144269654, "obj_rel_diff": 1.559387341476537e-08, "obj_tol": 1e-06, "residual_inf": 2.9543798518716358e-09, "res_tol": 0.0001, "solve_s": 3.733, "PASS": true}

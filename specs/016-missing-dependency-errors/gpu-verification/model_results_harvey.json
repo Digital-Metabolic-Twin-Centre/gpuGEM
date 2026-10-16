@@ -1,0 +1,66 @@
+[
+ {
+  "model": "Harvey",
+  "n_cols": 81094,
+  "n_rows": 56452,
+  "status": "Optimal",
+  "objective": 1.0,
+  "gurobi_ref": 1.0,
+  "committed_cuopt_ref": 1.0,
+  "obj_rel_diff": 0.0,
+  "obj_tol": 1e-06,
+  "residual_inf": 5.5791078423794715e-09,
+  "res_tol": 0.0001,
+  "solve_s": 5.859,
+  "solved_by": "PDLP",
+  "PASS": true,
+  "feasibility": {
+   "stoich_max_residual": 5.5791078423794715e-09,
+   "stoich_rows_violated_1e6": 0,
+   "coupling_max_residual": 1.57142920897968e-08,
+   "var_bounds_max_violation": 8.8694658797496e-07
+  },
+  "settings": {
+   "method": 1,
+   "pdlp_precision": 1,
+   "absolute_primal_tolerance": 1e-08,
+   "relative_primal_tolerance": 1e-08,
+   "absolute_dual_tolerance": 1e-08,
+   "relative_dual_tolerance": 1e-08,
+   "per_constraint_residual": 1,
+   "time_limit": 300.0
+  }
+ },
+ {
+  "model": "Harvetta",
+  "n_cols": 83521,
+  "n_rows": 58851,
+  "status": "Optimal",
+  "objective": 1.0,
+  "gurobi_ref": 1.0,
+  "committed_cuopt_ref": 1.0,
+  "obj_rel_diff": 0.0,
+  "obj_tol": 1e-06,
+  "residual_inf": 3.2092831958322026e-09,
+  "res_tol": 0.0001,
+  "solve_s": 4.864,
+  "solved_by": "PDLP",
+  "PASS": true,
+  "feasibility": {
+   "stoich_max_residual": 3.2092831958322026e-09,
+   "stoich_rows_violated_1e6": 0,
+   "coupling_max_residual": 1.4137924608803587e-08,
+   "var_bounds_max_violation": 9.965745074961136e-07
+  },
+  "settings": {
+   "method": 1,
+   "pdlp_precision": 1,
+   "absolute_primal_tolerance": 1e-08,
+   "relative_primal_tolerance": 1e-08,
+   "absolute_dual_tolerance": 1e-08,
+   "relative_dual_tolerance": 1e-08,
+   "per_constraint_residual": 1,
+   "time_limit": 300.0
+  }
+ }
+]
